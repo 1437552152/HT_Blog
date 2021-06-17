@@ -21,6 +21,14 @@ router.get('/',(req,res)=>{
   })
 });
 
+router.get('/index.html',(req,res)=>{
+  res.render('index', {
+    data: {}
+  })
+});
+
+
+
 router.get('/1/:menu',(req,res)=>{
   res.render('two', {
     data: {}
@@ -32,9 +40,6 @@ router.get('/a/:menu',(req,res)=>{
     data: {}
   })
 });
-
-
-
 
 
 module.exports = router;
