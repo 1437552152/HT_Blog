@@ -79,3 +79,10 @@ h1, h2, h3, h4, h5, h6 {
 .row{
 	margin: 0;
 }
+.w1200{
+	width: 1200px;
+	margin: 0 auto;
+}
+.m40{
+	margin-top: 40px;
+}

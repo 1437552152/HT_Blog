@@ -1,41 +1,104 @@
+﻿<!--
+ * @Description: 
+ * @Author: yfye
+ * @Date: 2021-06-05 16:59:35
+ * @LastEditTime: 2021-06-17 23:47:43
+ * @LastEditors: yfye
+-->
 <!DOCTYPE html>
 <html>
 
 <head>
-    <meta charset="UTF-8">
-   
-    <link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/css/common.css">
-    <link rel="stylesheet" href="/css/index.css">
-    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
-    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="https://cdn.staticfile.org/fingerprintjs2/2.1.0/fingerprint2.min.js"></script>
-    <!--[if lt IE 9]>
+  <meta charset="UTF-8">
+
+  <link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/common.css">
+  <link rel="stylesheet" href="/css/index.css">
+  <link rel="stylesheet" href="/css/home.css">
+  <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+  <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://cdn.staticfile.org/fingerprintjs2/2.1.0/fingerprint2.min.js"></script>
+  <!--[if lt IE 9]>
 	<script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
 	<![endif]-->
 </head>
 
 <body>
-    <div id="app" v-cloak>
-        {% include "public/header.html" %}
-
-
-
+  <div id="app" v-cloak>
+    {% include "public/header.html" %}
+    <div class="w1200 m40">
+      <el-card class="box-card list_index" shadow="hover" v-for="(item,index) in list" :key="item.id"
+        v-if="list.length>0" @click="goNewPage(item)">
+        <div slot="header" class="clearfix">
+          <span v-html="item.title">{{item.title}}</span>
+          <el-button style="float: right; padding: 3px 0" type="text" v-html="item.date">{{ item.date }}</el-button>
+        </div>
+        <div class="descc_index" v-html="item.descc">{{item.descc}}</div>
+        <div class="tag_list">
+          <div v-for="_item in item.tag" :key="_item" class="text item">
+            <el-tag v-html="_item">{{_item}}</el-tag>
+          </div>
+          <div class="allNum">
+            <span v-html="item.viewNum">{{item.viewNum}}</span>浏览
+            <span v-html="item.zanNum">{{item.zanNum}}</span>赞
+              <span v-html="item.commentNum">{{item.commentNum}}</span>评论
+          </div>
+        </div>
+      </el-card>
     </div>
+  </div>
 </body>
 <script src="/js/vue.js"></script>
 <script src="/js/index.js"></script>
 <script src="/js/oper.js"></script>
 <script>
+  $(function () {
     new Vue({
-        el: '#app',
-        data: function () {
-            return {
-                visible: false
+      el: '#app',
+      data: function () {
+        return {
+          list: [{
+              title: '测试标题',
+              date: '2020-01-15 10:15',
+              descc: "测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测",
+              tag: ['标签1', '标签2', '标签3', '标签4'],
+              viewNum: 203,
+              id: 1,
+              zanNum: 10,
+              commentNum: 10
+            },
+            {
+              title: '测试标题',
+              date: '2020-01-15 10:15',
+              descc: "测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测",
+              tag: ['标签1', '标签2', '标签3', '标签4'],
+              viewNum: 203,
+              zanNum: 10,
+              id: 2,
+              commentNum: 10
+            },
+            {
+              title: '测试标题',
+              date: '2020-01-15 10:15',
+              descc: "测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测",
+              tag: ['标签1', '标签2', '标签3', '标签4'],
+              viewNum: 203,
+              zanNum: 10,
+              id: 3,
+              commentNum: 10
             }
+          ],
         }
+      },
+      methods: {
+        goNewPage(id) {
+          debugger;
+        }
+      }
     })
+  })
+
 </script>
 
 </html>

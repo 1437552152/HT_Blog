@@ -1,0 +1,15 @@
+.list_index{
+    margin-bottom: 40px;
+}
+.tag_list{
+    display: flex;
+    margin-top: 20px;
+    position: relative;
+}
+.tag_list .item{
+    margin-right: 10px;
+}
+.tag_list .allNum{
+    position: absolute;
+    right: 10px;
+}
