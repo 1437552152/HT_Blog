@@ -1,4 +1,4 @@
-﻿<!--
+<!--
  * @Description: 
  * @Author: yfye
  * @Date: 2021-06-05 16:59:35
@@ -10,7 +10,7 @@
 
 <head>
   <meta charset="UTF-8">
-
+  <title>详情页</title>
   <link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="/css/common.css">
   <link rel="stylesheet" href="/css/index.css">
@@ -28,34 +28,32 @@
   <div id="app" v-cloak>
     {% include "public/header.html" %}
     <div class="w1200 m40">
-      <div class="content">
-        {% for item in list %}
-        <a href="/detail.html?id={{item.id}}" target="_blank">
-          <el-card class="box-card list_index" shadow="hover">
-            <div slot="header" class="clearfix">
-              <span>{{ item.title }}</span>
-              <el-button style="float: right; padding: 3px 0" type="text">{{ item.date }}</el-button>
-            </div>
-            <div class="descc_index">{{ item.descc }}</div>
-            <div class="tag_list">
-              {% for _item in item.tag %}
-              <div class="text item">
-                <el-tag>{{_item}}</el-tag>
-              </div>
-              {% endfor %}
-              <div class="allNum">
-                <span>{{ item.viewNum }}</span>浏览
-                <span>{{ item.zanNum }}</span>赞
-                <span>{{ item.commentNum }}</span>评论
-              </div>
-            </div>
-          </el-card>
-        </a>
-        {% endfor %}
-      </div>
-      <aside>
-        {% include "public/aside.html" %}
+      <aside style="width: 200px;">
+        {% include "public/menu.html" %}
       </aside>
+      <div class="content" style="width: 950px;">
+        <el-breadcrumb separator-class="el-icon-arrow-right">
+          <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+          <el-breadcrumb-item><a href="">前端</a></el-breadcrumb-item>
+          <el-breadcrumb-item><a href="">移动端</a></el-breadcrumb-item>
+          <el-breadcrumb-item>vant</el-breadcrumb-item>
+        </el-breadcrumb>
+
+        <div>
+          <ul class="detailTitle">
+            <li>作者:张三</li>
+            <li>创建于2020-01-15</li>
+            <li>修订者李四</li>
+            <li>更新于2020-12-15 10：25</li>
+          </ul>
+        </div>
+      
+        <div>
+          测试详情
+        </div>
+
+      </div>
+
     </div>
     {% include "public/footer.html" %}
   </div>
@@ -69,13 +67,14 @@
       el: '#app',
       data: function () {
         return {
-          input4: ''
+          activeName: 'second',
+
         }
 
       },
       methods: {
-        changeValue(e) {
-          debugger;
+        handleClick(tab, event) {
+          console.log(tab, event);
         }
       }
     })

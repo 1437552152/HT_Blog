@@ -1,0 +1,62 @@
+<!--
+ * @Description: 
+ * @Author: yfye
+ * @Date: 2021-06-05 16:59:35
+ * @LastEditTime: 2021-06-17 23:47:43
+ * @LastEditors: yfye
+-->
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>详情页</title>
+    <link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/home.css">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdn.staticfile.org/fingerprintjs2/2.1.0/fingerprint2.min.js"></script>
+    <!--[if lt IE 9]>
+	<script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+	<![endif]-->
+</head>
+
+<body>
+    <div id="app" v-cloak>
+        {% include "public/header.html" %}
+        <div class="w1200 m40">
+            <div class="content" style="width: 1200px;">
+                服务宗旨
+
+            </div>
+
+        </div>
+        {% include "public/footer.html" %}
+    </div>
+</body>
+<script src="/js/vue.js"></script>
+<script src="/js/index.js"></script>
+<script src="/js/oper.js"></script>
+<script>
+    $(function () {
+        new Vue({
+            el: '#app',
+            data: function () {
+                return {
+                 
+
+                }
+
+            },
+            methods: {
+      
+            }
+        })
+    })
+
+</script>
+
+</html>
