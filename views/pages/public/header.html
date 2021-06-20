@@ -6,8 +6,7 @@
             <div class="row">
                 <div class="col-lg-2 col-md-2 col-xs-2">
                     <div class="logo">
-                        <a href="javascript:window.location.pathname = location.pathname.slice(0, location.pathname.lastIndexOf('/')) + '/index.html';"
-                            title="LearnCoding">LearnCoding</a>
+                        <a href="/" title="LearnCoding">LearnCoding</a>
                     </div>
                 </div>
                 <div class="col-lg-8 col-md-8 col-xs-8" id="topNav">
@@ -245,7 +244,19 @@
                 </div>
                 <div class="col-lg-1 col-md-1 col-xs-1">
                     <div class="site">
-                        <a title="登陆注册" class="theme-login">登陆/注册</a>
+                        <el-dropdown>
+                            <span class="el-dropdown-link">
+                                张三<span class="caret"></span>
+                            </span>
+                            <el-dropdown-menu slot="dropdown">
+                                <el-dropdown-item><a href="/myNews.html">消息</a></el-dropdown-item>
+                                <el-dropdown-item><a href="/myArticle.html">个人中心</a></el-dropdown-item>
+                                <el-dropdown-item><a href="/index.html">退出</a></el-dropdown-item>
+                            </el-dropdown-menu>
+                        </el-dropdown>
+                    </div>
+                    <div class="site" style="display:none">
+                        <a href="javascript:void(0)" title="登陆注册" id="theme_login" class="theme-login">登陆/注册</a>
                     </div>
                 </div>
             </div>
@@ -260,12 +271,17 @@
     <div class="theme-popbod dform">
         <form class="theme-signin" name="loginform" action="" method="post">
             <ol>
-                <li><strong>用户名：</strong><input class="ipt" type="text" name="log" value="" size="20" placeholder="邮箱/账户昵称"/></li>
+                <li><strong>用户名：</strong><input class="ipt" type="text" name="log" value="" size="20"
+                        placeholder="邮箱/账户昵称" /></li>
                 <li><strong>密码：</strong><input class="ipt" type="password" name="pwd" value="" size="20" /></li>
 
-                <li style="display: flex;justify-content: space-between;width:338px"><div><input class="btn btn-primary" type="checkbox"  value="" style="margin-right:6px"/>30天免登录</div><div><a href="" style="color:#169BD5">忘记密码</a></div></li> 
+                <li style="display: flex;justify-content: space-between;width:338px">
+                    <div><input class="btn btn-primary" type="checkbox" value="" style="margin-right:6px" />30天免登录</div>
+                    <div><a href="" style="color:#169BD5">忘记密码</a></div>
+                </li>
                 <li><input class="btn btn-primary btnSubmit" type="submit" name="submit" value=" 登 录 " /></li>
-                <li style="display: flex;justify-content: space-between;width:338px"><a href="" style="color:#169BD5">注册账号</a></li> 
+                <li style="display: flex;justify-content: space-between;width:338px"><a href=""
+                        style="color:#169BD5">注册账号</a></li>
             </ol>
         </form>
     </div>

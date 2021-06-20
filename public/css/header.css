@@ -128,7 +128,8 @@
   color: #FFFBF0;
 }
 .header .nav .site a:hover {
-  color: #5e8579;
+  /* color: #5e8579; */
+  cursor: pointer;
 }
 .el-dropdown-link {
   cursor: pointer;
