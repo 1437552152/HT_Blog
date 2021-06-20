@@ -35,22 +35,22 @@
                 <el-row>
                     <el-form :inline="true" :model="formInline" class="demo-form-inline">
                         <el-form-item label="文章名">
-                            <el-input v-model="formInline.user" placeholder="文章名搜索"  size="mini"></el-input>
+                            <el-input v-model="formInline.user" placeholder="文章名搜索" size="mini"></el-input>
                         </el-form-item>
                         <el-form-item label="文章所属大纲">
-                            <el-select v-model="formInline.region" placeholder="文章所属大纲"  size="mini">
+                            <el-select v-model="formInline.region" placeholder="文章所属大纲" size="mini">
                                 <el-option label="大纲1" value="1"></el-option>
                                 <el-option label="大纲2" value="2"></el-option>
                             </el-select>
                         </el-form-item>
                         <el-form-item label="文章状态">
-                            <el-select v-model="formInline.status" placeholder="文章状态"  size="mini">
+                            <el-select v-model="formInline.status" placeholder="文章状态" size="mini">
                                 <el-option label="已下线" value="1"></el-option>
                                 <el-option label="已上线" value="2"></el-option>
                             </el-select>
                         </el-form-item>
                         <el-form-item>
-                            <el-button type="primary" @click="onSubmit"  size="mini">查询</el-button>
+                            <el-button type="primary" @click="onSubmit" size="mini">查询</el-button>
                         </el-form-item>
                     </el-form>
                 </el-row>
@@ -84,9 +84,7 @@
                     </el-table-column>
                 </el-table>
                 <div style="margin-top: 30px;">
-                    <el-pagination align='center' @size-change="handleSizeChange" @current-change="handleCurrentChange"
-                        :current-page="currentPage" :page-sizes="[1,5,10,20]" :page-size="pageSize"
-                        layout="total, sizes, prev, pager, next, jumper" :total="tableData.length">
+                    <el-pagination align='center' @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[1,5,10,20]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="tableData.length">
                     </el-pagination>
                 </div>
             </div>
@@ -98,12 +96,12 @@
 <script src="/js/index.js"></script>
 <script src="/js/oper.js"></script>
 <script>
-    $(function () {
+    $(function() {
         new Vue({
             el: '#app',
-            data: function () {
+            data: function() {
                 return {
-                    activeName: 'second',
+                    activeName: window.location.pathname,
                     tableData: [{
                         date: '2016-05-02',
                         name: '王小虎',
@@ -139,7 +137,7 @@
                     formInline: {
                         user: '',
                         region: '1',
-                        status:'1'
+                        status: '1'
                     }
                 }
             },
@@ -161,7 +159,6 @@
             }
         })
     })
-
 </script>
 
 </html>
