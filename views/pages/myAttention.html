@@ -34,7 +34,7 @@
             <div class="content" style="width: 950px;">
                 <el-table :data="tableData" border style="width: 100%">
                     <el-table-column prop="date" label="图片" align="center">
-                          <template slot-scope= "scope">
+                          <template slot-scope="scope">
                               <img :src="scope.row.comImage" style= "width:72px;height:72px">
                          </template>
                     </el-table-column>
