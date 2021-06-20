@@ -62,9 +62,9 @@
     width: 500px;
     background-color: #fff;
     box-sizing: border-box;
-    position: relative;
+    position: absolute;
     left: 10px;
-    top: -10px;
+    top: 50px;
 }
 
 .header .nav .top-nav>li .nav-box:before {

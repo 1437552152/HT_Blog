@@ -18,6 +18,7 @@
     <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://cdn.staticfile.org/fingerprintjs2/2.1.0/fingerprint2.min.js"></script>
+    <script src="/js/learn-coding.js"></script>
     <!--[if lt IE 9]>
 	<script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
@@ -35,20 +36,18 @@
                 <el-table :data="tableData" border style="width: 100%">
                     <el-table-column prop="title" label="标题" align="center">
                     </el-table-column>
-                    <el-table-column prop="content" label="内容" align= "center">
+                    <el-table-column prop="content" label="内容" align="center">
                     </el-table-column>
-                    <el-table-column label="状态" align="center">
-                        
-                         <template slot-scope="scope">                         
-                               <!--  <el-tag size="medium">{{Number(scope.row.status)==1?"已处理":"待处理"}}</el-tag> -->
-                               <el-tag size="medium">{{ scope.row.content }}</el-tag>
-                            </template>
+                    <el-table-column label="状态" prop="status" align="center">
+                        <template slot-scope="scope">
+                            <el-tag size="medium">{{scope.row.title}}</el-tag>
+                        </template>
                     </el-table-column>
                     <el-table-column prop="checktime" label="反馈时间" align="center">
                     </el-table-column>
                     <el-table-column prop="dealtime" label="处理时间" align="center">
                     </el-table-column>
-                    <el-table-column label="操作" width="250" align= "center">
+                    <el-table-column label="操作" width="250" align="center">
                         <template slot-scope="scope">
                             <el-button @click="viewDetail()" type="primary" size="small">查看详情</el-button>
                             <el-button @click="update()" type="primary" size="small">修改</el-button>
@@ -57,9 +56,7 @@
                     </el-table-column>
                 </el-table>
                 <div style="margin-top: 30px;">
-                    <el-pagination align='center' @size-change="handleSizeChange" @current-change="handleCurrentChange"
-                        :current-page="currentPage" :page-sizes="[1,5,10,20]" :page-size="pageSize"
-                        layout="total, sizes, prev, pager, next, jumper" :total="tableData.length">
+                    <el-pagination align='center' @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[1,5,10,20]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="tableData.length">
                     </el-pagination>
                 </div>
 
@@ -73,11 +70,12 @@
 <script src="/js/index.js"></script>
 <script src="/js/oper.js"></script>
 <script>
-    $(function () {
+    $(function() {
         new Vue({
             el: '#app',
-            data: function () {
+            data: function() {
                 return {
+                    activeName: window.location.pathname,
                     tableData: [{
                         title: '2016-05-02',
                         content: '王小虎',
@@ -105,10 +103,10 @@
             },
             methods: {
                 viewDetail() {
-                   
+
                 },
-                update(){},
-                del(){},
+                update() {},
+                del() {},
                 //每页条数改变时触发 选择一页显示多少行
                 handleSizeChange(val) {
                     console.log(`每页 ${val} 条`);
@@ -123,7 +121,6 @@
             }
         })
     })
-
 </script>
 
 </html>
