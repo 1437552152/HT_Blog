@@ -9,77 +9,98 @@
 <html>
 
 <head>
-  <meta charset="UTF-8">
-
-  <link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="/css/common.css">
-  <link rel="stylesheet" href="/css/index.css">
-  <link rel="stylesheet" href="/css/home.css">
-  <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
-  <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  <script src="https://cdn.staticfile.org/fingerprintjs2/2.1.0/fingerprint2.min.js"></script>
-  <!--[if lt IE 9]>
+    <meta charset="UTF-8">
+    <link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/home.css">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdn.staticfile.org/fingerprintjs2/2.1.0/fingerprint2.min.js"></script>
+    <script src="/js/learn-coding.js"></script>
+    <!--[if lt IE 9]>
 	<script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
 	<![endif]-->
 </head>
 
 <body>
-  <div id="app" v-cloak>
-    {% include "public/header.html" %}
-    <div class="w1200 m40">
-      <div class="content">
-        {% for item in list %}
-        <a href="/detail.html?id={{item.id}}" target="_blank">
-          <el-card class="box-card list_index" shadow="hover">
-            <div slot="header" class="clearfix">
-              <span>{{ item.title }}</span>
-              <el-button style="float: right; padding: 3px 0" type="text">{{ item.date }}</el-button>
+    <div id="app" v-cloak>
+        {% include "public/header.html" %}
+        <div class="w1200 m40">
+            <div class="content">
+                {% for item in list %}
+                <a href="/detail.html?id={{item.id}}" target="_blank">
+                    <el-card class="box-card list_index" shadow="hover">
+                        <div slot="header" class="clearfix">
+                            <span>{{ item.title }}</span>
+                            <el-button style="float: right; padding: 3px 0" type="text">{{ item.date }}</el-button>
+                        </div>
+                        <div class="descc_index">{{ item.descc }}</div>
+                        <div class="tag_list">
+                            {% for _item in item.tag %}
+                            <div class="text item">
+                                <el-tag>{{_item}}</el-tag>
+                            </div>
+                            {% endfor %}
+                            <div class="allNum">
+                                <span>{{ item.viewNum }}</span>浏览
+                                <span>{{ item.zanNum }}</span>赞
+                                <span>{{ item.commentNum }}</span>评论
+                            </div>
+                        </div>
+                    </el-card>
+                </a>
+                {% endfor %}
+                <div style="margin-top: 30px;">
+                    <el-pagination align='center' @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[1,5,10,20]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="{{list.length}}">
+                    </el-pagination>
+                </div>
             </div>
-            <div class="descc_index">{{ item.descc }}</div>
-            <div class="tag_list">
-              {% for _item in item.tag %}
-              <div class="text item">
-                <el-tag>{{_item}}</el-tag>
-              </div>
-              {% endfor %}
-              <div class="allNum">
-                <span>{{ item.viewNum }}</span>浏览
-                <span>{{ item.zanNum }}</span>赞
-                <span>{{ item.commentNum }}</span>评论
-              </div>
-            </div>
-          </el-card>
-        </a>
-        {% endfor %}
-      </div>
-      <aside>
-        {% include "public/aside.html" %}
-      </aside>
+            <aside>
+                {% include "public/aside.html" %}
+            </aside>
+            <div class="clearfix"></div>
+        </div>
+
+
+        {% include "public/footer.html" %}
     </div>
-    {% include "public/footer.html" %}
-  </div>
 </body>
 <script src="/js/vue.js"></script>
 <script src="/js/index.js"></script>
 <script src="/js/oper.js"></script>
 <script>
-  $(function () {
-    new Vue({
-      el: '#app',
-      data: function () {
-        return {
-          input4: ''
-        }
+    $(function() {
+        new Vue({
+            el: '#app',
+            data: function() {
+                return {
+                    input4: '',
+                    currentPage: 1, // 当前页码
+                    total: 20, // 总条数
+                    pageSize: 2, // 每页的数据条数
+                }
 
-      },
-      methods: {
-        changeValue(e) {
-          debugger;
-        }
-      }
+            },
+            methods: {
+                changeValue(e) {
+                    debugger;
+                },
+                //每页条数改变时触发 选择一页显示多少行
+                handleSizeChange(val) {
+                    console.log(`每页 ${val} 条`);
+                    this.currentPage = 1;
+                    this.pageSize = val;
+                },
+                //当前页改变时触发 跳转其他页
+                handleCurrentChange(val) {
+                    console.log(`当前页: ${val}`);
+                    this.currentPage = val;
+                }
+            }
+        })
     })
-  })
-
 </script>
+
 </html>

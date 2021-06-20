@@ -18,6 +18,7 @@
     <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://cdn.staticfile.org/fingerprintjs2/2.1.0/fingerprint2.min.js"></script>
+    <script src="/js/learn-coding.js"></script>
     <!--[if lt IE 9]>
 	<script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
@@ -34,23 +35,21 @@
             <div class="content" style="width: 950px;">
                 <el-table :data="tableData" border style="width: 100%">
                     <el-table-column prop="date" label="图片" align="center">
-                          <template slot-scope="scope">
+                        <template slot-scope="scope">
                               <img :src="scope.row.comImage" style= "width:72px;height:72px">
                          </template>
                     </el-table-column>
-                    <el-table-column prop="name" label="标题" align= "center">
+                    <el-table-column prop="name" label="标题" align="center">
                     </el-table-column>
-                  
-                    <el-table-column label="操作" width="120" align= "center">
+
+                    <el-table-column label="操作" width="120" align="center">
                         <template slot-scope="scope">
                             <el-button @click="dialogVisible = true" type="danger" size="small">取消关注</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
                 <div style="margin-top: 30px;">
-                    <el-pagination align='center' @size-change="handleSizeChange" @current-change="handleCurrentChange"
-                        :current-page="currentPage" :page-sizes="[1,5,10,20]" :page-size="pageSize"
-                        layout="total, sizes, prev, pager, next, jumper" :total="tableData.length">
+                    <el-pagination align='center' @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[1,5,10,20]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="tableData.length">
                     </el-pagination>
                 </div>
             </div>
@@ -62,12 +61,12 @@
 <script src="/js/index.js"></script>
 <script src="/js/oper.js"></script>
 <script>
-    $(function () {
+    $(function() {
         new Vue({
             el: '#app',
-            data: function () {
+            data: function() {
                 return {
-                    activeName: 'second',
+                    activeName: window.location.pathname,
                     tableData: [{
                         date: '2016-05-02',
                         name: '王小虎',
@@ -75,7 +74,7 @@
                         city: '普陀区',
                         address: '上海市普陀区金沙江路 1518 弄',
                         zip: 200333,
-                        comImage:'https://img-blog.csdnimg.cn/20201014180756927.png'
+                        comImage: 'https://img-blog.csdnimg.cn/20201014180756927.png'
                     }, {
                         date: '2016-05-04',
                         name: '王小虎',
@@ -83,7 +82,7 @@
                         city: '普陀区',
                         address: '上海市普陀区金沙江路 1517 弄',
                         zip: 200333,
-                        comImage:'https://img-blog.csdnimg.cn/20201014180756927.png'
+                        comImage: 'https://img-blog.csdnimg.cn/20201014180756927.png'
                     }, {
                         date: '2016-05-01',
                         name: '王小虎',
@@ -91,7 +90,7 @@
                         city: '普陀区',
                         address: '上海市普陀区金沙江路 1519 弄',
                         zip: 200333,
-                        comImage:'https://img-blog.csdnimg.cn/20201014180756927.png'
+                        comImage: 'https://img-blog.csdnimg.cn/20201014180756927.png'
                     }, {
                         date: '2016-05-03',
                         name: '王小虎',
@@ -99,7 +98,7 @@
                         city: '普陀区',
                         address: '上海市普陀区金沙江路 1516 弄',
                         zip: 200333,
-                        comImage:'https://img-blog.csdnimg.cn/20201014180756927.png'
+                        comImage: 'https://img-blog.csdnimg.cn/20201014180756927.png'
                     }],
                     currentPage: 1, // 当前页码
                     total: 20, // 总条数
@@ -124,7 +123,6 @@
             }
         })
     })
-
 </script>
 
 </html>

@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: yfye
  * @Date: 2021-06-05 16:59:35
- * @LastEditTime: 2021-06-20 23:13:21
+ * @LastEditTime: 2021-06-20 23:23:06
  * @LastEditors: yfye
 -->
 <!DOCTYPE html>
@@ -18,6 +18,7 @@
     <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://cdn.staticfile.org/fingerprintjs2/2.1.0/fingerprint2.min.js"></script>
+    <script src="/js/learn-coding.js"></script>
     <!--[if lt IE 9]>
 	<script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
@@ -61,12 +62,12 @@
 <script src="/js/index.js"></script>
 <script src="/js/oper.js"></script>
 <script>
-    $(function () {
+    $(function() {
         new Vue({
             el: '#app',
-            data: function () {
+            data: function() {
                 return {
-                    activeName: 'second',
+                    activeName:window.location.pathname,
                     tableData: [{
                         date: '2016-05-02',
                         reason: '王小虎',
@@ -117,7 +118,6 @@
             }
         })
     })
-
 </script>
 
 </html>
