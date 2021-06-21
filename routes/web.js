@@ -161,7 +161,7 @@ router.get('/adviseManagement.html', (req, res) => {
 
 router.get('/1/:menu', (req, res) => {
   res.render('two', {
-    data: {}
+    data: {status:1}
   })
 });
 

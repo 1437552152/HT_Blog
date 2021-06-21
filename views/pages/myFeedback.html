@@ -45,10 +45,8 @@
           <el-table-column prop="dealtime" label="处理时间" align="center">
           </el-table-column>
           <el-table-column label="操作" width="250" align="center">
-            <template slot-scope="scope" v-if="HandleStatus(scope.row.status)">
-              <el-button @click="viewDetail()" type="primary" size="small">查看详情</el-button>
-            </template>
-            <template slot-scope="scope" v-if="scope.row.status!=1?true:false">
+            <template slot-scope="scope">
+              <el-button @click="viewDetail()" type="primary" size="small"  v-if="scope.row.status!=1?true:false">查看详情</el-button>
               <el-button @click="update()" type="primary" size="small">修改</el-button>
               <el-button @click="del()" type="primary" size="small">删除</el-button>
             </template>

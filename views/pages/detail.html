@@ -19,6 +19,8 @@
     <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://cdn.staticfile.org/fingerprintjs2/2.1.0/fingerprint2.min.js"></script>
     <script src="/js/learn-coding.js"></script>
+    <link rel="stylesheet" href="/css/main.css" />
+<link rel="stylesheet" type="text/css" href="/css/sinaFaceAndEffec.css" />
     <!--[if lt IE 9]>
 	<script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
@@ -32,7 +34,7 @@
             <aside style="width: 200px;">
                 {% include "public/menu.html" %}
             </aside>
-            <div class="content" style="width: 950px;">
+            <div class="content" style="width: 950px;" id="content">
                 <el-breadcrumb separator-class="el-icon-arrow-right">
                     <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
                     <el-breadcrumb-item><a href="">前端</a></el-breadcrumb-item>
@@ -49,12 +51,32 @@
                     </ul>
                 </div>
 
-                <div>
+                <div style="min-height: 300px;">
                     测试详情
                 </div>
-
+                <div class="wrap">
+                    <div class="comment">
+                        <div class="head-face">
+                            <img src="/images/1.jpg" />
+                            <p>我是鸟</p>
+                        </div>
+                        <div class="content">
+                            <div class="cont-box">
+                                <textarea class="text" placeholder="请输入..."></textarea>
+                            </div>
+                            <div class="tools-box">
+                                <div class="operator-box-btn"><span class="face-icon">☺</span><span
+                                        class="img-icon">▧</span></div>
+                                <div class="submit-btn"><input type="button" onClick="out()" value="提交评论" /></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="info-show">
+                        <ul></ul>
+                    </div>
+                </div>
             </div>
-
+            <div class="clearfix"></div>
         </div>
         {% include "public/footer.html" %}
     </div>
@@ -63,15 +85,14 @@
 <script src="/js/index.js"></script>
 <script src="/js/oper.js"></script>
 <script>
-    $(function() {
+    $(function () {
         new Vue({
             el: '#app',
-            data: function() {
+            data: function () {
                 return {
                     activeName: window.location.pathname,
 
                 }
-
             },
             methods: {
                 handleClick(tab, event) {
@@ -80,6 +101,34 @@
             }
         })
     })
+</script>
+<script type="text/javascript" src="/js/main.js"></script>
+<script type="text/javascript" src="/js/sinaFaceAndEffec.js"></script>
+<script type="text/javascript">
+  $(function () {
+    // 绑定表情
+    $('.face-icon').SinaEmotion($('.text'));
+    // 测试本地解析
+    function out() {
+        var inputText = $('.text').val();
+        $('#info-show ul').append(reply(AnalyticEmotion(inputText)));
+    }
+
+    var html;
+    function reply(content) {
+        html = '<li>';
+        html += '<div class="head-face">';
+        html += '<img src="images/1.jpg" / >';
+        html += '</div>';
+        html += '<div class="reply-cont">';
+        html += '<p class="username">小小红色飞机</p>';
+        html += '<p class="comment-body">' + content + '</p>';
+        html += '<p class="comment-footer">2016年10月5日　回复　点赞54　转发12</p>';
+        html += '</div>';
+        html += '</li>';
+        return html;
+    }
+})
 </script>
 
 </html>

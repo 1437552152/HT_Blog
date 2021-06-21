@@ -34,34 +34,48 @@
             </aside>
             <div class="content" style="width: 950px;">
 
-                <el-form :inline="true" :model="userform" class="demo-form-inline">
-                    <el-form-item label="关注点">
-                        <el-input v-model="userform.point" placeholder="请输入" size="mini"></el-input>
-                    </el-form-item>
-                    <el-form-item label="文章名">
-                        <el-input v-model="userform.name" placeholder="请输入" size="mini"></el-input>
-                    </el-form-item>
-                    <el-form-item label="文章难度级别">
-                        <el-select v-model="userform.diff" placeholder="请选择" size="mini">
-                            <el-option label="1" value="1"></el-option>
-                            <el-option label="2" value="2"></el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="文章大纲">
-                        <el-select v-model="userform.bigCont" placeholder="请选择" size="mini">
-                            <el-option label="1" value="1"></el-option>
-                            <el-option label="2" value="2"></el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="文章状态">
-                        <el-select v-model="userform.status" placeholder="请选择" size="mini">
-                            <el-option label="1" value="1"></el-option>
-                            <el-option label="2" value="2"></el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item>
-                        <el-button type="primary" @click="onSubmit" size="mini">搜索</el-button>
-                    </el-form-item>
+                <el-form :inline="true" :model="userform" class="demo-form-inline" label-width="80px">
+                    <el-row>
+                        <el-col span="8">
+                            <el-form-item label="关注点">
+                                <el-input v-model="userform.point" placeholder="请输入" size="mini"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col span="8">
+                            <el-form-item label="文章名">
+                                <el-input v-model="userform.name" placeholder="请输入" size="mini"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col span="8">
+                            <el-form-item label="难度级别">
+                                <el-select v-model="userform.diff" placeholder="请选择" size="mini">
+                                    <el-option label="1" value="1"></el-option>
+                                    <el-option label="2" value="2"></el-option>
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                        <el-col span="8">
+                            <el-form-item label="文章大纲">
+                                <el-select v-model="userform.bigCont" placeholder="请选择" size="mini">
+                                    <el-option label="1" value="1"></el-option>
+                                    <el-option label="2" value="2"></el-option>
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                        <el-col span="8">
+                            <el-form-item label="文章状态">
+                                <el-select v-model="userform.status" placeholder="请选择" size="mini">
+                                    <el-option label="1" value="1"></el-option>
+                                    <el-option label="2" value="2"></el-option>
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                        <el-col span="8">
+                            <el-form-item>
+                                <el-button type="primary" @click="onSubmit" size="mini">搜索</el-button>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
                 </el-form>
                 <el-table :data="tableData" border style="width: 100%">
                     <el-table-column prop="title" label="文章名" align="center">
@@ -76,20 +90,18 @@
                     </el-table-column>
                     <el-table-column prop="dealtime" label="难度" align="center">
                     </el-table-column>
-                    <el-table-column label="操作" width="250" align="center">
+                    <el-table-column label="操作" width="250" align="center">                   
                         <template slot-scope="scope">
-              <el-button @click="viewPage()" type="primary" size="small">查看文章</el-button>
-            </template>
-                        <template slot-scope="scope" v-if="HandleStatus(scope.row.status)">
-              <el-button @click="viewDetail()" type="primary" size="small">上架审核</el-button>
-            </template>
-                        <template slot-scope="scope" v-if="scope.row.status!=1?true:false">
-              <el-button @click="update()" type="primary" size="small">下架</el-button>
-            </template>
+                            <el-button @click="update()" type="primary" size="small" v-if="scope.row.status==1?true:false">下架</el-button>
+                            <el-button @click="viewPage()" type="primary" size="small">查看文章</el-button>
+                            <el-button @click="viewDetail()" type="primary" size="small">上架审核</el-button>
+                        </template>                     
                     </el-table-column>
                 </el-table>
                 <div style="margin-top: 30px;">
-                    <el-pagination align='center' @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[1,5,10,20]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="tableData.length">
+                    <el-pagination align='center' @size-change="handleSizeChange" @current-change="handleCurrentChange"
+                        :current-page="currentPage" :page-sizes="[1,5,10,20]" :page-size="pageSize"
+                        layout="total, sizes, prev, pager, next, jumper" :total="tableData.length">
                     </el-pagination>
                 </div>
                 <el-dialog title="查看详情" :visible.sync="dialogVisible" width="30%">
@@ -112,9 +124,9 @@
                         </el-form-item>
                     </el-form>
                     <span slot="footer" class="dialog-footer">
-            <el-button @click="checkNo()">取 消</el-button>
-            <el-button type="primary" @click="checkYes()">确 定</el-button>
-          </span>
+                        <el-button @click="checkNo()">取 消</el-button>
+                        <el-button type="primary" @click="checkYes()">确 定</el-button>
+                    </span>
                 </el-dialog>
 
 
@@ -125,8 +137,8 @@
                         </el-form-item>
                     </el-form>
                     <span slot="footer" class="dialog-footer">
-            <el-button type="primary" @click="issure()">提交</el-button>
-          </span>
+                        <el-button type="primary" @click="issure()">提交</el-button>
+                    </span>
                 </el-dialog>
 
 
@@ -140,10 +152,10 @@
 <script src="/js/index.js"></script>
 <script src="/js/oper.js"></script>
 <script>
-    $(function() {
+    $(function () {
         new Vue({
             el: '#app',
-            data: function() {
+            data: function () {
                 return {
                     tableData: [{
                         id: 0,
@@ -201,6 +213,9 @@
                 update() {
                     this.deldialogVisible = true
                 },
+                viewPage(){
+                    
+                },
                 HandleStatus(status) {
                     return status == 1 ? true : false
                 },
@@ -233,8 +248,8 @@
                 issure() {
                     this.deldialogVisible = false
                 },
-                onSubmit() {},
-                onSearch() {},
+                onSubmit() { },
+                onSearch() { },
                 bclxChange(selectValue) {
                     if (selectValue == 1) {
                         this.isPoint = true;
