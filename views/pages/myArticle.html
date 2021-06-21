@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: yfye
  * @Date: 2021-06-05 16:59:35
- * @LastEditTime: 2021-06-17 23:47:43
+ * @LastEditTime: 2021-06-22 00:12:27
  * @LastEditors: yfye
 -->
 <!DOCTYPE html>
@@ -33,6 +33,7 @@
                 {% include "public/myUser.html" %}
             </aside>
             <div class="content" style="width: 950px;">
+              
                 <el-row>
                     <el-form :inline="true" :model="formInline" class="demo-form-inline">
                         <el-form-item label="文章名">
@@ -52,6 +53,7 @@
                         </el-form-item>
                         <el-form-item>
                             <el-button type="primary" @click="onSubmit" size="mini">查询</el-button>
+                            <el-button type="primary" @click="addSubmit" size="mini">新增</el-button>
                         </el-form-item>
                     </el-form>
                 </el-row>
@@ -156,6 +158,9 @@
                 handleCurrentChange(val) {
                     console.log(`当前页: ${val}`);
                     this.currentPage = val;
+                },
+                addSubmit(){
+                    window.location.href="/articleEdit.html"
                 }
             }
         })

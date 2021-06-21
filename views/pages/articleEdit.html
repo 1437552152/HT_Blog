@@ -2,61 +2,246 @@
  * @Description: 
  * @Author: yfye
  * @Date: 2021-06-05 16:59:35
- * @LastEditTime: 2021-06-17 23:47:43
+ * @LastEditTime: 2021-06-22 00:54:21
  * @LastEditors: yfye
 -->
 <!DOCTYPE html>
 <html>
 
 <head>
-    <meta charset="UTF-8">
-    <title>详情页</title>
-    <link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/css/common.css">
-    <link rel="stylesheet" href="/css/index.css">
-    <link rel="stylesheet" href="/css/home.css">
-    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
-    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="https://cdn.staticfile.org/fingerprintjs2/2.1.0/fingerprint2.min.js"></script>
-    <script src="/js/learn-coding.js"></script>
-    <!--[if lt IE 9]>
+  <meta charset="UTF-8">
+  <title>详情页</title>
+  <link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/common.css">
+  <link rel="stylesheet" href="/css/index.css">
+  <link rel="stylesheet" href="/css/home.css">
+  <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+  <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://cdn.staticfile.org/fingerprintjs2/2.1.0/fingerprint2.min.js"></script>
+  <script src="/js/learn-coding.js"></script>
+  <!--[if lt IE 9]>
 	<script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
 	<![endif]-->
 </head>
 
 <body>
-    <div id="app" v-cloak>
-        {% include "public/header.html" %}
-        <div class="w1200 m40">
-            <div class="content" style="width: 1200px;">
-                服务宗旨
+  <div id="app" v-cloak>
+    {% include "public/header.html" %}
+    <div class="w1200 m40">
+      <div class="content" style="width: 1200px;">
+        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+          <el-form-item label="标题" prop="name">
+            <el-input v-model="ruleForm.name" placeholder="请输入标题"></el-input>
+          </el-form-item>
 
-            </div>
+          <el-form-item label="标题" prop="name">
+            <textarea id="mytextarea" style="height: 500px;">Hello, World!</textarea>
+          </el-form-item>
 
-        </div>
-        {% include "public/footer.html" %}
+          <el-form-item label="所属大纲" prop="region">
+            <el-select v-model="ruleForm.region" placeholder="请选择文章所属大纲">
+              <el-option label="大纲一" value="shanghai"></el-option>
+              <el-option label="大纲二" value="beijing"></el-option>
+            </el-select>
+            <el-button type="primary" @click="addCont()">新增大纲</el-button>
+          </el-form-item>
+          <el-form-item label="文章标签" prop="type">
+            <el-checkbox-group v-model="ruleForm.type">
+              <el-checkbox label="标签1" name="type"></el-checkbox>
+              <el-checkbox label="标签2" name="type"></el-checkbox>
+              <el-checkbox label="标签3" name="type"></el-checkbox>
+              <el-checkbox label="标签4" name="type"></el-checkbox>
+            </el-checkbox-group>
+            <el-button type="primary" @click="addLevel()">新增标签</el-button>
+          </el-form-item>
+          <el-form-item label="文章主旨" prop="arctilemain">
+            <el-select v-model="ruleForm.arctilemain" multiple  placeholder="请选择文章主旨">
+              <el-option label="文章主旨一" value="shanghai"></el-option>
+              <el-option label="文章主旨二" value="beijing"></el-option>
+            </el-select>
+            <el-button type="primary" @click="addMain()">新增文章主旨</el-button>
+          </el-form-item>
+          <el-form-item label="文章难度" prop="difficult">
+            <el-rate v-model="ruleForm.difficult"></el-rate>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" @click="saveForm('ruleForm')">存为草稿</el-button>
+            <el-button @click="viewPdf()">预览</el-button>
+            <el-button @click="publish()">发布</el-button>
+            <el-button @click="resetForm('ruleForm')">取消</el-button>
+          </el-form-item>
+        </el-form>
+
+
+        <el-dialog title="新增大纲" :visible.sync="adddialogFormVisible">
+          <el-form :model="form">
+            <el-form-item label="大纲名" :label-width="formLabelWidth">
+              <el-input v-model="form.name" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="父级大纲" :label-width="formLabelWidth">
+              <el-select v-model="form.region" placeholder="请选择活动区域">
+                <el-option label="大纲一" value="shanghai"></el-option>
+                <el-option label="大纲二" value="beijing"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="排序列" :label-width="formLabelWidth">
+              <el-input v-model="form.sortcol" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="概述" :label-width="formLabelWidth">
+              <el-input type="textarea" v-model="form.desc"></el-input>
+            </el-form-item>
+            <el-form-item label="详细描述" :label-width="formLabelWidth">
+              <el-input type="textarea" v-model="form.detaildesc"></el-input>
+            </el-form-item>
+            <el-form-item label="备注" :label-width="formLabelWidth">
+              <el-input type="textarea" v-model="form.remind"></el-input>
+            </el-form-item>
+          </el-form>
+          <div slot="footer" class="dialog-footer">
+            <el-button @click="adddialogFormVisible = false">取 消</el-button>
+            <el-button type="primary" @click="adddialogFormVisible = false">确 定</el-button>
+          </div>
+        </el-dialog>
+
+        <el-dialog title="新增标签" :visible.sync="addLeveldialog">
+          <el-form :model="levelform">
+            <el-form-item label="标签" :label-width="formLabelWidth">
+              <el-input v-model="levelform.level" autocomplete="off"></el-input>
+            </el-form-item>
+          </el-form>
+          <div slot="footer" class="dialog-footer">
+            <el-button @click="addLeveldialog = false">取 消</el-button>
+            <el-button type="primary" @click="addLeveldialog = false">确 定</el-button>
+          </div>
+        </el-dialog>
+
+        <el-dialog title="新增文章主旨" :visible.sync="addMaindialog">
+          <el-form :model="mainform">
+            <el-form-item label="文章主旨" :label-width="formLabelWidth">
+              <el-input v-model="mainform.name" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="类型" :label-width="formLabelWidth">
+              <el-select v-model="mainform.articleType" placeholder="请选择活动区域">
+                <el-option label="大纲一" value="shanghai"></el-option>
+                <el-option label="大纲二" value="beijing"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="概述" :label-width="formLabelWidth">
+              <el-input type="textarea" v-model="mainform.remind"></el-input>
+            </el-form-item>
+          </el-form>
+          <div slot="footer" class="dialog-footer">
+            <el-button @click="addMaindialog = false">取 消</el-button>
+            <el-button type="primary" @click="addMaindialog = false">确 定</el-button>
+          </div>
+        </el-dialog>
+
+      </div>
+
     </div>
+    {% include "public/footer.html" %}
+  </div>
 </body>
 <script src="/js/vue.js"></script>
 <script src="/js/index.js"></script>
 <script src="/js/oper.js"></script>
+<script src="/js/tinymce/tinymce.min.js"></script>
+<script src="/js/tinymce.js"></script>
 <script>
-    $(function() {
-        new Vue({
-            el: '#app',
-            data: function() {
-                return {
+  $(function () {
+    new Vue({
+      el: '#app',
+      data: function () {
+        return {
+          formLabelWidth: '120px',
+          ruleForm: {
+            name: '',
+            region: '',
+            type: [],
+            arctilemain: [],
+            difficult: null
+          },
+          form: {
+            name: '',
+            region: '',
+            sortcol: '',
+            desc: '',
+            detaildesc: '',
+            remind: ''
+          },
+          levelform: {
+            level: ''
+          },
+          mainform: {
+            name: '',
+            articleType: '',
+            remind: ''
+          },
+          rules: {
+            name: [{
+              required: true,
+              message: '请输入标题',
+              trigger: 'blur'
+            }],
+            region: [{
+              required: true,
+              message: '请选择文章所属大纲',
+              trigger: 'change'
+            }],
+            type: [{
+              type: 'array',
+              required: true,
+              message: '请至少选择一个文章标签',
+              trigger: 'change'
+            }],
+            arctilemain: [{
+              type: 'array',
+              required: true,
+              message: '请至少选择一个文章主旨',
+              trigger: 'change'
+            }],
+            difficult: [{
+              required: true,
+              message: '请选择文章难度',
+              trigger: 'blur'
+            }]
+          },
+          adddialogFormVisible: false,
+          addLeveldialog: false,
+          addMaindialog: false
+        }
 
-
-                }
-
-            },
-            methods: {
-
+      },
+      methods: {
+        saveForm(formName) {
+          this.$refs[formName].validate((valid) => {
+            if (valid) {
+              alert('submit!');
+            } else {
+              console.log('error submit!!');
+              return false;
             }
-        })
+          });
+        },
+        resetForm(formName) {
+          this.$refs[formName].resetFields();
+        },
+        publish() {},
+        viewPdf() {},
+        addCont() {
+          this.adddialogFormVisible = true
+        },
+        addLevel() {
+          this.addLeveldialog = true
+        },
+        addMain() {
+          this.addMaindialog = true
+        }
+      }
     })
+  })
+
 </script>
 
 </html>
