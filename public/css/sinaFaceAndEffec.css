@@ -53,20 +53,20 @@
 	background: #F0F0F0;
 }
 #emotions .container{
-	padding:1px;
-	overflow: hidden;
-	min-height:auto;
-	overflow-y:auto;
-	max-height:180px;
+	padding: 1px;
+    overflow: hidden;
+    min-height: auto;
+    overflow-y: scroll;
+    max-height: 180px;
+    width: 100%;
 }
 #emotions .container a{
-	float:left;
-	width:26px;
-	height:22px;
-	text-align:center;
-	padding: 4px 2px;
-	margin: -1px 0 0 -1px;
-	border: 1px solid #e8e8e8;
+	float: left;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    padding: 4px 2px;
+    margin: -1px 0 0 -1px;
 }
 #emotions .container a:hover{
 	z-index:2;

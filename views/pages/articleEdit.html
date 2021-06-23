@@ -63,7 +63,7 @@
             <el-button type="primary" @click="addMain()">新增文章主旨</el-button>
           </el-form-item>
           <el-form-item label="文章难度" prop="difficult">
-            <el-rate v-model="ruleForm.difficult"></el-rate>
+            <el-rate v-model="ruleForm.difficult" style="margin-top:10px"></el-rate>
           </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="saveForm('ruleForm')">存为草稿</el-button>
