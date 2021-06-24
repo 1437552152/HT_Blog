@@ -84,6 +84,7 @@ function goRegister() {
 function closeDoor() {
     $(".theme-popover1").css("display", 'none');
     $(".theme-popover2").css("display", 'none');
+    $(".theme-popover3").css("display", 'none');
     $(".theme-popover-mask").css("display", 'none');
 }
 function forgetPassword() {
