@@ -1,14 +1,14 @@
-$(function() {
-    $(".theme-login").click(function() {
+$(function () {
+    $(".theme-login").click(function () {
         $(".theme-popover-mask").fadeIn(100);
         $(".theme-popover").slideDown(200);
     });
-    $(".theme-poptit .close").click(function() {
+    $(".theme-poptit .close").click(function () {
         $(".theme-popover-mask").fadeOut(100);
         $(".theme-popover").slideUp(200);
     });
 
-    $(".backTop").on("click", function() {
+    $(".backTop").on("click", function () {
         $("html,body").animate({ scrollTop: 0 }, "slow");
     });
 
@@ -19,13 +19,13 @@ $(function() {
             $(".backTop").fadeIn();
         }
     }
-    $(window).scroll(function() {
+    $(window).scroll(function () {
         back_Top();
     });
     back_Top();
 });
 $(window).load(
-    initTopMenu(function() {
+    initTopMenu(function () {
         // /a/menuId_articleId_versionId.html var pathname = window.location.pathname; var articleIndex = pathname.lastIndexOf("\/"); var articleInfo = pathname.substring(articleIndex + 1, pathname.length - 5); var articleInfoArray
         var pathname = window.location.pathname;
         var articleIndex = pathname.lastIndexOf("/");
@@ -41,7 +41,7 @@ $(window).load(
         $.ajax({
             url: urlPrefix + "/articles/" + articleId + "/" + versionId,
             dataType: "json",
-            success: function(data) {
+            success: function (data) {
                 if (data.code !== 0) {
                     $("#content").html(data.msg);
                     return;
@@ -59,3 +59,34 @@ $(window).load(
         });
     })
 );
+
+
+var userInfo = localStorage.getItem("userInfo") ? JSON.parse(localStorage.getItem("userInfo")) : '';
+if (userInfo) {
+    $(".site1").css({ "display": 'block' });
+    $(".site2").css({ "display": 'none' });
+} else {
+    $(".site1").css({ "display": 'none' });
+    $(".site2").css({ "display": 'block' });
+}
+
+function goLogin() {
+    $(".theme-popover1").css("display", 'block');
+    $(".theme-popover-mask").css("display", 'block');
+}
+
+function goRegister() {
+    $(".theme-popover2").css("display", 'block');
+    $(".theme-popover-mask").css("display", 'block');
+}
+
+
+function closeDoor() {
+    $(".theme-popover1").css("display", 'none');
+    $(".theme-popover2").css("display", 'none');
+    $(".theme-popover-mask").css("display", 'none');
+}
+function forgetPassword() {
+    $(".theme-popover3").css("display", 'block');
+    $(".theme-popover-mask").css("display", 'block');
+}
