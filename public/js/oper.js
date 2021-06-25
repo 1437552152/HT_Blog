@@ -91,3 +91,16 @@ function forgetPassword() {
     $(".theme-popover3").css("display", 'block');
     $(".theme-popover-mask").css("display", 'block');
 }
+function getCode() {
+    var count = 60;
+    var countdown = setInterval(CountDown,1000);
+    function CountDown() {
+        $("#btn").attr("disabled", true);
+        $("#btn").val("倒计时" + count + "秒!");
+        if (count == 0) {
+            $("#btn").val("获取验证码").removeAttr("disabled");
+            clearInterval(countdown);
+        }
+        count--;
+    }
+}

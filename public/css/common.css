@@ -304,3 +304,13 @@ aside {
     margin-bottom: 30px;
     margin-top: 30px;
 }
+.requireInput{
+    color: red;
+}
+#btn{
+    border: 1px solid #eee;
+    padding: 3px;
+    margin-left: 6px;
+    width: 92px;
+    border-radius: 8px;
+}
