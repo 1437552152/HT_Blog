@@ -1,6 +1,6 @@
 //服务器地址
 
-const urlPrefix = "http://39.97.160.96:8090";
+const urlPrefix = "http://39.97.160.96:8787";
 const languageId = 1;
 const listPageSize = 12;
 var menuList;
@@ -9,12 +9,12 @@ function initTopMenu(doAfterSuccess) {
     //加载导航栏
     $.ajax({
         async: true,
-        url: urlPrefix + "/menus/all/" + languageId,
+        url: urlPrefix + "/api/articleOutline/tree/" + languageId,
         dataType: "json",
         success: function(data) {
             if (data.code !== 0) return;
-            menuList = data.result;
-            var navigationStr = appendTopMenu(data.result, 1);
+            menuList = data.body;
+            var navigationStr = appendTopMenu(data.body, 1);
             $("#topNav").html(navigationStr);
             bindTopMenuEvent();
             if (doAfterSuccess) {

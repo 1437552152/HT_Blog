@@ -9,18 +9,18 @@
 <html>
 
 <head>
-    <meta charset="UTF-8">
-    <link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/css/common.css">
-    <link rel="stylesheet" href="/css/index.css">
-    <link rel="stylesheet" href="/css/home.css">
+    <meta charset="UTF-8" />
+    <link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/common.css" />
+    <link rel="stylesheet" href="/css/index.css" />
+    <link rel="stylesheet" href="/css/home.css" />
     <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="/js/learn-coding.js"></script>
     <!--[if lt IE 9]>
-	<script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
-	<![endif]-->
+      <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+    <![endif]-->
 </head>
 
 <body>
@@ -51,17 +51,14 @@
                     </el-card>
                 </a>
                 {% endfor %}
-                <div style="margin-top: 30px;">
-                    <el-pagination align='center' @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[1,5,10,20]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="{{list.length}}">
+                <div style="margin-top: 30px">
+                    <el-pagination align="center" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[1,5,10,20]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="{{list.length}}">
                     </el-pagination>
                 </div>
             </div>
-            <aside>
-                {% include "public/aside.html" %}
-            </aside>
+            <aside>{% include "public/aside.html" %}</aside>
             <div class="clearfix"></div>
         </div>
-
 
         {% include "public/footer.html" %}
     </div>
@@ -69,18 +66,19 @@
 <script src="/js/vue.js"></script>
 <script src="/js/index.js"></script>
 <script src="/js/oper.js"></script>
+<script src="/js/service.js"></script>
+<script src="/js/login.js"></script>
 <script>
     $(function() {
         new Vue({
-            el: '#app',
+            el: "#app",
             data: function() {
                 return {
-                    input4: '',
+                    input4: "",
                     currentPage: 1, // 当前页码
                     total: 20, // 总条数
                     pageSize: 2, // 每页的数据条数
-                }
-
+                };
             },
             methods: {
                 changeValue(e) {
@@ -96,10 +94,13 @@
                 handleCurrentChange(val) {
                     console.log(`当前页: ${val}`);
                     this.currentPage = val;
-                }
-            }
-        })
-    })
+                },
+            },
+            created() {
+
+            },
+        });
+    });
 </script>
 
 </html>
