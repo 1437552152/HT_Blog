@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: yfye
  * @Date: 2021-06-05 16:59:35
- * @LastEditTime: 2021-06-17 23:47:43
+ * @LastEditTime: 2021-06-27 22:09:04
  * @LastEditors: yfye
 -->
 <!DOCTYPE html>
@@ -17,16 +17,15 @@
     <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="/js/learn-coding.js"></script>
-    <!--[if lt IE 9]>
-      <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
-      <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
-    <![endif]-->
+    <script src="https://cdn.bootcss.com/jsencrypt/3.0.0-beta.1/jsencrypt.js"></script>
+    <link rel="stylesheet" href="/css/toast.css">
 </head>
 
 <body>
     <div id="app" v-cloak>
         {% include "public/header.html" %}
         <div class="w1200 m40">
+            
             <div class="content">
                 {% for item in list %}
                 <a href="/detail.html?id={{item.id}}" target="_blank">
@@ -68,6 +67,7 @@
 <script src="/js/oper.js"></script>
 <script src="/js/service.js"></script>
 <script src="/js/login.js"></script>
+<script src="/js/toast.js"></script>
 <script>
     $(function() {
         new Vue({
