@@ -38,20 +38,22 @@
                 <el-table :data="tableData" border style="width: 100%">
                     <el-table-column prop="date" label="图片" align="center">
                         <template slot-scope="scope">
-                              <img :src="scope.row.comImage" style= "width:72px;height:72px">
-                         </template>
+                                          <img :src="scope.row.comImage" style="width:72px;height:72px">
+                                     </template>
                     </el-table-column>
                     <el-table-column prop="name" label="标题" align="center">
                     </el-table-column>
 
                     <el-table-column label="操作" width="120" align="center">
                         <template slot-scope="scope">
-                            <el-button @click="dialogVisible = true" type="danger" size="small">取消关注</el-button>
+                            <el-button @click="gotoCancel(scope.row)" type="danger" size="small">取消关注</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
                 <div style="margin-top: 30px;">
-                    <el-pagination align='center' @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[1,5,10,20]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="tableData.length">
+                    <el-pagination align='center' @size-change="handleSizeChange" @current-change="handleCurrentChange"
+                        :current-page="pageNum" :page-sizes="[1,5,10,20]" :page-size="pageSize"
+                        :totalNum="tableData.length">
                     </el-pagination>
                 </div>
             </div>
@@ -65,67 +67,83 @@
 <script src="/js/service.js"></script>
 <script src="/js/login.js"></script>
 <script src="/js/toast.js"></script>
+<script src="/js/local.js"></script>
 <script>
-    $(function() {
+    $(function () {
         new Vue({
             el: '#app',
-            data: function() {
+            data: function () {
                 return {
                     activeName: window.location.pathname,
-                    tableData: [{
-                        date: '2016-05-02',
-                        name: '王小虎',
-                        province: '上海',
-                        city: '普陀区',
-                        address: '上海市普陀区金沙江路 1518 弄',
-                        zip: 200333,
-                        comImage: 'https://img-blog.csdnimg.cn/20201014180756927.png'
-                    }, {
-                        date: '2016-05-04',
-                        name: '王小虎',
-                        province: '上海',
-                        city: '普陀区',
-                        address: '上海市普陀区金沙江路 1517 弄',
-                        zip: 200333,
-                        comImage: 'https://img-blog.csdnimg.cn/20201014180756927.png'
-                    }, {
-                        date: '2016-05-01',
-                        name: '王小虎',
-                        province: '上海',
-                        city: '普陀区',
-                        address: '上海市普陀区金沙江路 1519 弄',
-                        zip: 200333,
-                        comImage: 'https://img-blog.csdnimg.cn/20201014180756927.png'
-                    }, {
-                        date: '2016-05-03',
-                        name: '王小虎',
-                        province: '上海',
-                        city: '普陀区',
-                        address: '上海市普陀区金沙江路 1516 弄',
-                        zip: 200333,
-                        comImage: 'https://img-blog.csdnimg.cn/20201014180756927.png'
-                    }],
-                    currentPage: 1, // 当前页码
-                    total: 20, // 总条数
-                    pageSize: 2 // 每页的数据条数
+                    tableData: [],
+                    pageNum: 1, // 当前页码
+                    totalNum: 1, // 总条数
+                    pageSize: 10 // 每页的数据条数
                 }
             },
             methods: {
-                handleClick(tab, event) {
-                    console.log(tab, event);
-                },
                 //每页条数改变时触发 选择一页显示多少行
                 handleSizeChange(val) {
-                    console.log(`每页 ${val} 条`);
-                    this.currentPage = 1;
+                    this.pageNum = 1;
                     this.pageSize = val;
+                    this.getData();
                 },
                 //当前页改变时触发 跳转其他页
                 handleCurrentChange(val) {
-                    console.log(`当前页: ${val}`);
-                    this.currentPage = val;
+                    this.pageNum = val;
+                    this.getData();
                 },
+                getData() {
+                    var params = {};
+                    params['id'] = getlocal('userInfo').id;
+                    params['pageNum'] = this.pageNum;
+                    params['pageSize'] = this.pageSize;
+                    jrequest
+                        .post(`/api/userFollow/page`, params)
+                        .then((res) => {
+                            if (res.data.code == 0) {
+                                this.tableData = res.data.body.data;
+                                this.pageNum = res.data.body.pageNum;
+                                this.pageSize = res.data.body.pageSize;
+                                this.totalNum = res.data.body.totalNum;
+                            } else {
+                                $('body').toast({
+                                    position: 'fixed',
+                                    content: res.data.msg,
+                                    duration: 3000
+                                });
+                            }
+                        });
+                },
+                gotoCancel(id) {
+                    jrequest
+                        .post(`/api/userFollow/delete/${id}`, params)
+                        .then((res) => {
+                            if (res.data.code == 0) {
+                                $('body').toast({
+                                    position: 'fixed',
+                                    content: "取消成功",
+                                    duration: 3000
+                                });
+                                this.pageNum = 1;
+                                this.pageSize = 10;
+                                this.totalNum = 0;
+                                this.getData();
+                            } else {
+                                $('body').toast({
+                                    position: 'fixed',
+                                    content: res.data.msg,
+                                    duration: 3000
+                                });
+                            }
+                        });
+                }
+            },
+            mounted() {
+                // 获取列表信息
+                this.getData();
             }
+
         })
     })
 </script>
