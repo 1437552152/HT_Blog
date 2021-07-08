@@ -40,18 +40,21 @@
                 <el-row>
                     <el-form :inline="true" :model="formInline" class="demo-form-inline">
                         <el-form-item label="文章名">
-                            <el-input v-model="formInline.user" placeholder="文章名搜索" size="mini"></el-input>
+                            <el-input v-model="formInline.name" placeholder="文章名搜索" size="mini"></el-input>
                         </el-form-item>
                         <el-form-item label="文章所属大纲">
-                            <el-select v-model="formInline.region" placeholder="文章所属大纲" size="mini">
-                                <el-option label="大纲1" value="1"></el-option>
-                                <el-option label="大纲2" value="2"></el-option>
+                            <el-cascader :props="optionProps" :options="articleOutList"
+                                @change="handleChange"></el-cascader>
                             </el-select>
                         </el-form-item>
+
                         <el-form-item label="文章状态">
                             <el-select v-model="formInline.status" placeholder="文章状态" size="mini">
-                                <el-option label="已下线" value="1"></el-option>
-                                <el-option label="已上线" value="2"></el-option>
+                                <el-option label="全部" value=""></el-option>
+                                <el-option label="草稿" value="1"></el-option>
+                                <el-option label="待审核" value="2"></el-option>
+                                <el-option label="下架" value="3"></el-option>
+                                <el-option label="上架" value="4"></el-option>
                             </el-select>
                         </el-form-item>
                         <el-form-item>
@@ -118,15 +121,22 @@
                     totalNum: 0, // 总条数
                     pageSize: 10, // 每页的数据条数
                     formInline: {
-                        user: '',
-                        region: '1',
-                        status: '1'
+                        name: '',
+                        status: '',
+                        articleOutlineId: ''
+                    },
+                    articleOutList:[],
+                    optionProps: {
+                        value: 'id',
+                        label: 'name',
+                        children: 'childList',
+                        checkStrictly: true
                     }
                 }
             },
             methods: {
                 onSubmit() {
-                    console.log('submit!');
+                    this.getData();
                 },
                 handleSizeChange(val) {
                     this.pageNum = 1;
@@ -141,11 +151,16 @@
                 addSubmit() {
                     window.location.href = "/articleEdit.html"
                 },
+                handleChange(value) {
+                    console.log(value);
+                    this.formInline.articleOutlineId = value[value.length - 1];
+                },
                 getData() {
                     var params = {};
                     params['userId'] = getlocal('userInfo').id;
                     params['pageNum'] = this.pageNum;
                     params['pageSize'] = this.pageSize;
+                    params={...params,...this.formInline}
                     jrequest
                         .post(`/api/article/userPage`, params)
                         .then((res) => {
@@ -164,12 +179,11 @@
                         });
                 },
                 getDaGang() {
-
                     jrequest
                         .get(`/api/articleOutline/treeForChoose/1/0`)
                         .then((res) => {
                             if (res.data.code == 0) {
-                                debugger;
+                                this.articleOutList = res.data.body;
                             } else {
                                 $('body').toast({
                                     position: 'fixed',

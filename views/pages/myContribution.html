@@ -114,11 +114,29 @@
                         }
                     });
             },
+            getContribution() {
+                jrequest
+                    .post(`/api/userScore/get/${getlocal('userInfo').id}`, {})
+                    .then((res) => {
+                        if (res.data.code == 0) {
+                          this.sumpoint=res.data.body.contribution;
+                          this.newpoint=res.data.body.contributionSum;
+                        } else {
+                            $('body').toast({
+                                position: 'fixed',
+                                content: res.data.msg,
+                                duration: 3000
+                            });
+                        }
+                    });
+            }
         },
 
         mounted() {
             // 获取列表信息
             this.getData();
+            // 查询贡献点
+            this.getContribution();
         }
     })
 </script>

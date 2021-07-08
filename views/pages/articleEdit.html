@@ -17,10 +17,11 @@
   <link rel="stylesheet" href="/css/home.css">
   <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
   <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  <script src="https://cdn.staticfile.org/fingerprintjs2/2.1.0/fingerprint2.min.js"></script>
   <script src="/js/learn-coding.js"></script>
   <script src="https://cdn.bootcss.com/jsencrypt/3.0.0-beta.1/jsencrypt.js"></script>
   <link rel="stylesheet" href="/css/toast.css">
+  <link rel="stylesheet" type="text/css" href="/editormd/css/editormd.min.css">
+
   <!--[if lt IE 9]>
 	<script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
@@ -38,7 +39,9 @@
           </el-form-item>
 
           <el-form-item label="标题" prop="name">
-            <textarea id="mytextarea" style="height: 500px;">Hello, World!</textarea>
+            <div id="md-content" style="z-index: 1 !important;">
+              <textarea></textarea>
+            </div>
           </el-form-item>
 
           <el-form-item label="所属大纲" prop="region">
@@ -58,7 +61,7 @@
             <el-button type="primary" @click="addLevel()">新增标签</el-button>
           </el-form-item>
           <el-form-item label="文章主旨" prop="arctilemain">
-            <el-select v-model="ruleForm.arctilemain" multiple  placeholder="请选择文章主旨">
+            <el-select v-model="ruleForm.arctilemain" multiple placeholder="请选择文章主旨">
               <el-option label="文章主旨一" value="shanghai"></el-option>
               <el-option label="文章主旨二" value="beijing"></el-option>
             </el-select>
@@ -151,8 +154,7 @@
 <script src="/js/service.js"></script>
 <script src="/js/login.js"></script>
 <script src="/js/toast.js"></script>
-<script src="/js/tinymce/tinymce.min.js"></script>
-<script src="/js/tinymce.js"></script>
+<script src="/editormd/editormd.min.js"></script>
 <script>
   $(function () {
     new Vue({
@@ -160,6 +162,7 @@
       data: function () {
         return {
           formLabelWidth: '120px',
+          value: '',
           ruleForm: {
             name: '',
             region: '',
@@ -219,6 +222,7 @@
 
       },
       methods: {
+
         saveForm(formName) {
           this.$refs[formName].validate((valid) => {
             if (valid) {
@@ -232,8 +236,8 @@
         resetForm(formName) {
           this.$refs[formName].resetFields();
         },
-        publish() {},
-        viewPdf() {},
+        publish() { },
+        viewPdf() { },
         addCont() {
           this.adddialogFormVisible = true
         },
@@ -243,7 +247,15 @@
         addMain() {
           this.addMaindialog = true
         }
-      }
+      },
+      created() {
+        var contentEditor = editormd("md-content", {
+          width: "100%",//宽度
+          height: 500,//高度
+          syncScrolling: "single",//单滚动条
+          path: "/editormd/lib/"//依赖的包路径
+        });
+      },
     })
   })
 
