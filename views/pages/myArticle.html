@@ -43,8 +43,9 @@
                             <el-input v-model="formInline.name" placeholder="文章名搜索" size="mini"></el-input>
                         </el-form-item>
                         <el-form-item label="文章所属大纲">
-                            <el-cascader :props="optionProps" :options="articleOutList"
-                                @change="handleChange"></el-cascader>
+                            <el-cascader :props="optionProps" :options="articleOutList" @change="handleChange">
+                            </el-cascader>
+                            </el-cascader>
                             </el-select>
                         </el-form-item>
 
@@ -125,7 +126,7 @@
                         status: '',
                         articleOutlineId: ''
                     },
-                    articleOutList:[],
+                    articleOutList: [],
                     optionProps: {
                         value: 'id',
                         label: 'name',
@@ -155,12 +156,26 @@
                     console.log(value);
                     this.formInline.articleOutlineId = value[value.length - 1];
                 },
+                // 匹配所属大纲
+                getTreeData(data) {
+                    // 循环遍历json数据
+                    for (var i = 0; i < data.length; i++) {
+                        if (data[i].childList.length < 1) {
+                            // children若为空数组，则将children设为undefined
+                            data[i].childList = undefined;
+                        } else {
+                            // children若不为空数组，则继续 递归调用 本方法
+                            this.getTreeData(data[i].childList);
+                        }
+                    }
+                    return data;
+                },
                 getData() {
                     var params = {};
                     params['userId'] = getlocal('userInfo').id;
                     params['pageNum'] = this.pageNum;
                     params['pageSize'] = this.pageSize;
-                    params={...params,...this.formInline}
+                    params = { ...params, ...this.formInline }
                     jrequest
                         .post(`/api/article/userPage`, params)
                         .then((res) => {
@@ -183,7 +198,7 @@
                         .get(`/api/articleOutline/treeForChoose/1/0`)
                         .then((res) => {
                             if (res.data.code == 0) {
-                                this.articleOutList = res.data.body;
+                                this.articleOutList = this.getTreeData(res.data.body);
                             } else {
                                 $('body').toast({
                                     position: 'fixed',
