@@ -9,50 +9,49 @@
 <html>
 
 <head>
-  <meta charset="UTF-8">
-  <title>详情页</title>
-  <link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="/css/common.css">
-  <link rel="stylesheet" href="/css/index.css">
-  <link rel="stylesheet" href="/css/home.css">
-  <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
-  <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  <script src="https://cdn.staticfile.org/fingerprintjs2/2.1.0/fingerprint2.min.js"></script>
-  <script src="/js/learn-coding.js"></script>
-  <script src="https://cdn.bootcss.com/jsencrypt/3.0.0-beta.1/jsencrypt.js"></script>
-  <link rel="stylesheet" href="/css/toast.css">
+    <meta charset="UTF-8">
+    <title>详情页</title>
+    <link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/home.css">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdn.staticfile.org/fingerprintjs2/2.1.0/fingerprint2.min.js"></script>
+    <script src="/js/learn-coding.js"></script>
+    <script src="https://cdn.bootcss.com/jsencrypt/3.0.0-beta.1/jsencrypt.js"></script>
+    <link rel="stylesheet" href="/css/toast.css">
 </head>
 
 <body>
-  <div id="app" v-cloak>
-    {% include "public/header.html" %}
-    <div class="w1200 m40">
-      <aside style="width: 200px;">
-        {% include "public/myUser.html" %}
-      </aside>
-      <div class="content" style="width: 950px;">
-        <el-table :data="tableData" border style="width: 100%">
-          <el-table-column prop="title" label="标题" align="center">
-          </el-table-column>
-          <el-table-column prop="context" label="内容" align="center">
-          </el-table-column>
-          <el-table-column prop="dealFlag" label="状态" align="center" :formatter="formatStatus">
-          </el-table-column>
-          <el-table-column prop="createTime" label="反馈时间" align="center">
-          </el-table-column>
-          <el-table-column prop="dealTime" label="处理时间" align="center">
-          </el-table-column>
-        </el-table>
-        <div style="margin-top: 30px;">
-          <el-pagination align='center' @size-change="handleSizeChange" @current-change="handleCurrentChange"
-            :current-page="pageNum" :page-sizes="[1,5,10,20]" :page-size="pageSize" :total="tableData.length">
-          </el-pagination>
-        </div>
-      </div>
+    <div id="app" v-cloak>
+        {% include "public/header.html" %}
+        <div class="w1200 m40">
+            <aside style="width: 200px;">
+                {% include "public/myUser.html" %}
+            </aside>
+            <div class="content" style="width: 950px;">
+                <el-table :data="tableData" border style="width: 100%">
+                    <!--<el-table-column prop="title" label="标题" align="center">
+                    </el-table-column>-->
+                    <el-table-column prop="context" label="内容" align="center">
+                    </el-table-column>
+                    <el-table-column prop="dealFlag" label="状态" align="center" :formatter="formatStatus">
+                    </el-table-column>
+                    <el-table-column prop="createTime" label="反馈时间" align="center">
+                    </el-table-column>
+                    <el-table-column prop="dealTime" label="处理时间" align="center">
+                    </el-table-column>
+                </el-table>
+                <div style="margin-top: 30px;">
+                    <el-pagination align='center' @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageNum" :page-sizes="[1,5,10,20]" :page-size="pageSize" :total="tableData.length">
+                    </el-pagination>
+                </div>
+            </div>
 
+        </div>
+        {% include "public/footer.html" %}
     </div>
-    {% include "public/footer.html" %}
-  </div>
 </body>
 <script src="/js/vue.js"></script>
 <script src="/js/index.js"></script>
@@ -62,68 +61,68 @@
 <script src="/js/toast.js"></script>
 <script src="/js/local.js"></script>
 <script>
-  $(function () {
-    new Vue({
-      el: '#app',
-      data: function () {
-        return {
-          tableData: [],
-          pageNum: 1, // 当前页码
-          totalNum: 0, // 总条数
-          pageSize: 2, // 每页的数据条数
-          dialogVisible: false,
-          deldialogVisible: false,
-          activeName: window.location.pathname,
-        }
+    $(function() {
+        new Vue({
+            el: '#app',
+            data: function() {
+                return {
+                    tableData: [],
+                    pageNum: 1, // 当前页码
+                    totalNum: 0, // 总条数
+                    pageSize: 2, // 每页的数据条数
+                    dialogVisible: false,
+                    deldialogVisible: false,
+                    activeName: window.location.pathname,
+                }
 
-      },
-      methods: {
-        handleSizeChange(val) {
-          this.pageNum = 1;
-          this.pageSize = val;
-          this.getData();
-        },
-        handleCurrentChange(val) {
-          this.pageNum = val;
-          this.getData();
-        },
-        formatStatus(row, column, cellValue) {
-          if (cellValue) {
-            return '已处理';
-          } else {
-            return '待处理';
-          }
-        },
-        getData() {
-          var params = {};
-          params['userId'] = getlocal('userInfo').id;
-          params['pageNum'] = this.pageNum;
-          params['pageSize'] = this.pageSize;
-          jrequest
-            .post(`/api/advice/page`, params)
-            .then((res) => {
-              if (res.data.code == 0) {
-                this.tableData = res.data.body.data;
-                this.pageNum = res.data.body.pageNum;
-                this.pageSize = res.data.body.pageSize;
-                this.totalNum = res.data.body.totalNum;
-              } else {
-                $('body').toast({
-                  position: 'fixed',
-                  content: res.data.msg,
-                  duration: 3000
-                });
-              }
-            });
-        },
-      },
-      mounted() {
-        // 获取列表信息
-        this.getData();
-      }
+            },
+            methods: {
+                handleSizeChange(val) {
+                    this.pageNum = 1;
+                    this.pageSize = val;
+                    this.getData();
+                },
+                handleCurrentChange(val) {
+                    this.pageNum = val;
+                    this.getData();
+                },
+                formatStatus(row, column, cellValue) {
+                    if (cellValue) {
+                        return '已处理';
+                    } else {
+                        return '待处理';
+                    }
+                },
+                getData() {
+                    var params = {};
+                    params['userId'] = getlocal('userInfo').id;
+                    params['pageNum'] = this.pageNum;
+                    params['pageSize'] = this.pageSize;
+                    params['isManager'] = getlocal('userInfo').adminFlag;
+                    jrequest
+                        .post(`/api/advice/page`, params)
+                        .then((res) => {
+                            if (res.data.code == 0) {
+                                this.tableData = res.data.body.data;
+                                this.pageNum = res.data.body.pageNum;
+                                this.pageSize = res.data.body.pageSize;
+                                this.totalNum = res.data.body.totalNum;
+                            } else {
+                                $('body').toast({
+                                    position: 'fixed',
+                                    content: res.data.msg,
+                                    duration: 3000
+                                });
+                            }
+                        });
+                },
+            },
+            mounted() {
+                // 获取列表信息
+                this.getData();
+            }
+        })
     })
-  })
-
 </script>
 
 </html>

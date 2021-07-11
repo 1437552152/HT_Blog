@@ -2,6 +2,10 @@
     display: none;
 }
 
+.isManager {
+    display: none;
+}
+
 body,
 ul,
 ol,
@@ -290,24 +294,29 @@ aside {
     margin-top: 30px;
     margin-bottom: 30px;
 }
-.detailTitle li{
+
+.detailTitle li {
     margin-right: 20px;
 }
+
 .el-form--inline .el-form-item {
     display: inline-block;
     margin-right: 10px;
     vertical-align: top;
     margin-bottom: 0;
 }
-.btnGroup{
+
+.btnGroup {
     text-align: center;
     margin-bottom: 30px;
     margin-top: 30px;
 }
-.requireInput{
+
+.requireInput {
     color: red;
 }
-#btn{
+
+#btn {
     border: 1px solid #eee;
     padding: 3px;
     margin-left: 6px;

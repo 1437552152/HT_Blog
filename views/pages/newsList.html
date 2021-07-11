@@ -1,0 +1,149 @@
+<!--
+ * @Description: 
+ * @Author: yfye
+ * @Date: 2021-06-05 16:59:35
+ * @LastEditTime: 2021-06-27 22:09:56
+ * @LastEditors: yfye
+-->
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>详情页</title>
+    <link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/home.css">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdn.staticfile.org/fingerprintjs2/2.1.0/fingerprint2.min.js"></script>
+    <script src="/js/learn-coding.js"></script>
+    <script src="https://cdn.bootcss.com/jsencrypt/3.0.0-beta.1/jsencrypt.js"></script>
+    <link rel="stylesheet" href="/css/toast.css">
+    <link rel="stylesheet" href="/css/main.css" />
+    <link rel="stylesheet" type="text/css" href="/css/sinaFaceAndEffec.css" />
+    <!--[if lt IE 9]>
+	<script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+	<![endif]-->
+</head>
+
+<body>
+    <div id="app" v-cloak>
+        {% include "public/header.html" %}
+        <div class="w1200 m40">
+            <aside style="width: 200px;">
+                {% include "public/menu.html" %}
+            </aside>
+            <div class="content" style="width: 950px;" id="content">
+                <el-breadcrumb separator-class="el-icon-arrow-right">
+                    <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+                    <el-breadcrumb-item><a href="">前端</a></el-breadcrumb-item>
+                    <el-breadcrumb-item><a href="">移动端</a></el-breadcrumb-item>
+                    <el-breadcrumb-item>vant</el-breadcrumb-item>
+                </el-breadcrumb>
+
+                <div>
+                    <ul class="detailTitle">
+                        <li>作者:张三</li>
+                        <li>创建于2020-01-15</li>
+                        <li>修订者李四</li>
+                        <li>更新于2020-12-15 10：25</li>
+                    </ul>
+                </div>
+
+                <div style="min-height: 300px;">
+                    测试详情
+                </div>
+                <div class="btnGroup">
+                    <el-button type="primary" icon="el-icon-check">202</el-button>
+                    <el-button type="danger" icon="el-icon-close">104</el-button>
+                    <el-button type="danger" @click="goYijian()">意见反馈</el-button>
+                </div>
+
+                <div class="wrap">
+                    <div class="comment">
+                        <div class="head-face">
+                            <img src="/images/1.jpg" />
+                            <p>我是鸟</p>
+                        </div>
+                        <div class="content">
+                            <div class="cont-box">
+                                <textarea class="text" placeholder="请输入..."></textarea>
+                            </div>
+                            <div class="tools-box">
+                                <div class="operator-box-btn"><span class="face-icon">☺</span><span class="img-icon" @Click="inputInsert()">▧</span></div>
+                                <div class="submit-btn"><input type="button" @Click="out()" value="提交评论" /></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="info-show">
+                        <ul></ul>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        {% include "public/footer.html" %}
+    </div>
+</body>
+<script src="/js/vue.js"></script>
+<script src="/js/index.js"></script>
+<script src="/js/oper.js"></script>
+<script src="/js/service.js"></script>
+<script src="/js/login.js"></script>
+<script src="/js/toast.js"></script>
+<script type="text/javascript" src="/js/main.js"></script>
+<script type="text/javascript" src="/js/sinaFaceAndEffec.js"></script>
+<script>
+    $(function() {
+        new Vue({
+            el: '#app',
+            data: function() {
+                return {
+                    activeName: window.location.pathname,
+                }
+            },
+            mounted() {
+                // 绑定表情
+                $('.face-icon').SinaEmotion($('.text'));
+            },
+            methods: {
+                handleClick(tab, event) {
+                    console.log(tab, event);
+                },
+                // 评论
+                reply(content) {
+                    var html;
+                    html = '<li>';
+                    html += '<div class="head-face">';
+                    html += '<img src="images/1.jpg" / >';
+                    html += '</div>';
+                    html += '<div class="reply-cont">';
+                    html += '<p class="username">小小红色飞机</p>';
+                    html += '<p class="comment-body">' + content + '</p>';
+                    // html += '<p class="comment-footer">2016年10月5日　回复　点赞54　转发12</p>';
+                    html += '</div>';
+                    html += '</li>';
+                    return html;
+                },
+                out() {
+                    var inputText = $('.text').val();
+                    $('#info-show ul').append(this.reply(AnalyticEmotion(inputText)));
+                },
+                inputInsert() {
+                    $(".cont-box .text").insertContent('<img src="请在这里输入图片地址" alt=""/>', -10);
+                },
+                // 意见反馈
+                goYijian() {
+                    window.open("/feedback.html", "_blank");
+                }
+
+
+            }
+        })
+    })
+</script>
+
+</html>

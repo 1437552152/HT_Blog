@@ -38,12 +38,12 @@
             <div class="content" style="width: 950px;">
 
                 <el-row>
-                    <el-form :inline="true" :model="formInline" class="demo-form-inline">
+                    <el-form :inline="true" :model="formInline" class="demo-form-inline" ref="formInline">
                         <el-form-item label="文章名">
                             <el-input v-model="formInline.name" placeholder="文章名搜索" size="mini"></el-input>
                         </el-form-item>
                         <el-form-item label="文章所属大纲">
-                            <el-cascader :props="optionProps" :options="articleOutList" @change="handleChange">
+                            <el-cascader ref="cascader" v-model="formInline.articleOutlineId" :props="optionProps" :options="articleOutList" @change="handleChange">
                             </el-cascader>
                             </el-cascader>
                             </el-select>
@@ -60,43 +60,47 @@
                         </el-form-item>
                         <el-form-item>
                             <el-button type="primary" @click="onSubmit" size="mini">查询</el-button>
+                            <el-button type="primary" @click="resetForm('formInline')" size="mini">重置</el-button>
                             <el-button type="primary" @click="addSubmit" size="mini">新增</el-button>
                         </el-form-item>
                     </el-form>
                 </el-row>
                 <el-table :data="tableData" border style="width: 100%">
-                    <el-table-column prop="date" label="文章名" fixed width="150">
+                    <el-table-column prop="name" label="文章名" fixed width="150">
                     </el-table-column>
-                    <el-table-column prop="name" label="所属大纲" width="150">
+                    <el-table-column prop="articleOutline" label="所属大纲" width="150">
                     </el-table-column>
-                    <el-table-column prop="province" label="关注点" width="150">
-                    </el-table-column>
-
-                    <el-table-column prop="date" label="文章状态" width="150">
-                    </el-table-column>
-                    <el-table-column prop="name" label="浏览数" width="150">
-                    </el-table-column>
-                    <el-table-column prop="province" label="点赞数" width="150">
+                    <el-table-column prop="overview" label="关注点" width="150">
                     </el-table-column>
 
-                    <el-table-column prop="date" label="创建时间" width="150">
-                    </el-table-column>
-                    <el-table-column prop="name" label="修正时间" width="150">
-                    </el-table-column>
-
-                    <el-table-column label="操作" width="300" fixed="right">
+                    <el-table-column prop="status" label="文章状态" width="150">
                         <template slot-scope="scope">
-                            <el-button @click="dialogVisible = true" type="text" size="small">修改</el-button>
-                            <el-button type="text" size="small">删除</el-button>
-                            <el-button type="text" size="small">上架</el-button>
-                            <el-button type="text" size="small">取消上架申请</el-button>
+                            <span v-html="scope.row.status==1?'草稿':scope.row.status==2?'待审核':
+                            scope.row.status==3?'已下架':scope.row.status==4?'已上架':''"></span>
+                        </template>
+
+                    </el-table-column>
+                    <el-table-column prop="scanNum" label="浏览数" width="150">
+                    </el-table-column>
+                    <el-table-column prop="praiseNum" label="点赞数" width="150">
+                    </el-table-column>
+
+                    <el-table-column prop="createTime" label="创建时间" width="150">
+                    </el-table-column>
+                    <el-table-column prop="updateTime" label="修正时间" width="150">
+                    </el-table-column>
+
+                    <el-table-column label="操作" width="150" fixed="right">
+                        <template slot-scope="scope">
+                            <el-button @click="goDetail(scope.row)" type="text" size="small">修改</el-button>
+                            <el-button type="text" size="small" @click="goDelete(scope.row)">删除</el-button>
+                            <el-button type="text" v-if="scope.row.status!=4"  size="small" @click="goUp(scope.row,4)">上架</el-button>
+                            <el-button type="text" v-if="scope.row.status==4" size="small"  @click="goUp(scope.row,3)">取消上架</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
                 <div style="margin-top: 30px;">
-                    <el-pagination align='center' @size-change="handleSizeChange" @current-change="handleCurrentChange"
-                        :current-page="pageNum" :page-sizes="[1,5,10,20]" :page-size="pageSize"
-                        :total="tableData.length">
+                    <el-pagination align='center' @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageNum" :page-sizes="[1,5,10,20]" :page-size="pageSize" :total="tableData.length">
                     </el-pagination>
                 </div>
             </div>
@@ -111,10 +115,10 @@
 <script src="/js/login.js"></script>
 <script src="/js/toast.js"></script>
 <script>
-    $(function () {
+    $(function() {
         new Vue({
             el: '#app',
-            data: function () {
+            data: function() {
                 return {
                     activeName: window.location.pathname,
                     tableData: [],
@@ -133,6 +137,11 @@
                         children: 'childList',
                         checkStrictly: true
                     }
+                }
+            },
+            watch: {
+                'formInline.articleOutlineId' () {
+                    this.$refs.cascader.toggleDropDownVisible() //监听值发生变化就关闭它
                 }
             },
             methods: {
@@ -175,7 +184,9 @@
                     params['userId'] = getlocal('userInfo').id;
                     params['pageNum'] = this.pageNum;
                     params['pageSize'] = this.pageSize;
-                    params = { ...params, ...this.formInline }
+                    params = {...params,
+                        ...this.formInline
+                    }
                     jrequest
                         .post(`/api/article/userPage`, params)
                         .then((res) => {
@@ -207,6 +218,55 @@
                                 });
                             }
                         });
+                },
+                resetForm(formName) {
+                    for (var key in this.formInline) {
+                        this.formInline[key] = ''
+                    }
+                },
+                goDelete(record) {
+                    jrequest
+                        .post(`/api/article/delete/${record.id}`, {})
+                        .then((res) => {
+                            if (res.data.code == 0) {
+                                $('body').toast({
+                                    position: 'fixed',
+                                    content: "删除成功",
+                                    duration: 3000
+                                });
+                                this.getData();
+                            } else {
+                                $('body').toast({
+                                    position: 'fixed',
+                                    content: res.data.msg,
+                                    duration: 3000
+                                });
+                            }
+                        });
+                },
+                goUp(record, status) {
+                    jrequest
+                        .PATCH(`/api/article/${record.id}/${status}`, {})
+                        .then((res) => {
+                            if (res.data.code == 0) {
+                                $('body').toast({
+                                    position: 'fixed',
+                                    content: "状态修改成功",
+                                    duration: 3000
+                                });
+                                this.getData();
+                            } else {
+                                $('body').toast({
+                                    position: 'fixed',
+                                    content: res.data.msg,
+                                    duration: 3000
+                                });
+                            }
+                        });
+
+                },
+                goDetail(record) {
+                    window.location.href = `/articleEdit.html?id=${record.id}`
                 }
             },
             mounted() {
