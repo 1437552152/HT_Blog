@@ -36,11 +36,12 @@
       </aside>
       <div class="content" style="width: 950px;">
         <el-form ref="form" :model="sizeForm" label-width="80px" size="mini" :rules="rules" ref="sizeForm" status-icon>
-          <el-form-item label="上传头像" ref="uploadElement" prop="imageUrl">
-            <el-input v-model="sizeForm.imageUrl" v-if="false"></el-input>
-            <el-upload class="avatar-uploader" ref="upload" :show-file-list="false" action="/api/user/updateUserImage"
-              :before-upload="beforeUpload" :on-change="handleChange" :auto-upload="false" :data="sizeForm">
-              <img v-if="sizeForm.imageUrl" :src="sizeForm.imageUrl" class="avatar">
+          <el-form-item label="上传头像" ref="uploadElement" prop="userImage">
+            <el-input v-model="sizeForm.userImage" v-show="false"></el-input>
+            <el-upload class="avatar-uploader" action="http://39.97.160.96:8787/api/common/imageUpload"
+              :show-file-list="false" accept=".jpg,.png" :on-success="handleAvatarSuccess"
+              :before-upload="beforeUpload">
+              <img v-if="sizeForm.userImage" :src="sizeForm.userImage" class="avatar" />
               <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             </el-upload>
           </el-form-item>
@@ -57,8 +58,8 @@
             <el-input v-model="sizeForm.phone"></el-input>
           </el-form-item>
 
-          <el-form-item label="微信号" prop="weChat">
-            <el-input v-model="sizeForm.weChat"></el-input>
+          <el-form-item label="微信号" prop="weChatNum">
+            <el-input v-model="sizeForm.weChatNum"></el-input>
           </el-form-item>
 
           <el-form-item size="large">
@@ -66,6 +67,7 @@
           </el-form-item>
         </el-form>
       </div>
+      <div class="clearfix"></div>
     </div>
     {% include "public/footer.html" %}
   </div>
@@ -76,6 +78,7 @@
 <script src="/js/service.js"></script>
 <script src="/js/login.js"></script>
 <script src="/js/toast.js"></script>
+<script src="/js/local.js"></script>
 <script>
   $(function () {
     new Vue({
@@ -108,8 +111,8 @@
             nickName: '',
             email: '',
             phone: '',
-            weChat: '',
-            imageUrl: '',
+            weChatNum: '',
+            userImage: '',
           },
           rules: {
             email: [{
@@ -120,19 +123,20 @@
               validator: validatePass2,
               trigger: 'blur'
             }],
-            imageUrl: [{
+            userImage: [{
               required: true,
               message: '请上传头像',
               trigger: 'blur'
-            }, ],
+            },],
           }
         }
       },
-      methods: {
-        handleChange(file, fileList) {
-          this.ruleForm.imageUrl = URL.createObjectURL(file.raw);
-        },
+      created() {
+        // 获取个人资料
+        this.getInfo();
+      },
 
+      methods: {
         beforeUpload(file) {
           const isImage = file.type.includes("image");
           if (!isImage) {
@@ -144,49 +148,64 @@
           }
           return isImage && isLt2M;
         },
-        handleChange(file, fileList) {
-          debugger;
-          jrequest
-            .post("/api/user/login", {
-        
-            })
-            .then((res) => {
-              if (res.data.code == 0) {
-                $('body').toast({
-                  position: 'fixed',
-                  content: '登陆成功',
-                  duration: 3000
-                });
-
-              } else {
-                $('body').toast({
-                  position: 'fixed',
-                  content: res.data.msg,
-                  duration: 3000,
-                  /* 			isCenter:false,
-                  			background:'#4EA44E' */
-                });
-              }
-            });
+        handleAvatarSuccess(res, file) {
+          this.sizeForm.userImage = res.body;
+          this.$forceUpdate()
         },
         submitForm(formName) {
-          let vm = this;
-          this.$refs[formName].validate((valid) => {
+          this.$refs.form.validate((valid) => {
             if (valid) {
-              vm.$refs.upload.submit();
+              jrequest
+                .post(`/api/user/update`, { ...this.sizeForm })
+                .then((res) => {
+                  if (res.data.code == 0) {
+                    $('body').toast({
+                      position: 'fixed',
+                      content: '用户信息更新成功',
+                      duration: 3000
+                    });
+                    // 更新图片
+                    jrequest
+                      .post(`/api/user/updateUserImage`, { id: getlocal('userInfo').id, imageUrl: this.sizeForm.userImage })
+                      .then((respon) => { })
+                  } else {
+                    $('body').toast({
+                      position: 'fixed',
+                      content: res.data.msg,
+                      duration: 3000
+                    });
+                  }
+                });
+              // vm.$refs.upload.submit();
             } else {
               return false;
             }
           });
+        },
+        getInfo() {
+          var id = getlocal('userInfo').id;
+          jrequest
+            .post(`/api/user/get/${id}`)
+            .then((res) => {
+              if (res.data.code == 0) {
+                this.sizeForm = res.data.body;
+
+              } else {
+                $('body').toast({
+                  position: 'fixed',
+                  content: '用户信息获取失败',
+                  duration: 3000
+                });
+              }
+            });
         }
       }
     })
   })
-
 </script>
 
 <style>
-  input[type="file"] {
+  input[type=file] {
     display: none;
   }
 
@@ -216,7 +235,6 @@
     height: 178px;
     display: block;
   }
-
 </style>
 
 </html>

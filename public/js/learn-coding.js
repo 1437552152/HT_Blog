@@ -66,13 +66,11 @@ function appendTopMenu(dataList, level) {
     if (level === 2 && dataList[i].childList.length === 0) {
       isEmpty = true;
     }
-    navigationStr += `<li ${
-      isEmpty ? "class= 'empty'" : ""
-    }><a class="menu" href="${menuUrl(id)}" data-id="${id}">${name}${
-      level === 1 && dataList[i].childList.length > 0
+    navigationStr += `<li ${isEmpty ? "class= 'empty'" : ""
+      }><a class="menu" href="${menuUrl(id)}" data-id="${id}">${name}${level === 1 && dataList[i].childList.length > 0
         ? "<span class='caret'></span>"
         : ""
-    }</a>`;
+      }</a>`;
     navigationStr += appendTopMenu(dataList[i].childList, level + 1);
   }
   if (level === 1) {
@@ -214,17 +212,15 @@ function initContentPage(id, menuFlag, pageNum, pageSize) {
                             <li>
                                 <img src="${imgUrl}" alt="">
                                 <div class="list-box">
-                                    <a href="${
-                                      menuFlag
-                                        ? menuUrl(dataArr[i].id)
-                                        : "javascript:goArticlePage(" +
-                                          id +
-                                          ", " +
-                                          dataArr[i].id +
-                                          ")"
-                                    }" class="rightContent">${
-          !dataArr[i].name ? dataArr[i].focusPoint : dataArr[i].name
-        }</a>
+                                    <a href="${menuFlag
+            ? menuUrl(dataArr[i].id)
+            : "javascript:goArticlePage(" +
+            id +
+            ", " +
+            dataArr[i].id +
+            ")"
+          }" class="rightContent">${!dataArr[i].name ? dataArr[i].focusPoint : dataArr[i].name
+          }</a>
                                     <p>${dataArr[i].overview}</p>
                                 </div>
                             </li>
@@ -341,9 +337,8 @@ function appendLeftPoint(dataList, dataId, menuId) {
   for (let i = 0; i < dataList.length; i++) {
     let id = dataList[i].id;
     let name = dataList[i].focusPoint;
-    leftMenu += `<li ${
-      id === dataId ? 'class="active"' : ""
-    }><a href="javascript:goArticlePage(${menuId}, ${id})" class="left-menu-a">${name}</a></li>`;
+    leftMenu += `<li ${id === dataId ? 'class="active"' : ""
+      }><a href="javascript:goArticlePage(${menuId}, ${id})" class="left-menu-a">${name}</a></li>`;
   }
   return leftMenu;
 }
@@ -421,7 +416,7 @@ function appendBreadcrumb(parentArray) {
 
 function menuUrl(menuId, pageNum) {
   if (!pageNum) pageNum = 1;
-  return "/l/" + menuId + "_" + pageNum + "_" + listPageSize + ".html";
+  return "/l/" + menuId + "/" + pageNum + "/" + listPageSize + "/newsList.html";
 }
 
 function articleUrl(menuId, articleId, version) {

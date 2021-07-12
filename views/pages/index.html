@@ -51,7 +51,7 @@
                 </a>
                 {% endfor %}
                 <div style="margin-top: 30px">
-                    <el-pagination align="center" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[1,5,10,20]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="{{list.length}}">
+                    <el-pagination align="center" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[1,5,10,20]" :page-size="pageSize"  :total="totalNum">
                     </el-pagination>
                 </div>
             </div>
@@ -76,13 +76,12 @@
                 return {
                     input4: "",
                     currentPage: 1, // 当前页码
-                    total: 20, // 总条数
+                    totalNum: 10, // 总条数
                     pageSize: 2, // 每页的数据条数
                 };
             },
             methods: {
                 changeValue(e) {
-                    debugger;
                 },
                 //每页条数改变时触发 选择一页显示多少行
                 handleSizeChange(val) {
