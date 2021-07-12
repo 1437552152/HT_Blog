@@ -39,15 +39,15 @@
                 <div><span>累积贡献点:</span><span v-html="sumpoint"></span></div>
                 <div style="margin-bottom:20px"><span>累积贡献点:</span><span v-html="newpoint"></span></div>
                 <el-table :data="tableData" border style="width: 100%">
-                    <el-table-column prop="date" label="时间" align="center">
+                    <el-table-column prop="time" label="时间" align="center">
                     </el-table-column>
-                    <el-table-column prop="reason" label="事由" align="center">
+                    <el-table-column prop="event" label="事由" align="center">
                     </el-table-column>
-                    <el-table-column prop="point" label="贡献点" align="center">
+                    <el-table-column prop="value" label="贡献点" align="center">
                     </el-table-column>
-                    <el-table-column prop="newNum" label="当前值(处理之后)" align="center">
+                    <el-table-column prop="afterNow" label="当前值(处理之后)" align="center">
                     </el-table-column>
-                    <el-table-column prop="sumNum" label="累计值(处理之后)" align="center">
+                    <el-table-column prop="afterTotal" label="累计值(处理之后)" align="center">
                     </el-table-column>
                 </el-table>
                 <div style="margin-top: 30px;">
