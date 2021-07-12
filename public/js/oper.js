@@ -170,6 +170,12 @@ function findPassword() {
               });
             }
           });
+      }else{
+        $('body').toast({
+          position: 'fixed',
+          content:res.data.msg,
+          duration: 3000
+        }); 
       }
     });
 }
