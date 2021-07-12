@@ -44,9 +44,7 @@
                         </el-form-item>
                         <el-form-item label="文章所属大纲">
                             <el-cascader ref="cascader" v-model="formInline.articleOutlineId" :props="optionProps" :options="articleOutList" @change="handleChange">
-                            </el-cascader>
-                            </el-cascader>
-                            </el-select>
+                            </el-cascader>                    
                         </el-form-item>
 
                         <el-form-item label="文章状态">
@@ -70,7 +68,7 @@
                     </el-table-column>
                     <el-table-column prop="articleOutline" label="所属大纲" width="150">
                     </el-table-column>
-                    <el-table-column prop="overview" label="关注点" width="150">
+                    <el-table-column prop="articleGist" label="关注点" width="150">
                     </el-table-column>
 
                     <el-table-column prop="status" label="文章状态" width="150">
@@ -100,10 +98,11 @@
                     </el-table-column>
                 </el-table>
                 <div style="margin-top: 30px;">
-                    <el-pagination align='center' @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageNum" :page-sizes="[1,5,10,20]" :page-size="pageSize" :total="tableData.length">
+                    <el-pagination align='center' @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageNum" :page-sizes="[1,5,10,20]" :page-size="pageSize" :total="totalNum">
                     </el-pagination>
                 </div>
             </div>
+            <div class="clearfix"></div>
         </div>
         {% include "public/footer.html" %}
     </div>
@@ -114,6 +113,7 @@
 <script src="/js/service.js"></script>
 <script src="/js/login.js"></script>
 <script src="/js/toast.js"></script>
+<script src="/js/local.js"></script>
 <script>
     $(function() {
         new Vue({

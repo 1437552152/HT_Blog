@@ -88,7 +88,7 @@
                     </el-table-column>
                 </el-table>
                 <div style="margin-top: 30px;">
-                    <el-pagination align='center' @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[1,5,10,20]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="tableData.length">
+                    <el-pagination align='center' @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[1,5,10,20]" :page-size="pageSize"  :total="totalNum">
                     </el-pagination>
                 </div>
                 <el-dialog title="提示" :visible.sync="dialogVisible" width="30%">
@@ -111,7 +111,7 @@
 
 
             </div>
-
+            <div class="clearfix"></div>
         </div>
         {% include "public/footer.html" %}
     </div>
@@ -122,6 +122,7 @@
 <script src="/js/service.js"></script>
 <script src="/js/login.js"></script>
 <script src="/js/toast.js"></script>
+<script src="/js/local.js"></script>
 <script>
     $(function() {
         new Vue({
