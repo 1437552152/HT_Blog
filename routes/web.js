@@ -30,17 +30,7 @@ var list = [{
         zanNum: 10,
         id: 2,
         commentNum: 10,
-    },
-    {
-        title: "测试标题",
-        date: "2020-01-15 10:15",
-        descc: "测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测",
-        tag: ["标签1", "标签2", "标签3", "标签4"],
-        viewNum: 203,
-        zanNum: 10,
-        id: 3,
-        commentNum: 10,
-    },
+    }
 ];
 
 // 首页
@@ -67,6 +57,15 @@ router.get("/purpose.html", (req, res) => {
         list,
     });
 });
+
+//列表
+router.get("/l/:menuId/:pageNum/:listPageSize/newsList.html", (req, res) => {
+    console.log("12121212")
+    res.render("newsList", {
+        data: {},
+    });
+});
+
 
 // 详情页
 router.get("/detail.html", (req, res) => {
@@ -152,9 +151,5 @@ router.get("/adviseManagement.html", (req, res) => {
     res.render("adviseManagement", {
         data: {},
     });
-});
-//列表
-router.get("/1/:name", (req, res) => {
-    res.render("newsList");
 });
 module.exports = router;

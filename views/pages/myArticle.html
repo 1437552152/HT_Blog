@@ -52,8 +52,9 @@
                                 <el-option label="全部" value=""></el-option>
                                 <el-option label="草稿" value="1"></el-option>
                                 <el-option label="待审核" value="2"></el-option>
-                                <el-option label="下架" value="3"></el-option>
-                                <el-option label="上架" value="4"></el-option>
+                                <el-option label="已下架" value="3"></el-option>
+                                <el-option label="已上架" value="4"></el-option>
+                                <el-option label="审核失败" value="5"></el-option>
                             </el-select>
                         </el-form-item>
                         <el-form-item>
@@ -74,7 +75,7 @@
                     <el-table-column prop="status" label="文章状态" width="150">
                         <template slot-scope="scope">
                             <span v-html="scope.row.status==1?'草稿':scope.row.status==2?'待审核':
-                            scope.row.status==3?'已下架':scope.row.status==4?'已上架':''"></span>
+                            scope.row.status==3?'已下架':scope.row.status==4?'已上架':'审核失败'"></span>
                         </template>
 
                     </el-table-column>
@@ -90,10 +91,10 @@
 
                     <el-table-column label="操作" width="150" fixed="right">
                         <template slot-scope="scope">
-                            <el-button @click="goDetail(scope.row)" type="text" size="small">修改</el-button>
-                            <el-button type="text" size="small" @click="goDelete(scope.row)">删除</el-button>
-                            <el-button type="text" v-if="scope.row.status!=4"  size="small" @click="goUp(scope.row,4)">上架</el-button>
-                            <el-button type="text" v-if="scope.row.status==4" size="small"  @click="goUp(scope.row,3)">取消上架</el-button>
+                            <el-button @click="goDetail(scope.row)" type="text" size="small" v-if="scope.row.status!=2">修改</el-button>
+                            <el-button type="text" size="small" @click="goDelete(scope.row)"  v-if="scope.row.status!=2">删除</el-button>
+                            <el-button type="text" v-if="scope.row.status==2"  size="small" @click="goUp(scope.row,1)">取消上架申请</el-button>
+                            <el-button type="text" v-if="scope.row.status==1||scope.row.status==5||scope.row.status==3"  size="small" @click="goUp(scope.row,2)">上架</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -246,7 +247,7 @@
                 },
                 goUp(record, status) {
                     jrequest
-                        .PATCH(`/api/article/${record.id}/${status}`, {})
+                        .PATCH(`/api/article/${record.id}/${status}/''`, {})
                         .then((res) => {
                             if (res.data.code == 0) {
                                 $('body').toast({

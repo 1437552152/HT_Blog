@@ -1,15 +1,15 @@
-var jrequest = (function() {
+var jrequest = (function () {
     return {
         _request(url, method, contentType, params) {
             return new Promise((resolve, reject) => {
                 $.ajax({
                     contentType: contentType,
                     dataType: "json",
-                    data: method == "post" ? JSON.stringify(params) : params,
+                    data: method == "post"||method == "PATCH" ? JSON.stringify(params) : params,
                     url: `http://39.97.160.96:8787${url}`,
                     withCredentials: true,
                     type: method,
-                    success: function(res, textStatus, request) {
+                    success: function (res, textStatus, request) {
                         let data = {
                             data: res,
                         };
