@@ -1,16 +1,16 @@
 <div>
-    <el-input
+  <!-- <el-input
     placeholder="请输入内容"
     @change="changeValue"
-    v-model="input4">
-    <!-- <i slot="append" class="el-input__icon el-icon-search"></i> -->
-  </el-input>
-  <el-card class="box-card" style="margin-top: 20px;margin-bottom: 20px;">
+    v-model="input4"></el-input>
+    <i slot="append" class="el-input__icon el-icon-search"></i>
+  </el-input> -->
+  <el-card class="box-card" style="margin-bottom: 20px;">
     <div slot="header" class="clearfix">
       <span>点赞最多的文章</span>
     </div>
-    <div v-for="o in 4" :key="o" class="text item">
-     <a href=""> {{'列表内容 ' + o }}</a>
+    <div v-for="(item,index) in zanList" :key="index" class="text item">
+      <a v-bind:href="'/detail.html?id='+item.id" v-html="item.name"></a>
     </div>
   </el-card>
 
@@ -18,8 +18,8 @@
     <div slot="header" class="clearfix">
       <span>浏览最多的文章</span>
     </div>
-    <div v-for="o in 4" :key="o" class="text item">
-      <a href=""> {{'列表内容 ' + o }}</a>
+    <div  v-for="(item,index) in readList" :key="index" class="text item">
+      <a v-bind:href="'/detail.html?id='+item.id"  v-html="item.name"></a>
     </div>
   </el-card>
 </div>

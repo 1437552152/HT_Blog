@@ -33,7 +33,8 @@
     {% include "public/header.html" %}
     <div class="w1200 m40">
       <div class="content" style="width: 1200px;">
-        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm" :disabled="disabled">
+        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm"
+          :disabled="disabled">
           <el-form-item label="标题" prop="name">
             <el-input v-model="ruleForm.name" placeholder="请输入标题"></el-input>
           </el-form-item>
@@ -56,10 +57,11 @@
             <el-button type="primary" @click="addCont()">新增大纲</el-button>
           </el-form-item>
 
-          <el-form-item label="文章标签" prop="tagIds" v-if="ruleForm.articleOutlineId">
-            <el-checkbox-group v-model="ruleForm.tagIds">
-              <el-checkbox :label="item.id" :value="item.id" name="tagIds" v-for="(item,index) in TagsList"
-                :key="index"><span v-html="item.name"></span></el-checkbox>
+          <el-form-item label="文章标签" v-if="ruleForm.articleOutlineId">
+            <el-checkbox-group v-model="ruleForm.tagIds" @change="goCheck()">
+              <el-checkbox :label="item.id" :value="item.id" v-for="(item,index) in TagsList" :key="index">
+                <span v-html="item.name"></span>
+              </el-checkbox>
             </el-checkbox-group>
             <el-button type="primary" @click="addLevel()">新增标签</el-button>
           </el-form-item>
@@ -75,8 +77,8 @@
             <el-rate v-model="ruleForm.level" style="margin-top:10px"></el-rate>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="saveForm(1)">存为草稿</el-button>
-            <el-button @click="saveForm(2)">发布</el-button>
+            <el-button type="primary" @click="saveForm(1)"> <span v-html="ruleForm.id?'保存':'存为草稿'"></span></el-button>
+            <el-button @click="saveForm(2)" v-if="!ruleForm.id">发布</el-button>
             <el-button @click="resetForm('ruleForm')">取消</el-button>
           </el-form-item>
         </el-form>
@@ -174,13 +176,13 @@
             children: 'childList',
             checkStrictly: true
           },
-          disabled:false,
+          disabled: false,
           ruleForm: {
             name: '',
             tagIds: [],
-            articleGistId: "",
+            articleGistId: '',
             articleOutlineId: '',
-            level: '',
+            level: 1,
             overview: '',
             comment: ''
           },
@@ -211,14 +213,13 @@
               message: '请选择文章所属大纲',
               trigger: 'change'
             }],
-            type: [{
-              type: 'array',
-              required: true,
-              message: '请至少选择一个文章标签',
-              trigger: 'change'
-            }],
+            // tagIds: [{
+            //   type: 'array',
+            //   required: true,
+            //   message: '请至少选择一个文章标签',
+            //   trigger: 'change'
+            // }],
             articleGistId: [{
-
               required: true,
               message: '请选择文章主旨',
               trigger: 'blur'
@@ -303,8 +304,10 @@
         }
       },
       methods: {
+        goCheck() {
+          this.$forceUpdate();
+        },
         addMaindialogSubmit() {
-
           this.$refs.mainRules.validate((valid) => {
             if (valid) {
               jrequest
@@ -427,8 +430,11 @@
               params['htmlContent'] = contentEditor.getHTML();
               params['status'] = status == 1 ? 1 : 2;
               params['isUpdateVersion'] = true;
-              params['updateVersionComment'] = "1111";
-
+              params['updateVersionComment'] =params.comment;
+              delete params.tagList;
+              delete params.updateTime;
+              delete params.url;
+              // delete params.updateVersionComment;
 
               jrequest
                 .post(params.id ? `/api/article/update` : `/api/article/add`, params)
@@ -562,12 +568,10 @@
                 let arr = [];
                 if (res.data.body.tagList && res.data.body.tagList.length) {
                   res.data.body.tagList.map(item => {
-                    arr.push(item.id)
+                    arr.push(Number(item.id))
                   })
                 }
-
                 this.ruleForm.tagIds = arr;
-
                 this.getAriticleList();
                 this.initEditor(res.data.body.content);
                 this.getTags();
@@ -580,8 +584,6 @@
                 });
               }
             });
-
-
         },
         initEditor(value) {
           contentEditor = editormd("md-content", {
@@ -592,10 +594,10 @@
             imageUpload: true,
             imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
             imageUploadURL: "http://39.97.160.96:8787/api/common/imageUploadForArticle", //上传请求的地址
-             crossDomainUpload : true,
+            crossDomainUpload: true,
             //  uploadCallbackURL :"http://39.97.160.96:8787/articleEdit.html",
             saveHTMLToTextarea: true,
-            readOnly:  this.disabled?true:false,
+            readOnly: this.disabled ? true : false,
             autoHeight: false, //自动宽高
             flowChart: true, // 流程图
             emoji: true,
@@ -618,9 +620,9 @@
       },
       mounted() {
         //判断是新增还是修改
-       if(this.getQueryVariable('edit')==='false'&&this.getQueryVariable('id')){
-          this.disabled=true
-       }
+        if (this.getQueryVariable('edit') === 'false' && this.getQueryVariable('id')) {
+          this.disabled = true
+        }
 
         if (this.getQueryVariable('id')) {
           this.getDetail(this.getQueryVariable('id'));

@@ -46,20 +46,40 @@
 
                 <div>
                     <ul class="detailTitle">
-                        <li>作者:张三</li>
-                        <li>创建于2020-01-15</li>
+                        <li>作者:<span>张三</span></li>
+                        <li>创建于<span v-html="detailData.createTime"></span></li>
                         <li>修订者李四</li>
-                        <li>更新于2020-12-15 10：25</li>
+                        <li>更新于<span v-html="detailData.updateTime"></span></li>
                     </ul>
                 </div>
 
-                <div style="min-height: 300px;">
-                    测试详情
+                <el-dialog title="意见反馈" :visible.sync="dialogVisible" width="1000px" :before-close="handleClose">
+                    <el-form ref="form" :model="form" label-width="80px">
+                        <el-form-item label="建议内容">
+                            <el-input type="textarea" v-model="form.context" :autosize="{ minRows:20, maxRows:40}">
+                            </el-input>
+                        </el-form-item>
+                        <el-form-item>
+                            <el-button type="primary" @click="onSubmit">提交</el-button>
+                        </el-form-item>
+                    </el-form>
+                </el-dialog>
+
+                <div style="min-height: 300px;" v-html="detailData.htmlContent">
                 </div>
                 <div class="btnGroup">
-                    <el-button type="primary" icon="el-icon-check">202</el-button>
-                    <el-button type="danger" icon="el-icon-close">104</el-button>
-                    <el-button type="danger" @click="goYijian()">意见反馈</el-button>
+                    <div>
+                        <img src="/images/zan.png" />
+                        <p>123</p>
+                    </div>
+                    <div>
+                        <img src="/images/chai.png" />
+                        <p>123</p>
+                    </div>
+
+                    <div>
+                        <img src="/images/fankui.png" @click="dialogVisible = true" />
+                    </div>
                 </div>
 
                 <div class="wrap">
@@ -95,6 +115,7 @@
 <script src="/js/service.js"></script>
 <script src="/js/login.js"></script>
 <script src="/js/toast.js"></script>
+<script src="/js/local.js"></script>
 <script type="text/javascript" src="/js/main.js"></script>
 <script type="text/javascript" src="/js/sinaFaceAndEffec.js"></script>
 <script>
@@ -104,6 +125,11 @@
             data: function () {
                 return {
                     activeName: window.location.pathname,
+                    detailData: {},
+                    dialogVisible: false,
+                    form: {
+                        context: ''
+                    }
                 }
             },
             mounted() {
@@ -111,6 +137,45 @@
                 $('.face-icon').SinaEmotion($('.text'));
             },
             methods: {
+                onSubmit() {
+                    var params = {};
+                    params['userId'] = getlocal('userInfo').id;
+                    params['context'] = this.form.context;
+                    params['articleId'] =this.getQueryVariable('id');                
+                    jrequest
+                        .post(`/api/advice/add`, params)
+                        .then((res) => {
+                            if (res.data.code == 0) {
+                                this.$message({
+                                    message: '感谢您的建议，您可在个人中心 我的反馈 中查看后续处理，如果有后续优化方案，工作人员也会给与说明。祝您生活愉快，工作顺利',
+                                    type: 'success'
+                                });
+                                this.dialogVisible = false
+                            } else {
+                                $('body').toast({
+                                    position: 'fixed',
+                                    content: res.data.msg,
+                                    duration: 3000
+                                });
+                            }
+                        });
+                },
+
+                handleClose(done) {
+                    this.form.context = '';
+                    this.dialogVisible = false
+                },
+                getQueryVariable(variable) {
+                    var query = window.location.search.substring(1);
+                    var vars = query.split("&");
+                    for (var i = 0; i < vars.length; i++) {
+                        var pair = vars[i].split("=");
+                        if (pair[0] == variable) {
+                            return pair[1];
+                        }
+                    }
+                    return (false);
+                },
                 handleClick(tab, event) {
                     console.log(tab, event);
                 },
@@ -139,12 +204,43 @@
                 // 意见反馈
                 goYijian() {
                     window.open("/feedback.html", "_blank");
-                }
-
-
-            }
+                },
+                getDetail(id) {
+                    jrequest
+                        .post(`/api/article/get/${id}`)
+                        .then((res) => {
+                            if (res.data.code == 0) {
+                                this.detailData = res.data.body;
+                            } else {
+                                $('body').toast({
+                                    position: 'fixed',
+                                    content: res.data.msg,
+                                    duration: 3000
+                                });
+                            }
+                        });
+                },
+            },
+            created() {
+                this.getDetail(this.getQueryVariable('id'));
+            },
         })
     })
 </script>
+<style>
+    .btnGroup {
+        text-align: center;
+        margin-top: 30px;
+        display: flex;
+        justify-content: space-between;
+        width: 300px;
+        margin: 0 auto;
+        margin-bottom: 30px;
+    }
+
+    .btnGroup div {
+        cursor: pointer;
+    }
+</style>
 
 </html>

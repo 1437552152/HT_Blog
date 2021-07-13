@@ -9,25 +9,25 @@ $(function() {
         $(".theme-popover").slideUp(200);
     });
 
-    $(".backTop").on("click", function() {
-        $("html,body").animate({
-                scrollTop: 0,
-            },
-            "slow"
-        );
-    });
+    // $(".backTop").on("click", function() {
+    //     $("html,body").animate({
+    //             scrollTop: 0,
+    //         },
+    //         "slow"
+    //     );
+    // });
 
-    function back_Top() {
-        if ($(document).scrollTop() <= 100) {
-            $(".backTop").fadeOut();
-        } else {
-            $(".backTop").fadeIn();
-        }
-    }
-    $(window).scroll(function() {
-        back_Top();
-    });
-    back_Top();
+    // function back_Top() {
+    //     if ($(document).scrollTop() <= 100) {
+    //         $(".backTop").fadeOut();
+    //     } else {
+    //         $(".backTop").fadeIn();
+    //     }
+    // }
+    // $(window).scroll(function() {
+    //     back_Top();
+    // });
+    // back_Top();
 });
 $(window).load(
     initTopMenu(function() {
