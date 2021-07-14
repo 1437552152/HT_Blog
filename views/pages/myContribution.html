@@ -37,7 +37,7 @@
             </aside>
             <div class="content" style="width: 950px;">
                 <div><span>累积贡献点:</span><span v-html="sumpoint"></span></div>
-                <div style="margin-bottom:20px"><span>累积贡献点:</span><span v-html="newpoint"></span></div>
+                <div style="margin-bottom:20px"><span>当前贡献点:</span><span v-html="newpoint"></span></div>
                 <el-table :data="tableData" border style="width: 100%">
                     <el-table-column prop="time" label="时间" align="center">
                     </el-table-column>
@@ -68,6 +68,7 @@
 <script src="/js/service.js"></script>
 <script src="/js/login.js"></script>
 <script src="/js/toast.js"></script>
+<script src="/js/local.js"></script>
 <script>
     new Vue({
         el: '#app',

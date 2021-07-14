@@ -39,16 +39,17 @@
             <div class="content" style="width: 950px;" id="content">
                 <el-breadcrumb separator-class="el-icon-arrow-right">
                     <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-                    <el-breadcrumb-item><a href="">前端</a></el-breadcrumb-item>
-                    <el-breadcrumb-item><a href="">移动端</a></el-breadcrumb-item>
-                    <el-breadcrumb-item>vant</el-breadcrumb-item>
+                    <el-breadcrumb-item v-for="(item,index) in detailData.crumbsList"><a href=""></a><span
+                            v-html="item.name"></span></el-breadcrumb-item>
+                    <el-breadcrumb-item><span v-html="detailData.name"></span></el-breadcrumb-item>
                 </el-breadcrumb>
 
                 <div>
+                    <h2 style="margin:30px;text-align: center;"><span v-html="detailData.name"></span></h2>
                     <ul class="detailTitle">
-                        <li>作者:<span>张三</span></li>
+                        <li>作者:<span v-html="detailData.userName"></span></li>
                         <li>创建于<span v-html="detailData.createTime"></span></li>
-                        <li>修订者李四</li>
+                        <li>修订者:<span v-html="detailData.maintainUserName"></span></li>
                         <li>更新于<span v-html="detailData.updateTime"></span></li>
                     </ul>
                 </div>
@@ -69,12 +70,14 @@
                 </div>
                 <div class="btnGroup">
                     <div>
-                        <img src="/images/zan.png" />
-                        <p>123</p>
+                        <img src="/images/zan.png" v-if="!detailData.praiseFlag" @click="goDianzan(1)" />
+                        <img src="/images/zanCheck.png" v-if="detailData.praiseFlag" @click="goDianzan(2)" />
+                        <p><span v-html="detailData.praiseNum"></span></p>
                     </div>
                     <div>
-                        <img src="/images/chai.png" />
-                        <p>123</p>
+                        <img src="/images/chai.png" v-if="!detailData.blameFlag" @click="goChaipin(1)" />
+                        <img src="/images/chaiCheck.png" v-if="detailData.blameFlag" @click="goChaipin(2)" />
+                        <p><span v-html="detailData.blameNum"></span></p>
                     </div>
 
                     <div>
@@ -127,6 +130,7 @@
                     activeName: window.location.pathname,
                     detailData: {},
                     dialogVisible: false,
+                    navList:[],
                     form: {
                         context: ''
                     }
@@ -141,7 +145,7 @@
                     var params = {};
                     params['userId'] = getlocal('userInfo').id;
                     params['context'] = this.form.context;
-                    params['articleId'] =this.getQueryVariable('id');                
+                    params['articleId'] = this.getQueryVariable('id');
                     jrequest
                         .post(`/api/advice/add`, params)
                         .then((res) => {
@@ -207,7 +211,7 @@
                 },
                 getDetail(id) {
                     jrequest
-                        .post(`/api/article/get/${id}`)
+                        .post(`/api/article/frontGet/${id}`)
                         .then((res) => {
                             if (res.data.code == 0) {
                                 this.detailData = res.data.body;
@@ -220,9 +224,92 @@
                             }
                         });
                 },
+
+                goDianzan(type) {
+                    jrequest
+                        .post(`${type == 1 ? `/api/articleScore/praise/${this.getQueryVariable('id')}/${getlocal('userInfo').id}` : `'/api/articleScore/praise/cancel/${this.getQueryVariable('id')}/${getlocal('userInfo').id}'`}`)
+                        .then((res) => {
+                            if (res.data.code == 0) {
+                                if (type == 1) {
+                                    this.detailData.praiseFlag = true;
+                                    this.detailData.praiseNum = this.detailData.praiseNum + 1;
+                                    $('body').toast({
+                                        position: 'fixed',
+                                        content: "感谢认可，如果有好的建议请务必留言哦...",
+                                        duration: 3000
+                                    });
+                                } else {
+                                    this.detailData.praiseFlag = false;
+                                    this.detailData.praiseNum = this.detailData.praiseNum + 1;
+                                    $('body').toast({
+                                        position: 'fixed',
+                                        content: "取消点赞",
+                                        duration: 3000
+                                    });
+                                }
+                            } else {
+                                $('body').toast({
+                                    position: 'fixed',
+                                    content: res.data.msg,
+                                    duration: 3000
+                                });
+                            }
+                        });
+                },
+                goChaipin(type) {
+                    jrequest
+                        .post(`${type == 1 ? `/api/articleScore/blame/${this.getQueryVariable('id')}/${getlocal('userInfo').id}` : `'/api/articleScore/blame/cancel/${this.getQueryVariable('id')}/${getlocal('userInfo').id}'`}`)
+                        .then((res) => {
+                            if (res.data.code == 0) {
+                                if (type == 1) {
+                                    this.detailData.blameFlag = true;
+                                    this.detailData.blameNum = this.detailData.blameNum + 1;
+                                    $('body').toast({
+                                        position: 'fixed',
+                                        content: "抱歉，才疏学浅，烦请指点一二，不胜感激...",
+                                        duration: 3000
+                                    });
+                                } else {
+                                    this.detailData.blameFlag = false;
+                                    this.detailData.blameNum = this.detailData.blameNum - 1;
+                                    $('body').toast({
+                                        position: 'fixed',
+                                        content: "取消差评",
+                                        duration: 3000
+                                    });
+                                }
+
+
+                            } else {
+                                $('body').toast({
+                                    position: 'fixed',
+                                    content: res.data.msg,
+                                    duration: 3000
+                                });
+                            }
+                        });
+                },
+                getNav(id) {
+                    jrequest
+                        .get(`/api/articleGist/selectList/${id}`)
+                        .then((res) => {
+                            if (res.data.code == 0) {
+                                this.navList=res.data.body;
+                            } else {
+                                $('body').toast({
+                                    position: 'fixed',
+                                    content: res.data.msg,
+                                    duration: 3000
+                                });
+                            }
+                        });
+                },
+
             },
             created() {
                 this.getDetail(this.getQueryVariable('id'));
+                // 获取左侧导航
+                this.getNav(this.getQueryVariable('id'));
             },
         })
     })
