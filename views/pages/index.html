@@ -28,7 +28,7 @@
         <div class="w1200 m40">
 
             <div class="content">
-                <a v-bind:href="'/detail.html?id='+item.id" target="_blank" v-for="(item,index) in tableData"
+                <a v-bind:href="'/detail.html?id='+item.id+'&gistId='+item.articleGistId" target="_blank" v-for="(item,index) in tableData"
                     :key="index">
                     <el-card class="box-card list_index" shadow="hover">
                         <div slot="header" class="clearfix">
@@ -39,9 +39,9 @@
                         <div class="descc_index" v-html="item.overview"></div>
                         <div class="tag_list">
 
-                            <!-- <div class="text item">
-                                <el-tag>{{_item}}</el-tag>
-                            </div> -->
+                            <div class="text item">
+                                <el-tag v-for="(_item,_index) in item.tagsList" :key="_index" style="margin-right: 6px;"><span v-html="_item"></span></el-tag>
+                            </div>
 
                             <div class="allNum">
                                 <span v-html="item.scanNum"></span>浏览
@@ -110,8 +110,11 @@
                     jrequest
                         .post(`/api/article/frontPage`, params)
                         .then((res) => {
-                            if (res.data.code == 0) {
-                                this.tableData = res.data.body.data;
+                            if (res.data.code == 0) {                       
+                                res.data.body.data.length&&res.data.body.data.map(item=>{
+                                    item.tagsList=item.tags&&item.tags.split(",")
+                                })
+                               this.tableData = res.data.body.data;
                                 this.pageNum = res.data.body.pageNum;
                                 this.pageSize = res.data.body.pageSize;
                                 this.totalNum = res.data.body.totalNum;

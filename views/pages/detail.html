@@ -130,10 +130,12 @@
                     activeName: window.location.pathname,
                     detailData: {},
                     dialogVisible: false,
-                    navList:[],
+                    navList: [],
                     form: {
                         context: ''
-                    }
+                    },
+                    id: this.getQueryVariable('id'),
+                    gistId: this.getQueryVariable('gistId'),
                 }
             },
             mounted() {
@@ -145,7 +147,7 @@
                     var params = {};
                     params['userId'] = getlocal('userInfo').id;
                     params['context'] = this.form.context;
-                    params['articleId'] = this.getQueryVariable('id');
+                    params['articleId'] = this.id;
                     jrequest
                         .post(`/api/advice/add`, params)
                         .then((res) => {
@@ -211,7 +213,7 @@
                 },
                 getDetail(id) {
                     jrequest
-                        .post(`/api/article/frontGet/${id}/${getlocal('userInfo').id||''}`)
+                        .post(`/api/article/frontGet/${id}/${getlocal('userInfo').id || ''}`)
                         .then((res) => {
                             if (res.data.code == 0) {
                                 this.detailData = res.data.body;
@@ -227,7 +229,7 @@
 
                 goDianzan(type) {
                     jrequest
-                        .post(`${type == 1 ? `/api/articleScore/praise/${this.getQueryVariable('id')}/${getlocal('userInfo').id}` : `'/api/articleScore/praise/cancel/${this.getQueryVariable('id')}/${getlocal('userInfo').id}'`}`)
+                        .post(`${type == 1 ? `/api/articleScore/praise/${this.id}/${getlocal('userInfo').id}` : `'/api/articleScore/praise/cancel/${this.getQueryVariable('id')}/${getlocal('userInfo').id}'`}`)
                         .then((res) => {
                             if (res.data.code == 0) {
                                 if (type == 1) {
@@ -258,7 +260,7 @@
                 },
                 goChaipin(type) {
                     jrequest
-                        .post(`${type == 1 ? `/api/articleScore/blame/${this.getQueryVariable('id')}/${getlocal('userInfo').id}` : `'/api/articleScore/blame/cancel/${this.getQueryVariable('id')}/${getlocal('userInfo').id}'`}`)
+                        .post(`${type == 1 ? `/api/articleScore/blame/${this.id}/${getlocal('userInfo').id}` : `'/api/articleScore/blame/cancel/${this.getQueryVariable('id')}/${getlocal('userInfo').id}'`}`)
                         .then((res) => {
                             if (res.data.code == 0) {
                                 if (type == 1) {
@@ -291,10 +293,10 @@
                 },
                 getNav(id) {
                     jrequest
-                        .get(`/api/articleGist/selectListByGistId/24`)
+                        .get(`/api/articleGist/selectListByGistId/${this.gistId}`)
                         .then((res) => {
                             if (res.data.code == 0) {
-                                this.navList=res.data.body;
+                                this.navList = res.data.body;
                             } else {
                                 $('body').toast({
                                     position: 'fixed',
@@ -307,9 +309,9 @@
 
             },
             created() {
-                this.getDetail(this.getQueryVariable('id'));
+                this.getDetail(this.id);
                 // 获取左侧导航
-                this.getNav(this.getQueryVariable('id'));
+                this.getNav(this.id);
             },
         })
     })

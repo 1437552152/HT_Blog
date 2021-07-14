@@ -59,8 +59,7 @@ router.get("/purpose.html", (req, res) => {
 });
 
 //列表
-router.get("/l/:menuId/:pageNum/:listPageSize/newsList.html", (req, res) => {
-    console.log("12121212")
+router.get("/newsList.html", (req, res) => {
     res.render("newsList", {
         data: {},
     });
