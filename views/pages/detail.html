@@ -211,7 +211,7 @@
                 },
                 getDetail(id) {
                     jrequest
-                        .post(`/api/article/frontGet/${id}`)
+                        .post(`/api/article/frontGet/${id}/${getlocal('userInfo').id||''}`)
                         .then((res) => {
                             if (res.data.code == 0) {
                                 this.detailData = res.data.body;
@@ -291,7 +291,7 @@
                 },
                 getNav(id) {
                     jrequest
-                        .get(`/api/articleGist/selectList/${id}`)
+                        .get(`/api/articleGist/selectListByGistId/24`)
                         .then((res) => {
                             if (res.data.code == 0) {
                                 this.navList=res.data.body;
