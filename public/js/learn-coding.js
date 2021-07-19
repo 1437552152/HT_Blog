@@ -65,7 +65,7 @@ function appendTopMenu(dataList, level) {
       isEmpty = true;
     }
     navigationStr += `<li ${isEmpty ? "class= 'empty'" : ""
-      }><a class="menu" href="${menuUrl(id, dataList[i].info,dataList[i].childList&&dataList[i].childList.length)}" data-id="${id}">${name}${level === 1 && dataList[i].childList.length > 0
+      }><a class="menu" href="${menuUrl(id,dataList[i].childList&&dataList[i].childList.length?1:0)}" data-id="${id}">${name}${level === 1 && dataList[i].childList.length > 0
         ? "<span class='caret'></span>"
         : ""
       }</a>`;
@@ -81,8 +81,8 @@ function appendTopMenu(dataList, level) {
   return navigationStr;
 }
 
-function menuUrl(menuId,outlineId,type) {
-  return "/newsList.html?menuId=" + menuId+"&type="+type+"&outlineId="+outlineId
+function menuUrl(menuId,type) {
+  return "/newsList.html?menuId=" + menuId+"&type="+type
 }
 
 function articleUrl(menuId, articleId, version) {

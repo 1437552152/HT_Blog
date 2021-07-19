@@ -98,7 +98,6 @@
           menuId: this.getQueryVariable('menuId'),
           defaultId: this.getQueryVariable('id') || 0,
           type: this.getQueryVariable('type') == 0 ? 0 : 1,
-          outlineId: this.getQueryVariable('outlineId') ,
           navList: [],
           tableData: []
         }
@@ -155,9 +154,9 @@
               }
             });
         },
-        getNav(id) {
+        getNav() {
           jrequest
-            .get(`${this.type ? `/api/articleOutline/selectList/${id}` : `/api/articleGist/selectList/${this.outlineId}`}`)
+            .get(`${this.type ? `/api/articleOutline/selectList/${this.menuId}` : `/api/articleGist/selectList/${this.menuId}`}`)
             .then((res) => {
               if (res.data.code == 0) {
                 this.navList = res.data.body;
@@ -175,7 +174,7 @@
       },
       created() {
         // 获取左侧导航
-        this.getNav(this.menuId);
+        this.getNav();
       },
     })
   })

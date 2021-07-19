@@ -1,6 +1,6 @@
 <div class="sideba">
     <ul>
-        <li :class="{active:item.id==defaultId?true:false}" v-for="(item,index) in navList" :key="index"><a v-bind:href="'/newsList.html?menuId='+menuId+'&id='+item.id"
+        <li :class="{active:item.id==defaultId?true:false}" v-for="(item,index) in navList" :key="index"><a v-bind:href="'/newsList.html?menuId='+menuId+'&id='+item.id+'&type='+type"
                 v-html="item.name"></a></li>
     </ul>
 </div>
