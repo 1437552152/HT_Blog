@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: yfye
  * @Date: 2021-06-05 16:59:35
- * @LastEditTime: 2021-07-25 22:02:11
+ * @LastEditTime: 2021-07-25 22:21:03
  * @LastEditors: sueRimn
 -->
 <!DOCTYPE html>
@@ -119,6 +119,27 @@
                   <el-button type="text" @click="onDelete(item)" v-if="userId==item.userId">删除</el-button>
                 </div>
                 <div class="clearfix"></div>
+
+                <div id="info-show" style="padding-left:50px;width:calc(100% - 10px)">
+                    <ul>
+                      <li v-for="(_item,index) in item.replyList" style="border: none;">
+                        <div class="head-face"><img :src="_item.userImage||'images/1.jpg'"></div>
+                        <div class="reply-cont">
+                          <p class="username" v-html="_item.nickName"></p>
+                          <p class="comment-body" v-html="_item.context"></p>
+                        </div>
+                        <div class="opertion">
+                          <img src="/images/zan.png" v-if="!_item.praiseFlag" @click="goZan(_item,1)" style="cursor: pointer;">
+                          <img src="/images/zanCheck.png" v-if="_item.praiseFlag" style="cursor: pointer;"
+                            @click="goZan(_item,2)">
+                          <el-button type="text" @click="onReply(_item)">回复</el-button>
+                          <el-button type="text" @click="onDelete(_item)" v-if="userId==_item.userId">删除</el-button>
+                        </div>
+                       </li>
+                       <div class="clearfix"></div>
+                    </ul>
+                </div>
+       
                 <div class="content" v-if="editVisable&&item.id==commentId" style="margin-left: 90px;margin-top: 20px;">
                   <div class="cont-box">
                     <textarea class="text text2" placeholder="请输入..."></textarea>
@@ -284,8 +305,14 @@
             .then((res) => {
               if (res.data.code == 0) {
                 /* 查询评论列表 */
-                $('.text').val('')
-                this.getCommentList()
+                $('.text1').val('');
+                $('.text2').val('');
+                this.getCommentList();
+                $('body').toast({
+                  position: 'fixed',
+                  content: "评论成功",
+                  duration: 3000
+                });
               } else {
                 $('body').toast({
                   position: 'fixed',
@@ -362,7 +389,7 @@
         goDianzan(type) {
           jrequest
             .post(
-              `${type == 1 ? `/api/articleScore/praise/${this.id}/${getlocal('userInfo').id}` : `'/api/articleScore/praise/cancel/${this.getQueryVariable('id')}/${getlocal('userInfo').id}'`}`
+              type == 1 ? `/api/articleScore/praise/${this.id}/${getlocal('userInfo').id}` : `/api/articleScore/praise/cancel/${this.getQueryVariable('id')}/${getlocal('userInfo').id}`,{}
             )
             .then((res) => {
               if (res.data.code == 0) {
@@ -376,7 +403,7 @@
                   });
                 } else {
                   this.detailData.praiseFlag = false;
-                  this.detailData.praiseNum = this.detailData.praiseNum + 1;
+                  this.detailData.praiseNum = this.detailData.praiseNum - 1;
                   $('body').toast({
                     position: 'fixed',
                     content: "取消点赞",
@@ -395,7 +422,7 @@
         goChaipin(type) {
           jrequest
             .post(
-              `${type == 1 ? `/api/articleScore/blame/${this.id}/${getlocal('userInfo').id}` : `'/api/articleScore/blame/cancel/${this.getQueryVariable('id')}/${getlocal('userInfo').id}'`}`
+             type == 1 ? `/api/articleScore/blame/${this.id}/${getlocal('userInfo').id}` : `/api/articleScore/blame/cancel/${this.getQueryVariable('id')}/${getlocal('userInfo').id}`,{}
             )
             .then((res) => {
               if (res.data.code == 0) {
