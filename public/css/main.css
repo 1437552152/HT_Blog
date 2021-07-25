@@ -18,12 +18,24 @@ p,ul,li{margin: 0; padding: 0; list-style: none;}
 .tools-box .submit-btn input{ width: 100%; height: 100%; font-family: "微软雅黑"; font-size: 14px; color: #fff; cursor: pointer; border: none; outline: none; background-color: #99cc66;}
 
 /* 回复信息 */
-#info-show{float: left;  width: 100%; margin-top: 20px;}
+#info-show{width: 100%; margin-top: 20px;}
+#info-show img{
+    max-width: 100%;
+}
 #info-show li{ width: 100%; height: auto; padding: 10px 0 20px 0; border-bottom: 1px dashed #c0c0c0; float: left;}
 #info-show .head-face{width: 10%;  float: left; text-align: center;}
 #info-show .head-face img{width: 50px; height: 50px; border-radius: 50%; box-shadow: 0 0 8px #c0c0c0;}
 
-#info-show .reply-cont{ width: 89%; padding-right: 1%; float: right;}
+#info-show .reply-cont{width: 70%;
+    padding-right: 1%;
+    float: left;}
+#info-show .opertion{
+    width:20%;  
+    float: left; 
+    padding-left: 1%;
+}
+
+
 #info-show .reply-cont  p{ min-height: 20px; line-height: 20px;  font-family: "微软雅黑"; font-size: 14px;}
 #info-show .reply-cont .username{ color: #99cc66; margin-bottom: 5px;}
 #info-show .reply-cont .comment-body{ color: #999; max-height: auto;}

@@ -2,8 +2,8 @@
  * @Description: 
  * @Author: yfye
  * @Date: 2021-06-05 16:59:35
- * @LastEditTime: 2021-06-27 22:07:52
- * @LastEditors: yfye
+ * @LastEditTime: 2021-07-25 15:59:05
+ * @LastEditors: sueRimn
 -->
 <!DOCTYPE html>
 <html>
@@ -52,7 +52,7 @@
                 </el-table>
                 <div style="margin-top: 30px;">
                     <el-pagination align='center' @size-change="handleSizeChange" @current-change="handleCurrentChange"
-                        :current-page="currentPage" :page-sizes="[1,5,10,20]" :page-size="pageSize"
+                        :current-page="pageNum" :page-sizes="[1,5,10,20]" :page-size="pageSize"
                         :total="totalNum">
                     </el-pagination>
                 </div>
@@ -76,7 +76,7 @@
             return {
                 activeName: window.location.pathname,
                 tableData: [],
-                currentPage: 1, // 当前页码
+                pageNum: 1, // 当前页码
                 totalNum: 0, // 总条数
                 pageSize: 10, // 每页的数据条数
                 sumpoint: 0,
@@ -85,13 +85,13 @@
         },
         methods: {
             handleSizeChange(val) {
-                this.currentPage = 1;
+                this.pageNum = 1;
                 this.pageSize = val;
                 this.getData();
             },
             //当前页改变时触发 跳转其他页
             handleCurrentChange(val) {
-                this.currentPage = val;
+                this.pageNum = val;
                 this.getData();
             },
             getData() {
@@ -118,7 +118,7 @@
             },
             getContribution() {
                 jrequest
-                    .post(`/api/userScore/get/${getlocal('userInfo').id}`, {})
+                    .post(`/api/userScore/getByUserId/${getlocal('userInfo').id}`, {})
                     .then((res) => {
                         if (res.data.code == 0) {
                           this.sumpoint=res.data.body.contribution;

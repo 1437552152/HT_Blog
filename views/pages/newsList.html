@@ -2,8 +2,8 @@
  * @Description: 
  * @Author: yfye
  * @Date: 2021-06-05 16:59:35
- * @LastEditTime: 2021-07-12 20:17:45
- * @LastEditors: yfye
+ * @LastEditTime: 2021-07-25 15:55:10
+ * @LastEditors: sueRimn
 -->
 <!DOCTYPE html>
 <html>
@@ -37,10 +37,8 @@
       </aside>
       <div class="content" style="width: 950px;" id="content">
         <el-breadcrumb separator-class="el-icon-arrow-right">
-          <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-          <el-breadcrumb-item><a href="">前端</a></el-breadcrumb-item>
-          <el-breadcrumb-item><a href="">移动端</a></el-breadcrumb-item>
-          <el-breadcrumb-item>vant</el-breadcrumb-item>
+          <el-breadcrumb-item v-for="(item,index) in breadcrumbList" :key="index"><a v-bind:href="'/newsList.html?menuId='+item.id+'&type='+item.hasChild"  v-html="item.name"></a></el-breadcrumb-item>
+       <!--    <el-breadcrumb-item v-for="(item,index) in breadcrumbList.slice(breadcrumbList.length-1,breadcrumbList.length)" :key="index"><a v-bind:href="'/newsList.html?menuId='+item.id+'&type=0'"  v-html="item.name"></a></el-breadcrumb-item> -->
         </el-breadcrumb>
 
         <div style="min-height: 300px;margin-top: 30px;">
@@ -99,7 +97,8 @@
           defaultId: this.getQueryVariable('id') || 0,
           type: this.getQueryVariable('type') == 0 ? 0 : 1,
           navList: [],
-          tableData: []
+          tableData: [],
+          breadcrumbList:[]
         }
       },
       mounted() {
@@ -129,6 +128,13 @@
           this.pageNum = val;
           this.getList();
         },
+        /**
+         * @name: 
+         * @test: test font
+         * @msg: 根据主旨id查询列表
+         * @param {*} id
+         * @return {*}
+         */        
         getList(id) {
           var params = {};
           params['pageNum'] = this.pageNum;
@@ -154,14 +160,25 @@
               }
             });
         },
+        /**
+         * @name: 
+         * @test: test font
+         * @msg:  获取左侧导航 
+         * @param {*}
+         * @return {*}
+         */        
         getNav() {
           jrequest
             .get(`${this.type ? `/api/articleOutline/selectList/${this.menuId}` : `/api/articleGist/selectList/${this.menuId}`}`)
             .then((res) => {
               if (res.data.code == 0) {
                 this.navList = res.data.body;
-                this.defaultId = this.defaultId ? this.defaultId : res.data.body[0].id;
-                this.getList();
+                this.defaultId = this.defaultId ? this.defaultId : res.data.body[0]&&res.data.body[0].id?res.data.body[0].id:"";
+                this.getCrumbs();
+                if(this.defaultId){
+                  this.getList();
+                }
+               
               } else {
                 $('body').toast({
                   position: 'fixed',
@@ -171,9 +188,30 @@
               }
             });
         },
+        /**
+         * @name: 
+         * @test: test font
+         * @msg:  获取面包屑列表
+         * @param {*} articleOutlineId   主旨id获取面包屑
+         * @return {*}
+         */        
+        getCrumbs(articleOutlineId){
+        jrequest
+            .post(`/api/article/crumbs/${this.menuId}`,{})
+            .then((res) => {
+              if (res.data.code == 0) {
+                  this.breadcrumbList=res.data.body;
+              } else {
+                $('body').toast({
+                  position: 'fixed',
+                  content: res.data.msg,
+                  duration: 3000
+                });
+              }
+            });
+        }
       },
       created() {
-        // 获取左侧导航
         this.getNav();
       },
     })

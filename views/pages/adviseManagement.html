@@ -2,93 +2,92 @@
  * @Description: 
  * @Author: yfye
  * @Date: 2021-06-05 16:59:35
- * @LastEditTime: 2021-06-27 22:09:25
- * @LastEditors: yfye
+ * @LastEditTime: 2021-07-25 16:53:27
+ * @LastEditors: sueRimn
 -->
 <!DOCTYPE html>
 <html>
 
 <head>
-    <meta charset="UTF-8">
-    <title>详情页</title>
-    <link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/css/common.css">
-    <link rel="stylesheet" href="/css/index.css">
-    <link rel="stylesheet" href="/css/home.css">
-    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
-    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="https://cdn.staticfile.org/fingerprintjs2/2.1.0/fingerprint2.min.js"></script>
-    <script src="/js/learn-coding.js"></script>
-    <script src="https://cdn.bootcss.com/jsencrypt/3.0.0-beta.1/jsencrypt.js"></script>
-    <link rel="stylesheet" href="/css/toast.css">
-    <!--[if lt IE 9]>
+  <meta charset="UTF-8">
+  <title>详情页</title>
+  <link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/common.css">
+  <link rel="stylesheet" href="/css/index.css">
+  <link rel="stylesheet" href="/css/home.css">
+  <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+  <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://cdn.staticfile.org/fingerprintjs2/2.1.0/fingerprint2.min.js"></script>
+  <script src="/js/learn-coding.js"></script>
+  <script src="https://cdn.bootcss.com/jsencrypt/3.0.0-beta.1/jsencrypt.js"></script>
+  <link rel="stylesheet" href="/css/toast.css">
+  <!--[if lt IE 9]>
 	<script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
 	<![endif]-->
 </head>
 
 <body>
-    <div id="app" v-cloak>
-        {% include "public/header.html" %}
-        <div class="w1200 m40">
-            <aside style="width: 200px;">
-                {% include "public/myUser.html" %}
-            </aside>
-            <div class="content" style="width: 950px;">
-                <el-table :data="tableData" border style="width: 100%">
-                    <el-table-column prop="name" label="建议类型" align="center">
-                    </el-table-column>
-                    <el-table-column prop="belong" label="文章名" align="center">
-                    </el-table-column>
-                    <el-table-column prop="articleGist" label="文章主旨" align="center">
-                    </el-table-column>
-                    <el-table-column prop="content" label="建议内容" align="center">
-                    </el-table-column>
-                    <el-table-column prop="status" label="状态" align="center" :formatter="formatStatus">
-                    </el-table-column>
-                    <el-table-column prop="dealtime" label="创建时间" align="center">
-                    </el-table-column>
-                    <el-table-column label="操作" width="250" align="center">
-                        <template slot-scope="scope">
-                            <el-button @click="viewPage()" type="primary" size="small">查看文章</el-button>
-                        </template>
-                        <template slot-scope="scope" v-if="HandleStatus(scope.row.status)">
-                            <el-button @click="viewDetail()" type="primary" size="small">建议处理</el-button>
-                        </template>
-                    </el-table-column>
-                </el-table>
-                <div style="margin-top: 30px;">
-                    <el-pagination align='center' @size-change="handleSizeChange" @current-change="handleCurrentChange"
-                        :current-page="currentPage" :page-sizes="[1,5,10,20]" :page-size="pageSize" :total="totalNum">
-                    </el-pagination>
-                </div>
-                <el-dialog title="提示" :visible.sync="dialogVisible" width="30%">
-                    <el-form :model="formInline" class="demo-form-inline">
-
-                        <el-form-item label="结果" prop="result">
-                            <el-radio-group v-model="formInline.result" size="mini">
-                                <el-radio :label="1">采纳</el-radio>
-                                <el-radio :label="2">不予处理</el-radio>
-                            </el-radio-group>
-                        </el-form-item>
-                        <el-form-item label="贡献点">
-                            <el-input v-model="formInline.reason" size="mini"></el-input>
-                        </el-form-item>
-                        <el-form-item label="回复">
-                            <el-input type="textarea" v-model="formInline.respons" size="mini"></el-input>
-                        </el-form-item>
-                        <el-form-item>
-                            <el-button type="primary" @click="onSearch()" size="mini">提交</el-button>
-                        </el-form-item>
-                    </el-form>
-                </el-dialog>
-
-
-            </div>
-            <div class="clearfix"></div>
+  <div id="app" v-cloak>
+    {% include "public/header.html" %}
+    <div class="w1200 m40">
+      <aside style="width: 200px;">
+        {% include "public/myUser.html" %}
+      </aside>
+      <div class="content" style="width: 950px;">
+        <el-table :data="tableData" border style="width: 100%">
+          <el-table-column prop="type" label="建议类型" align="center" :formatter="formatStatus">
+          </el-table-column>
+          <el-table-column prop="articleName" label="文章名" align="center">
+          </el-table-column>
+          <el-table-column prop="articleGist" label="文章主旨" align="center">
+          </el-table-column>
+          <el-table-column prop="context" label="建议内容" show-overflow-tooltip align="center">
+          </el-table-column>
+          <el-table-column prop="dealFlag" label="状态" align="center" :formatter="formatHandleStatus">
+          </el-table-column>
+          <el-table-column prop="createTime" label="创建时间" align="center">
+          </el-table-column>
+          <el-table-column label="操作" width="250" align="center">
+            <template slot-scope="scope">
+              <el-button @click="viewPage(scope.row)" type="primary" size="small" v-if="scope.row.type===2">查看文章
+              </el-button>
+              <el-button @click="viewDetail(scope.row)" type="primary" size="small" v-if="!scope.row.dealFlag">建议处理
+              </el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+        <div style="margin-top: 30px;">
+          <el-pagination align='center' @size-change="handleSizeChange" @current-change="handleCurrentChange"
+            :current-page="pageNum" :page-sizes="[1,5,10,20]" :page-size="pageSize" :total="totalNum">
+          </el-pagination>
         </div>
-        {% include "public/footer.html" %}
+        <el-dialog title="提示" :visible.sync="dialogVisible" width="30%">
+          <el-form :model="formInline" class="demo-form-inline" :rules="rules" ref="formInline">
+            <el-form-item label="结果" prop="dealResult">
+              <el-radio-group v-model="formInline.dealResult" size="mini">
+                <el-radio label="采纳">采纳</el-radio>
+                <el-radio label="不予处理">不予处理</el-radio>
+              </el-radio-group>
+            </el-form-item>
+            <el-form-item label="贡献点" prop="thankContribution">
+              <el-input v-model="formInline.thankContribution" size="mini"></el-input>
+            </el-form-item>
+            <el-form-item label="回复" prop="userMsg">
+              <el-input type="textarea" v-model="formInline.userMsg" size="mini"></el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="onSearch()" size="mini">提交</el-button>
+            </el-form-item>
+          </el-form>
+        </el-dialog>
+
+
+      </div>
+      <div class="clearfix"></div>
     </div>
+    {% include "public/footer.html" %}
+  </div>
 </body>
 <script src="/js/vue.js"></script>
 <script src="/js/index.js"></script>
@@ -98,88 +97,147 @@
 <script src="/js/toast.js"></script>
 <script src="/js/local.js"></script>
 <script>
-    $(function () {
-        new Vue({
-            el: '#app',
-            data: function () {
-                return {
-                    tableData: [],
-                    currentPage: 1, // 当前页码
-                    totalNum: 0, // 总条数
-                    pageSize: 10, // 每页的数据条数
-                    dialogVisible: false,
-                    activeName: window.location.pathname,
-                    formInline: {
-                        result: '',
-                        reason: "",
-                        respons: ""
-                    }
-                }
+  $(function () {
+    new Vue({
+      el: '#app',
+      data: function () {
+        return {
+          tableData: [],
+          pageNum: 1, // 当前页码
+          totalNum: 0, // 总条数
+          pageSize: 10, // 每页的数据条数
+          dialogVisible: false,
+          activeName: window.location.pathname,
+          formInline: {
+            thankContribution: '',
+            dealResult: "采纳",
+            userMsg: ''
+          },
+          rules: {
+            thankContribution: [{
+              required: true,
+              message: '请输入贡献点',
+              trigger: 'blur'
+            }],
+            userMsg: [{
+              required: true,
+              message: '请输入回复的内容',
+              trigger: 'blur'
+            }],
+            dealResult: [{
+              required: true,
+              message: '请选择建议处理结果',
+              trigger: 'blur'
+            }]
+          },
+          detailData:{}
+        }
 
-            },
-            methods: {
-                getData() {
-                    var params = {};
-                    params['pageNum'] = this.pageNum;
-                    params['pageSize'] = this.pageSize;
-                    jrequest
-                        .post(`/api/articleAdvice/page`, params)
-                        .then((res) => {
-                            if (res.data.code == 0) {
-                                this.tableData = res.data.body.data;
-                                this.pageNum = res.data.body.pageNum;
-                                this.pageSize = res.data.body.pageSize;
-                                this.totalNum = res.data.body.totalNum;
-                            } else {
-                                $('body').toast({
-                                    position: 'fixed',
-                                    content: res.data.msg,
-                                    duration: 3000
-                                });
-                            }
-                        });
-                },
-                // 查看详情
-                viewDetail() {
-                    this.dialogVisible = true
-                },
-                HandleStatus(status) {
-                    return status == 1 ? true : false
-                },
-                //每页条数改变时触发 选择一页显示多少行
-                handleSizeChange(val) {
-                    this.currentPage = 1;
-                    this.pageSize = val;
-                    this.getData();
-                },
-                //当前页改变时触发 跳转其他页
-                handleCurrentChange(val) {
-                    this.currentPage = val;
-                    this.getData();
-                },
-                //状态判断
-                formatStatus(row, column, cellValue) {
-                    if (cellValue === 1) {
-                        return '待审核';
-                    } else {
-                        return '已审核';
-                    }
-                },
-
-                onSubmit() { },
-                onSearch() {
-                    this.dialogVisible = false
-                }
-            },
-            mounted() {
-                // 获取列表信息
-                this.getData();
+      },
+      methods: {
+        getData() {
+          var params = {};
+          params['pageNum'] = this.pageNum;
+          params['pageSize'] = this.pageSize;
+          params['isManager'] = true;
+          params['userId'] = getlocal('userInfo').id;
+          jrequest
+            .post(`/api/advice/page`, params)
+            .then((res) => {
+              if (res.data.code == 0) {
+                this.tableData = res.data.body.data;
+                this.pageNum = res.data.body.pageNum;
+                this.pageSize = res.data.body.pageSize;
+                this.totalNum = res.data.body.totalNum;
+              } else {
+                $('body').toast({
+                  position: 'fixed',
+                  content: res.data.msg,
+                  duration: 3000
+                });
+              }
+            });
+        },
+        // 查看详情
+        viewDetail(record) {
+          this.detailData=record;
+          this.dialogVisible = true;
+          this.formInline={
+                thankContribution: '',
+                dealResult: "采纳",
+                userMsg: ''
+            };
+        },
+        viewPage(record) {
+          window.location.href = "/detail.html?id=" + record.articleId + "&gistId=" + record.articleGistId
+        },
+        HandleStatus(status) {
+          return status == 1 ? true : false
+        },
+        //每页条数改变时触发 选择一页显示多少行
+        handleSizeChange(val) {
+          this.pageNum = 1;
+          this.pageSize = val;
+          this.getData();
+        },
+        //当前页改变时触发 跳转其他页
+        handleCurrentChange(val) {
+          this.pageNum = val;
+          this.getData();
+        },
+        //状态判断
+        formatStatus(row, column, cellValue) {
+          if (cellValue === 2) {
+            return '文章建议';
+          } else {
+            return '网站建议';
+          }
+        },
+        formatHandleStatus(row, column, cellValue) {
+          if (cellValue) {
+            return '已处理';
+          } else {
+            return '未处理';
+          }
+        },
+        onSearch() {
+          this.$refs.formInline.validate((valid) => {
+            if (valid) {
+              jrequest
+                .post(this.detailData.type===2?`/api/articleAdvice/deal`:`/api/advice/deal`, {...this.formInline,id:this.detailData.id})
+                .then((res) => {
+                  if (res.data.code == 0) {
+                    this.dialogVisible = false;
+                    this.detailData={};
+                    this.formInline={
+                        thankContribution: '',
+                        dealResult: "采纳",
+                        userMsg: ''
+                    };
+                     // 获取列表信息
+                   this.getData();
+                  } else {
+                    $('body').toast({
+                      position: 'fixed',
+                      content: res.data.msg,
+                      duration: 3000
+                    });
+                  }
+                });
             }
+          })
+        }
+      },
+      mounted() {
+        // 获取列表信息
+        this.getData();
+      }
 
 
 
-        })
     })
+  })
+
 </script>
 
 </html>

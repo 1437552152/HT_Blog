@@ -273,7 +273,7 @@ aside {
 .sideba ul li {
     line-height: 2;
     border: 1px solid #e9e9e9;
-    padding: 6px 10px 6px 14px;
+   
     font-size: 17px;
     color: #000;
     margin-right: 23px;
@@ -281,6 +281,11 @@ aside {
 
 .sideba ul li.active {
     background-color: #1989fa;
+}
+.sideba ul li a{
+    padding: 6px 10px 6px 14px;
+    display: block;
+    box-sizing: border-box;
 }
 
 .sideba ul li.active a {

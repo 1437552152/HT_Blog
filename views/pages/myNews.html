@@ -2,74 +2,84 @@
  * @Description: 
  * @Author: yfye
  * @Date: 2021-06-05 16:59:35
- * @LastEditTime: 2021-06-27 22:07:42
- * @LastEditors: yfye
+ * @LastEditTime: 2021-07-25 17:27:39
+ * @LastEditors: sueRimn
 -->
 <!DOCTYPE html>
 <html>
 
 <head>
-    <meta charset="UTF-8">
-    <title>我的消息</title>
-    <link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/css/common.css">
-    <link rel="stylesheet" href="/css/index.css">
-    <link rel="stylesheet" href="/css/home.css">
-    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
-    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="https://cdn.staticfile.org/fingerprintjs2/2.1.0/fingerprint2.min.js"></script>
-    <script src="/js/learn-coding.js"></script>
-    <script src="https://cdn.bootcss.com/jsencrypt/3.0.0-beta.1/jsencrypt.js"></script>
-    <link rel="stylesheet" href="/css/toast.css">
-    <!--[if lt IE 9]>
+  <meta charset="UTF-8">
+  <title>我的消息</title>
+  <link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/common.css">
+  <link rel="stylesheet" href="/css/index.css">
+  <link rel="stylesheet" href="/css/home.css">
+  <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+  <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://cdn.staticfile.org/fingerprintjs2/2.1.0/fingerprint2.min.js"></script>
+  <script src="/js/learn-coding.js"></script>
+  <script src="https://cdn.bootcss.com/jsencrypt/3.0.0-beta.1/jsencrypt.js"></script>
+  <link rel="stylesheet" href="/css/toast.css">
+  <!--[if lt IE 9]>
 	<script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
 	<![endif]-->
 </head>
 
 <body>
-    <div id="app" v-cloak>
-        {% include "public/header.html" %}
-        <div class="w1200 m40">
-            <aside style="width: 200px;">
-                {% include "public/myUser.html" %}
-            </aside>
-            <div class="content" style="width: 950px;">
-                <el-row style="margin-bottom: 20px;">
-                    <el-button type="success" @click="goSet()">全部设置为已读</el-button>
-                </el-row>
-                <el-table :data="tableData" border style="width: 100%">
-                    <el-table-column prop="type" label="消息类型">
-                    </el-table-column>
-                    <el-table-column prop="message" label="内容">
-                    </el-table-column>
-                    <el-table-column prop="createTime" label="时间">
-                    </el-table-column>
-                    <el-table-column label="操作" width="100">
-                        <template slot-scope="scope">
-                            <el-button @click="goLook(scope.row)" type="danger" size="small">查看</el-button>
-                        </template>
-                    </el-table-column>
-                </el-table>
-                <div style="margin-top: 30px;">
-                    <el-pagination align='center' @size-change="handleSizeChange" @current-change="handleCurrentChange"
-                        :current-page="pageNum" :page-sizes="[1,5,10,20]" :page-size="pageSize"
-                        :totalNum="totalNum">
-                    </el-pagination>
-                </div>
-            </div>
-            <!-- 模态框 -->
-            <el-dialog title="详情" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
-                <span v-html="message"></span>
-                <span slot="footer" class="dialog-footer">
-                    <!-- <el-button @click="dialogVisible = false">取 消</el-button> -->
-                    <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
-                </span>
-            </el-dialog>
-            <div class="clearfix"></div>
+  <div id="app" v-cloak>
+    {% include "public/header.html" %}
+    <div class="w1200 m40">
+      <aside style="width: 200px;">
+        {% include "public/myUser.html" %}
+      </aside>
+      <div class="content" style="width: 950px;">
+        <el-row style="margin-bottom: 20px;">
+          <el-button type="success" @click="goSet()">全部设置为已读</el-button>
+        </el-row>
+        <el-table :data="tableData" border style="width: 100%">
+          <el-table-column prop="type" label="消息类型">
+          </el-table-column>
+
+          <el-table-column prop="title" label="消息来源">
+          </el-table-column>
+
+
+          <el-table-column label="状态" width="100">
+            <template slot-scope="scope">
+              <sapn v-html="scope.row.readFlag?'已读':'未读'"></sapn>
+            </template>
+          </el-table-column>
+
+          <el-table-column prop="message" label="内容">
+          </el-table-column>
+          <el-table-column prop="createTime" label="时间">
+          </el-table-column>
+          <el-table-column label="操作" width="100">
+            <template slot-scope="scope">
+              <el-button @click="goLook(scope.row)" type="danger" size="small">查看</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+        <div style="margin-top: 30px;">
+          <el-pagination align='center' @size-change="handleSizeChange" @current-change="handleCurrentChange"
+            :current-page="pageNum" :page-sizes="[1,5,10,20]" :page-size="pageSize" :totalNum="totalNum">
+          </el-pagination>
         </div>
-        {% include "public/footer.html" %}
+      </div>
+      <!-- 模态框 -->
+      <el-dialog title="详情" :visible.sync="dialogVisible" width="30%">
+        <span v-html="message"></span>
+        <span slot="footer" class="dialog-footer">
+          <!-- <el-button @click="dialogVisible = false">取 消</el-button> -->
+          <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+        </span>
+      </el-dialog>
+      <div class="clearfix"></div>
     </div>
+    {% include "public/footer.html" %}
+  </div>
 </body>
 <script src="/js/vue.js"></script>
 <script src="/js/index.js"></script>
@@ -79,98 +89,107 @@
 <script src="/js/toast.js"></script>
 <script src="/js/local.js"></script>
 <script>
-    $(function () {
-        new Vue({
-            el: '#app',
-            data: function () {
-                return {
-                    activeName: window.location.pathname,
-                    dialogVisible: false,
-                    message: '',
-                    tableData: [],
-                    pageNum: 1, // 当前页码
-                    totalNum: 20, // 总条数
-                    pageSize: 2 // 每页的数据条数
-                }
-            },
-            methods: {
-                handleClick(tab, event) {
-                    console.log(tab, event);
-                },
-                //每页条数改变时触发 选择一页显示多少行
-                handleSizeChange(val) {
-                    this.pageNum = 1;
-                    this.pageSize = val;
-                    this.getData();
-                },
-                //当前页改变时触发 跳转其他页
-                handleCurrentChange(val) {
-                    this.pageNum = val;
-                    this.getData();
-                },
-                // 关闭弹框
-                handleClose(done) {
-                    this.$confirm('确认关闭？')
-                        .then(_ => {
-                            done();
-                        })
-                        .catch(_ => { });
-                },
-                // 去设置
-                goSet() {
-                    jrequest
-                        .post(`/api/userMessage/allRead`, {})
-                        .then((res) => {
-                            if (res.data.code == 0) {
-                                $('body').toast({
-                                    position: 'fixed',
-                                    content: '设置成功',
-                                    duration: 3000
-                                });
-                                this.getData();
-                            } else {
-                                $('body').toast({
-                                    position: 'fixed',
-                                    content: res.data.msg,
-                                    duration: 3000
-                                });
-                            }
-                        });
-                },
-                // 去查看  
-                goLook(row) {
-                    this.dialogVisible = true;
-                    this.message = row.message;
-                },
-                getData() {
-                    var params = {};
-                    params['id'] = getlocal('userInfo').id;
-                    params['pageNum'] = this.pageNum;
-                    params['pageSize'] = this.pageSize;
-                    jrequest
-                        .post(`/api/userMessage/page`, params)
-                        .then((res) => {
-                            if (res.data.code == 0) {
-                                this.tableData = res.data.body.data;
-                                this.pageNum = res.data.body.pageNum;
-                                this.pageSize = res.data.body.pageSize;
-                                this.totalNumNum = res.data.body.totalNumNum;
-                            } else {
-                                $('body').toast({
-                                    position: 'fixed',
-                                    content: res.data.msg,
-                                    duration: 3000
-                                });
-                            }
-                        });
-                },
-            },
-            mounted() {
+  $(function () {
+    new Vue({
+      el: '#app',
+      data: function () {
+        return {
+          activeName: window.location.pathname,
+          dialogVisible: false,
+          message: '',
+          tableData: [],
+          pageNum: 1, // 当前页码
+          totalNum: 20, // 总条数
+          pageSize: 2 // 每页的数据条数
+        }
+      },
+      methods: {
+        handleClick(tab, event) {
+          console.log(tab, event);
+        },
+        //每页条数改变时触发 选择一页显示多少行
+        handleSizeChange(val) {
+          this.pageNum = 1;
+          this.pageSize = val;
+          this.getData();
+        },
+        //当前页改变时触发 跳转其他页
+        handleCurrentChange(val) {
+          this.pageNum = val;
+          this.getData();
+        },
+        // 去设置
+        goSet() {
+          jrequest
+            .post(`/api/userMessage/allRead/${getlocal('userInfo').id}`,{})
+            .then((res) => {
+              if (res.data.code == 0) {
+                $('body').toast({
+                  position: 'fixed',
+                  content: '设置成功',
+                  duration: 3000
+                });
+                this.getData();
+              } else {
+                $('body').toast({
+                  position: 'fixed',
+                  content: res.data.msg,
+                  duration: 3000
+                });
+              }
+            });
+        },
+        // 去查看  
+        goLook(row) {
+          this.dialogVisible = true;
+          this.message = row.message;
+          jrequest
+            .post(`/api/userMessage/get/${row.id}`, {})
+            .then((res) => {
+              if (res.data.code == 0) {
                 // 获取列表信息
                 this.getData();
-            }
-        })
+              } else {
+                $('body').toast({
+                  position: 'fixed',
+                  content: res.data.msg,
+                  duration: 3000
+                });
+              }
+            });
+
+
+        },
+        getData() {
+          var params = {};
+          params['id'] = getlocal('userInfo').id;
+          params['pageNum'] = this.pageNum;
+          params['pageSize'] = this.pageSize;
+          jrequest
+            .post(`/api/userMessage/page`, params)
+            .then((res) => {
+              if (res.data.code == 0) {
+                this.tableData = res.data.body.data;
+                this.pageNum = res.data.body.pageNum;
+                this.pageSize = res.data.body.pageSize;
+                this.totalNumNum = res.data.body.totalNumNum;
+              } else {
+                $('body').toast({
+                  position: 'fixed',
+                  content: res.data.msg,
+                  duration: 3000
+                });
+              }
+            });
+        },
+      },
+      mounted() {
+        // 获取列表信息
+        this.getData();
+      }
     })
+  })
+
 </script>
 
 </html>

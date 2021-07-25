@@ -2,8 +2,8 @@
  * @Description:
  * @Author: yfye
  * @Date: 2021-06-27 13:15:19
- * @LastEditTime: 2021-06-27 22:43:38
- * @LastEditors: yfye
+ * @LastEditTime: 2021-07-25 21:17:24
+ * @LastEditors: sueRimn
  */
 function registerUser() {
   var nickName = $('input[name="nickname"]').val();
@@ -31,16 +31,18 @@ function registerUser() {
               localStorage.setItem("userInfo", JSON.stringify(respon.data.body));
               location.reload();
             } else {
-              that.$message({
-                message: respon.data.msg,
-                type: 'warning'
-              });
+              $('body').toast({
+                position: 'fixed',
+                content: respon.data.msg,
+                duration: 3000
+              });           
             }
           })
       } else {
-        that.$message({
-          message: res.data.msg,
-          type: 'warning'
+        $('body').toast({
+          position: 'fixed',
+          content: respon.data.msg,
+          duration: 3000
         });
       }
     });

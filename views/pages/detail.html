@@ -2,115 +2,136 @@
  * @Description: 
  * @Author: yfye
  * @Date: 2021-06-05 16:59:35
- * @LastEditTime: 2021-06-27 22:09:56
- * @LastEditors: yfye
+ * @LastEditTime: 2021-07-25 21:32:21
+ * @LastEditors: sueRimn
 -->
 <!DOCTYPE html>
 <html>
 
 <head>
-    <meta charset="UTF-8">
-    <title>详情页</title>
-    <link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/css/common.css">
-    <link rel="stylesheet" href="/css/index.css">
-    <link rel="stylesheet" href="/css/home.css">
-    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
-    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="https://cdn.staticfile.org/fingerprintjs2/2.1.0/fingerprint2.min.js"></script>
-    <script src="/js/learn-coding.js"></script>
-    <script src="https://cdn.bootcss.com/jsencrypt/3.0.0-beta.1/jsencrypt.js"></script>
-    <link rel="stylesheet" href="/css/toast.css">
-    <link rel="stylesheet" href="/css/main.css" />
-    <link rel="stylesheet" type="text/css" href="/css/sinaFaceAndEffec.css" />
-    <!--[if lt IE 9]>
+  <meta charset="UTF-8">
+  <title>详情页</title>
+  <link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/common.css">
+  <link rel="stylesheet" href="/css/index.css">
+  <link rel="stylesheet" href="/css/home.css">
+  <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+  <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://cdn.staticfile.org/fingerprintjs2/2.1.0/fingerprint2.min.js"></script>
+  <script src="/js/learn-coding.js"></script>
+  <script src="https://cdn.bootcss.com/jsencrypt/3.0.0-beta.1/jsencrypt.js"></script>
+  <link rel="stylesheet" href="/css/toast.css">
+  <link rel="stylesheet" href="/css/main.css" />
+  <link rel="stylesheet" type="text/css" href="/css/sinaFaceAndEffec.css" />
+  <!--[if lt IE 9]>
 	<script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
 	<![endif]-->
 </head>
 
 <body>
-    <div id="app" v-cloak>
-        {% include "public/header.html" %}
-        <div class="w1200 m40">
-            <aside style="width: 200px;">
-                {% include "public/menu.html" %}
-            </aside>
-            <div class="content" style="width: 950px;" id="content">
-                <el-breadcrumb separator-class="el-icon-arrow-right">
-                    <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-                    <el-breadcrumb-item v-for="(item,index) in detailData.crumbsList"><a href=""></a><span
-                            v-html="item.name"></span></el-breadcrumb-item>
-                    <el-breadcrumb-item><span v-html="detailData.name"></span></el-breadcrumb-item>
-                </el-breadcrumb>
+  <div id="app" v-cloak>
+    {% include "public/header.html" %}
+    <div class="w1200 m40">
+      <aside style="width: 200px;">
+        {% include "public/menu.html" %}
+      </aside>
+      <div class="content" style="width: 950px;" id="content">
+        <el-breadcrumb separator-class="el-icon-arrow-right">
+          <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+          <el-breadcrumb-item v-for="(item,index) in detailData.crumbsList" :key="index"><a
+              v-bind:href="'/newsList.html?menuId='+item.id+'&type='+item.hasChild"><span v-html="item.name"></span></a>
+          </el-breadcrumb-item>
+          <!-- 
+                    <el-breadcrumb-item><span v-html="detailData.name"></span></el-breadcrumb-item> -->
+        </el-breadcrumb>
 
-                <div>
-                    <h2 style="margin:30px;text-align: center;"><span v-html="detailData.name"></span></h2>
-                    <ul class="detailTitle">
-                        <li>作者:<span v-html="detailData.userName"></span></li>
-                        <li>创建于<span v-html="detailData.createTime"></span></li>
-                        <li>修订者:<span v-html="detailData.maintainUserName"></span></li>
-                        <li>更新于<span v-html="detailData.updateTime"></span></li>
-                    </ul>
-                </div>
-
-                <el-dialog title="意见反馈" :visible.sync="dialogVisible" width="1000px" :before-close="handleClose">
-                    <el-form ref="form" :model="form" label-width="80px">
-                        <el-form-item label="建议内容">
-                            <el-input type="textarea" v-model="form.context" :autosize="{ minRows:20, maxRows:40}">
-                            </el-input>
-                        </el-form-item>
-                        <el-form-item>
-                            <el-button type="primary" @click="onSubmit">提交</el-button>
-                        </el-form-item>
-                    </el-form>
-                </el-dialog>
-
-                <div style="min-height: 300px;" v-html="detailData.htmlContent">
-                </div>
-                <div class="btnGroup">
-                    <div>
-                        <img src="/images/zan.png" v-if="!detailData.praiseFlag" @click="goDianzan(1)" />
-                        <img src="/images/zanCheck.png" v-if="detailData.praiseFlag" @click="goDianzan(2)" />
-                        <p><span v-html="detailData.praiseNum"></span></p>
-                    </div>
-                    <div>
-                        <img src="/images/chai.png" v-if="!detailData.blameFlag" @click="goChaipin(1)" />
-                        <img src="/images/chaiCheck.png" v-if="detailData.blameFlag" @click="goChaipin(2)" />
-                        <p><span v-html="detailData.blameNum"></span></p>
-                    </div>
-
-                    <div>
-                        <img src="/images/fankui.png" @click="dialogVisible = true" />
-                    </div>
-                </div>
-
-                <div class="wrap">
-                    <div class="comment">
-                        <div class="head-face">
-                            <img src="/images/1.jpg" />
-                            <p>我是鸟</p>
-                        </div>
-                        <div class="content">
-                            <div class="cont-box">
-                                <textarea class="text" placeholder="请输入..."></textarea>
-                            </div>
-                            <div class="tools-box">
-                                <div class="operator-box-btn"><span class="face-icon">☺</span><span class="img-icon"
-                                        @Click="inputInsert()">▧</span></div>
-                                <div class="submit-btn"><input type="button" @Click="out()" value="提交评论" /></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="info-show">
-                        <ul></ul>
-                    </div>
-                </div>
-            </div>
-            <div class="clearfix"></div>
+        <div>
+          <h2 style="margin:30px;text-align: center;"><span v-html="detailData.name"></span></h2>
+          <ul class="detailTitle">
+            <li>作者:<span v-html="detailData.userName"></span></li>
+            <li>创建于<span v-html="detailData.createTime"></span></li>
+            <li>修订者:<span v-html="detailData.maintainUserName"></span></li>
+            <li>更新于<span v-html="detailData.updateTime"></span></li>
+          </ul>
         </div>
-        {% include "public/footer.html" %}
+
+        <el-dialog title="意见反馈" :visible.sync="dialogVisible" width="1000px" :before-close="handleClose">
+          <el-form ref="form" :model="form" label-width="80px">
+            <el-form-item label="建议内容">
+              <el-input type="textarea" v-model="form.context" :autosize="{ minRows:20, maxRows:40}">
+              </el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="onSubmit">提交</el-button>
+            </el-form-item>
+          </el-form>
+        </el-dialog>
+
+        <div style="min-height: 300px;" v-html="detailData.htmlContent">
+        </div>
+        <div class="btnGroup">
+          <div>
+            <img src="/images/zan.png" v-if="!detailData.praiseFlag" @click="goDianzan(1)" />
+            <img src="/images/zanCheck.png" v-if="detailData.praiseFlag" @click="goDianzan(2)" />
+            <p><span v-html="detailData.praiseNum"></span></p>
+          </div>
+          <div>
+            <img src="/images/chai.png" v-if="!detailData.blameFlag" @click="goChaipin(1)" />
+            <img src="/images/chaiCheck.png" v-if="detailData.blameFlag" @click="goChaipin(2)" />
+            <p><span v-html="detailData.blameNum"></span></p>
+          </div>
+
+          <div>
+            <img src="/images/fankui.png" @click="dialogVisible = true" />
+          </div>
+        </div>
+
+        <div class="wrap">
+          <div class="comment">
+            <div class="head-face">
+              <img src="/images/1.jpg" />
+            </div>
+            <div class="content">
+              <div class="cont-box">
+                <textarea class="text" placeholder="请输入..."></textarea>
+              </div>
+              <div class="tools-box">
+                <div class="operator-box-btn"><span class="face-icon">☺</span><span class="img-icon"
+                    @Click="inputInsert()">▧</span></div>
+                <div class="submit-btn"><input type="button" @Click="out()" value="提交评论" /></div>
+              </div>
+            </div>
+          </div>
+          <div id="info-show">
+            <ul> 
+              <li v-for="(item,index) in commentList">
+                <div class="head-face"><img :src="item.userImage||'images/1.jpg'"></div>
+                <div class="reply-cont">
+                  <p class="username" v-html="item.nickName"></p>
+                  <p class="comment-body" v-html="item.context"></p>
+                </div>
+                <div class="opertion">
+                    <img src="/images/zan.png" v-if="!item.praiseFlag" @click="goZan(item,1)" style="cursor: pointer;">
+                    <img src="/images/zanCheck.png" v-if="item.praiseFlag" style="cursor: pointer;"  @click="goZan(item,2)">
+                    <el-button type="text" @click="onReply(item)">回复</el-button>
+                    <el-button type="text" @click="onDelete(item)" v-if="userId==item.userId">删除</el-button>
+                </div>
+              </li>
+              <div class="clearfix"></div>
+            </ul>
+          </div>
+          <div style="margin-top: 30px;" v-if="totalNum>10">
+            <el-pagination align='center' @size-change="handleSizeChange" @current-change="handleCurrentChange"
+              :current-page="pageNum" :page-sizes="[1,5,10,20]" :page-size="pageSize" :total="totalNum">
+            </el-pagination>
+          </div>
+        </div>
+      </div>
+      <div class="clearfix"></div>
     </div>
+    {% include "public/footer.html" %}
+  </div>
 </body>
 <script src="/js/vue.js"></script>
 <script src="/js/index.js"></script>
@@ -122,214 +143,336 @@
 <script type="text/javascript" src="/js/main.js"></script>
 <script type="text/javascript" src="/js/sinaFaceAndEffec.js"></script>
 <script>
-    $(function () {
-        new Vue({
-            el: '#app',
-            data: function () {
-                return {
-                    activeName: window.location.pathname,
-                    detailData: {},
-                    dialogVisible: false,
-                    navList: [],
-                    form: {
-                        context: ''
-                    },
-                    id: this.getQueryVariable('id'),
-                    gistId: this.getQueryVariable('gistId'),
+  $(function () {
+    new Vue({
+      el: '#app',
+      data: function () {
+        return {
+          activeName: window.location.pathname,
+          detailData: {},
+          dialogVisible: false,
+          navList: [],
+          form: {
+            context: ''
+          },
+          id: this.getQueryVariable('id'),
+          gistId: this.getQueryVariable('gistId'),
+          commentList: [],
+          pageNum: 1,
+          pageSize: 10,
+          totalNum: 0,
+          userId:getlocal('userInfo').id
+        }
+      },
+      mounted() {
+        // 绑定表情
+        $('.face-icon').SinaEmotion($('.text'));
+      },
+      methods: {
+        onSubmit() {
+          var params = {};
+          params['userId'] = getlocal('userInfo').id;
+          params['context'] = this.form.context;
+          params['articleId'] = this.id;
+          jrequest
+            .post(`/api/articleAdvice/add`, params)
+            .then((res) => {
+              if (res.data.code == 0) {
+                this.$message({
+                  message: '感谢您的建议，您可在个人中心 我的反馈 中查看后续处理，如果有后续优化方案，工作人员也会给与说明。祝您生活愉快，工作顺利',
+                  type: 'success'
+                });
+                this.dialogVisible = false
+              } else {
+                $('body').toast({
+                  position: 'fixed',
+                  content: res.data.msg,
+                  duration: 3000
+                });
+              }
+            });
+        },
+
+        handleClose(done) {
+          this.form.context = '';
+          this.dialogVisible = false
+        },
+        getQueryVariable(variable) {
+          var query = window.location.search.substring(1);
+          var vars = query.split("&");
+          for (var i = 0; i < vars.length; i++) {
+            var pair = vars[i].split("=");
+            if (pair[0] == variable) {
+              return pair[1];
+            }
+          }
+          return (false);
+        },
+        handleSizeChange(val) {
+          this.pageNum = 1;
+          this.pageSize = val;
+          this.getCommentList();
+        },
+        //当前页改变时触发 跳转其他页
+        handleCurrentChange(val) {
+          this.pageNum = val;
+          this.getCommentList();
+        },
+        /**
+         * @name: 
+         * @test: test font
+         * @msg: 点赞与取消点赞
+         * @param {*} item   整个对象
+         * @param {*} type    类型1去点赞   2为取消点赞
+         * @return {*}
+         */        
+        goZan(item,type){
+          jrequest
+            .post(type==1?`/api/articleComment/praise/${this.id}/${item.id}/${getlocal('userInfo').id}`:`/api/articleComment/praise/cancel/${this.id}/${item.id}/${getlocal('userInfo').id}`, {})
+            .then((res) => {
+              if (res.data.code == 0) {
+                /* 查询评论列表 */
+                $('body').toast({
+                  position: 'fixed',
+                  content: type==1?'点赞成功':'取消点赞',
+                  duration: 3000
+                });
+                this.getCommentList()
+              } else {
+                $('body').toast({
+                  position: 'fixed',
+                  content: res.data.msg,
+                  duration: 3000
+                });
+              }
+            });         
+        },
+        /**
+         * @name: 
+         * @test: test font
+         * @msg: 回复
+         * @param {*} item
+         * @return {*}
+         */        
+        onReply(item){},
+        out() {
+          let params = {};
+          params['articleId'] = this.id
+          params['context'] = AnalyticEmotion($('.text').val());
+          params['parentId'] = 0
+          params['userId'] = getlocal('userInfo').id;
+          jrequest
+            .post(`/api/articleComment/add`, params)
+            .then((res) => {
+              if (res.data.code == 0) {
+                /* 查询评论列表 */
+                $('.text').val('')
+                this.getCommentList()
+              } else {
+                $('body').toast({
+                  position: 'fixed',
+                  content: res.data.msg,
+                  duration: 3000
+                });
+              }
+            });
+        },
+        inputInsert() {
+          $(".cont-box .text").insertContent('<img src="请在这里输入图片地址" alt=""/>', -10);
+        },
+        /**
+         * @name: 
+         * @test: test font
+         * @msg:  删除功能
+         * @param {*} item
+         * @return {*}
+         */        
+        onDelete(item){
+            jrequest
+            .post(`/api/articleComment/delete/${item.id}`, {})
+            .then((res) => {
+              if (res.data.code == 0) {
+                this.getCommentList();
+                $('body').toast({
+                  position: 'fixed',
+                  content: "删除成功",
+                  duration: 3000
+                });
+              } else {
+                $('body').toast({
+                  position: 'fixed',
+                  content: res.data.msg,
+                  duration: 3000
+                });
+              }
+            });
+            
+        },
+        // 意见反馈
+        goYijian() {
+          window.open("/feedback.html", "_blank");
+        },
+        getDetail(id) {
+          jrequest
+            .post(`/api/article/frontGet`, {
+              id,
+              userId: getlocal('userInfo').id
+            })
+            .then((res) => {
+              if (res.data.code == 0) {
+                this.detailData = res.data.body;
+              } else {
+                $('body').toast({
+                  position: 'fixed',
+                  content: res.data.msg,
+                  duration: 3000
+                });
+              }
+            });
+        },
+        /**
+         * @name: 
+         * @test: test font
+         * @msg: 点赞功能    type为1时点赞   为2时取消点赞
+         * @param {*} type
+         * @return {*}
+         */
+        goDianzan(type) {
+          jrequest
+            .post(
+              `${type == 1 ? `/api/articleScore/praise/${this.id}/${getlocal('userInfo').id}` : `'/api/articleScore/praise/cancel/${this.getQueryVariable('id')}/${getlocal('userInfo').id}'`}`
+            )
+            .then((res) => {
+              if (res.data.code == 0) {
+                if (type == 1) {
+                  this.detailData.praiseFlag = true;
+                  this.detailData.praiseNum = this.detailData.praiseNum + 1;
+                  $('body').toast({
+                    position: 'fixed',
+                    content: "感谢认可，如果有好的建议请务必留言哦...",
+                    duration: 3000
+                  });
+                } else {
+                  this.detailData.praiseFlag = false;
+                  this.detailData.praiseNum = this.detailData.praiseNum + 1;
+                  $('body').toast({
+                    position: 'fixed',
+                    content: "取消点赞",
+                    duration: 3000
+                  });
                 }
-            },
-            mounted() {
-                // 绑定表情
-                $('.face-icon').SinaEmotion($('.text'));
-            },
-            methods: {
-                onSubmit() {
-                    var params = {};
-                    params['userId'] = getlocal('userInfo').id;
-                    params['context'] = this.form.context;
-                    params['articleId'] = this.id;
-                    jrequest
-                        .post(`/api/advice/add`, params)
-                        .then((res) => {
-                            if (res.data.code == 0) {
-                                this.$message({
-                                    message: '感谢您的建议，您可在个人中心 我的反馈 中查看后续处理，如果有后续优化方案，工作人员也会给与说明。祝您生活愉快，工作顺利',
-                                    type: 'success'
-                                });
-                                this.dialogVisible = false
-                            } else {
-                                $('body').toast({
-                                    position: 'fixed',
-                                    content: res.data.msg,
-                                    duration: 3000
-                                });
-                            }
-                        });
-                },
-
-                handleClose(done) {
-                    this.form.context = '';
-                    this.dialogVisible = false
-                },
-                getQueryVariable(variable) {
-                    var query = window.location.search.substring(1);
-                    var vars = query.split("&");
-                    for (var i = 0; i < vars.length; i++) {
-                        var pair = vars[i].split("=");
-                        if (pair[0] == variable) {
-                            return pair[1];
-                        }
-                    }
-                    return (false);
-                },
-                handleClick(tab, event) {
-                    console.log(tab, event);
-                },
-                // 评论
-                reply(content) {
-                    var html;
-                    html = '<li>';
-                    html += '<div class="head-face">';
-                    html += '<img src="images/1.jpg" / >';
-                    html += '</div>';
-                    html += '<div class="reply-cont">';
-                    html += '<p class="username">小小红色飞机</p>';
-                    html += '<p class="comment-body">' + content + '</p>';
-                    // html += '<p class="comment-footer">2016年10月5日　回复　点赞54　转发12</p>';
-                    html += '</div>';
-                    html += '</li>';
-                    return html;
-                },
-                out() {
-                    var inputText = $('.text').val();
-                    $('#info-show ul').append(this.reply(AnalyticEmotion(inputText)));
-                },
-                inputInsert() {
-                    $(".cont-box .text").insertContent('<img src="请在这里输入图片地址" alt=""/>', -10);
-                },
-                // 意见反馈
-                goYijian() {
-                    window.open("/feedback.html", "_blank");
-                },
-                getDetail(id) {
-                    jrequest
-                        .post(`/api/article/frontGet/${id}/${getlocal('userInfo').id || ''}`)
-                        .then((res) => {
-                            if (res.data.code == 0) {
-                                this.detailData = res.data.body;
-                            } else {
-                                $('body').toast({
-                                    position: 'fixed',
-                                    content: res.data.msg,
-                                    duration: 3000
-                                });
-                            }
-                        });
-                },
-
-                goDianzan(type) {
-                    jrequest
-                        .post(`${type == 1 ? `/api/articleScore/praise/${this.id}/${getlocal('userInfo').id}` : `'/api/articleScore/praise/cancel/${this.getQueryVariable('id')}/${getlocal('userInfo').id}'`}`)
-                        .then((res) => {
-                            if (res.data.code == 0) {
-                                if (type == 1) {
-                                    this.detailData.praiseFlag = true;
-                                    this.detailData.praiseNum = this.detailData.praiseNum + 1;
-                                    $('body').toast({
-                                        position: 'fixed',
-                                        content: "感谢认可，如果有好的建议请务必留言哦...",
-                                        duration: 3000
-                                    });
-                                } else {
-                                    this.detailData.praiseFlag = false;
-                                    this.detailData.praiseNum = this.detailData.praiseNum + 1;
-                                    $('body').toast({
-                                        position: 'fixed',
-                                        content: "取消点赞",
-                                        duration: 3000
-                                    });
-                                }
-                            } else {
-                                $('body').toast({
-                                    position: 'fixed',
-                                    content: res.data.msg,
-                                    duration: 3000
-                                });
-                            }
-                        });
-                },
-                goChaipin(type) {
-                    jrequest
-                        .post(`${type == 1 ? `/api/articleScore/blame/${this.id}/${getlocal('userInfo').id}` : `'/api/articleScore/blame/cancel/${this.getQueryVariable('id')}/${getlocal('userInfo').id}'`}`)
-                        .then((res) => {
-                            if (res.data.code == 0) {
-                                if (type == 1) {
-                                    this.detailData.blameFlag = true;
-                                    this.detailData.blameNum = this.detailData.blameNum + 1;
-                                    $('body').toast({
-                                        position: 'fixed',
-                                        content: "抱歉，才疏学浅，烦请指点一二，不胜感激...",
-                                        duration: 3000
-                                    });
-                                } else {
-                                    this.detailData.blameFlag = false;
-                                    this.detailData.blameNum = this.detailData.blameNum - 1;
-                                    $('body').toast({
-                                        position: 'fixed',
-                                        content: "取消差评",
-                                        duration: 3000
-                                    });
-                                }
+              } else {
+                $('body').toast({
+                  position: 'fixed',
+                  content: res.data.msg,
+                  duration: 3000
+                });
+              }
+            });
+        },
+        goChaipin(type) {
+          jrequest
+            .post(
+              `${type == 1 ? `/api/articleScore/blame/${this.id}/${getlocal('userInfo').id}` : `'/api/articleScore/blame/cancel/${this.getQueryVariable('id')}/${getlocal('userInfo').id}'`}`
+            )
+            .then((res) => {
+              if (res.data.code == 0) {
+                if (type == 1) {
+                  this.detailData.blameFlag = true;
+                  this.detailData.blameNum = this.detailData.blameNum + 1;
+                  $('body').toast({
+                    position: 'fixed',
+                    content: "抱歉，才疏学浅，烦请指点一二，不胜感激...",
+                    duration: 3000
+                  });
+                } else {
+                  this.detailData.blameFlag = false;
+                  this.detailData.blameNum = this.detailData.blameNum - 1;
+                  $('body').toast({
+                    position: 'fixed',
+                    content: "取消差评",
+                    duration: 3000
+                  });
+                }
 
 
-                            } else {
-                                $('body').toast({
-                                    position: 'fixed',
-                                    content: res.data.msg,
-                                    duration: 3000
-                                });
-                            }
-                        });
-                },
-                getNav(id) {
-                    jrequest
-                        .get(`/api/articleGist/selectListByGistId/${this.gistId}`)
-                        .then((res) => {
-                            if (res.data.code == 0) {
-                                this.navList = res.data.body;
-                            } else {
-                                $('body').toast({
-                                    position: 'fixed',
-                                    content: res.data.msg,
-                                    duration: 3000
-                                });
-                            }
-                        });
-                },
-
-            },
-            created() {
-                this.getDetail(this.id);
-                // 获取左侧导航
-                this.getNav(this.id);
-            },
-        })
+              } else {
+                $('body').toast({
+                  position: 'fixed',
+                  content: res.data.msg,
+                  duration: 3000
+                });
+              }
+            });
+        },
+        getNav(id) {
+          jrequest
+            .get(`/api/articleGist/selectListByGistId/${this.gistId}`)
+            .then((res) => {
+              if (res.data.code == 0) {
+                this.navList = res.data.body;
+              } else {
+                $('body').toast({
+                  position: 'fixed',
+                  content: res.data.msg,
+                  duration: 3000
+                });
+              }
+            });
+        },
+        /**
+         * @name: 
+         * @test: test font
+         * @msg:  评论列表
+         * @param {*} id  文章id
+         * @return {*}
+         */
+        getCommentList() {
+          let params = {};
+          params['articleId'] = this.id;
+          params['orderType'] = 1;
+          params['pageNum'] = this.pageNum;
+          params['pageSize'] = this.pageSize;
+       /*    params['rootId'] = 1; */
+        /*   params['articleId'] = this.id; */
+          jrequest
+            .post(`/api/articleComment/page`, params)
+            .then((res) => {
+              if (res.data.code == 0) {
+                this.commentList = res.data.body.data;
+                this.pageNum = res.data.body.pageNum;
+                this.pageSize = res.data.body.pageSize;
+                this.totalNum = res.data.body.totalNum;
+              }
+            });
+        }
+      },
+      created() {
+        this.getDetail(this.id);
+        // 获取左侧导航
+        this.getNav(this.id);
+        /* 查询评论列表 */
+        this.getCommentList()
+      },
     })
+  })
+
 </script>
 <style>
-    .btnGroup {
-        text-align: center;
-        margin-top: 30px;
-        display: flex;
-        justify-content: space-between;
-        width: 300px;
-        margin: 0 auto;
-        margin-bottom: 30px;
-    }
+  .btnGroup {
+    text-align: center;
+    margin-top: 30px;
+    display: flex;
+    justify-content: space-between;
+    width: 300px;
+    margin: 0 auto;
+    margin-bottom: 30px;
+  }
 
-    .btnGroup div {
-        cursor: pointer;
-    }
+  .btnGroup div {
+    cursor: pointer;
+  }
+
 </style>
 
 </html>
