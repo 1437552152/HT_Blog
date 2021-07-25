@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: yfye
  * @Date: 2021-06-05 16:59:35
- * @LastEditTime: 2021-07-25 21:32:21
+ * @LastEditTime: 2021-07-25 22:02:11
  * @LastEditors: sueRimn
 -->
 <!DOCTYPE html>
@@ -93,18 +93,18 @@
               <img src="/images/1.jpg" />
             </div>
             <div class="content">
-              <div class="cont-box">
-                <textarea class="text" placeholder="请输入..."></textarea>
+              <div class="cont-box cont-box1">
+                <textarea class="text text1" placeholder="请输入..."></textarea>
               </div>
               <div class="tools-box">
                 <div class="operator-box-btn"><span class="face-icon">☺</span><span class="img-icon"
-                    @Click="inputInsert()">▧</span></div>
-                <div class="submit-btn"><input type="button" @Click="out()" value="提交评论" /></div>
+                    @Click="inputInsert(1)">▧</span></div>
+                <div class="submit-btn"><input type="button" @Click="out(1)" value="提交评论" /></div>
               </div>
             </div>
           </div>
           <div id="info-show">
-            <ul> 
+            <ul>
               <li v-for="(item,index) in commentList">
                 <div class="head-face"><img :src="item.userImage||'images/1.jpg'"></div>
                 <div class="reply-cont">
@@ -112,10 +112,22 @@
                   <p class="comment-body" v-html="item.context"></p>
                 </div>
                 <div class="opertion">
-                    <img src="/images/zan.png" v-if="!item.praiseFlag" @click="goZan(item,1)" style="cursor: pointer;">
-                    <img src="/images/zanCheck.png" v-if="item.praiseFlag" style="cursor: pointer;"  @click="goZan(item,2)">
-                    <el-button type="text" @click="onReply(item)">回复</el-button>
-                    <el-button type="text" @click="onDelete(item)" v-if="userId==item.userId">删除</el-button>
+                  <img src="/images/zan.png" v-if="!item.praiseFlag" @click="goZan(item,1)" style="cursor: pointer;">
+                  <img src="/images/zanCheck.png" v-if="item.praiseFlag" style="cursor: pointer;"
+                    @click="goZan(item,2)">
+                  <el-button type="text" @click="onReply(item)">回复</el-button>
+                  <el-button type="text" @click="onDelete(item)" v-if="userId==item.userId">删除</el-button>
+                </div>
+                <div class="clearfix"></div>
+                <div class="content" v-if="editVisable&&item.id==commentId" style="margin-left: 90px;margin-top: 20px;">
+                  <div class="cont-box">
+                    <textarea class="text text2" placeholder="请输入..."></textarea>
+                  </div>
+                  <div class="tools-box">
+                    <div class="operator-box-btn"><span class="face-icon">☺</span><span class="img-icon"
+                        @Click="inputInsert(2)">▧</span></div>
+                    <div class="submit-btn"><input type="button" @Click="out(2,item)" value="提交评论" /></div>
+                  </div>
                 </div>
               </li>
               <div class="clearfix"></div>
@@ -161,7 +173,9 @@
           pageNum: 1,
           pageSize: 10,
           totalNum: 0,
-          userId:getlocal('userInfo').id
+          userId: getlocal('userInfo').id,
+          editVisable: false,
+          commentId: ''
         }
       },
       mounted() {
@@ -225,16 +239,17 @@
          * @param {*} item   整个对象
          * @param {*} type    类型1去点赞   2为取消点赞
          * @return {*}
-         */        
-        goZan(item,type){
+         */
+        goZan(item, type) {
           jrequest
-            .post(type==1?`/api/articleComment/praise/${this.id}/${item.id}/${getlocal('userInfo').id}`:`/api/articleComment/praise/cancel/${this.id}/${item.id}/${getlocal('userInfo').id}`, {})
+            .post(type == 1 ? `/api/articleComment/praise/${this.id}/${item.id}/${getlocal('userInfo').id}` :
+              `/api/articleComment/praise/cancel/${this.id}/${item.id}/${getlocal('userInfo').id}`, {})
             .then((res) => {
               if (res.data.code == 0) {
                 /* 查询评论列表 */
                 $('body').toast({
                   position: 'fixed',
-                  content: type==1?'点赞成功':'取消点赞',
+                  content: type == 1 ? '点赞成功' : '取消点赞',
                   duration: 3000
                 });
                 this.getCommentList()
@@ -245,7 +260,7 @@
                   duration: 3000
                 });
               }
-            });         
+            });
         },
         /**
          * @name: 
@@ -253,13 +268,16 @@
          * @msg: 回复
          * @param {*} item
          * @return {*}
-         */        
-        onReply(item){},
-        out() {
+         */
+        onReply(item) {
+          this.editVisable = true;
+          this.commentId = item.id;
+        },
+        out(type, item={}) {
           let params = {};
           params['articleId'] = this.id
-          params['context'] = AnalyticEmotion($('.text').val());
-          params['parentId'] = 0
+          params['context'] = AnalyticEmotion(type == 1 ? $('.text1').val() : $('.text2').val());
+          params['parentId'] = item.id ? item.id:0;
           params['userId'] = getlocal('userInfo').id;
           jrequest
             .post(`/api/articleComment/add`, params)
@@ -277,8 +295,12 @@
               }
             });
         },
-        inputInsert() {
-          $(".cont-box .text").insertContent('<img src="请在这里输入图片地址" alt=""/>', -10);
+        inputInsert(type) {
+          if (type == 1) {
+            $(".cont-box1 .text").insertContent('<img src="请在这里输入图片地址" alt=""/>', -10);
+          } else {
+            $(".cont-box2 .text").insertContent('<img src="请在这里输入图片地址" alt=""/>', -10);
+          }
         },
         /**
          * @name: 
@@ -286,9 +308,9 @@
          * @msg:  删除功能
          * @param {*} item
          * @return {*}
-         */        
-        onDelete(item){
-            jrequest
+         */
+        onDelete(item) {
+          jrequest
             .post(`/api/articleComment/delete/${item.id}`, {})
             .then((res) => {
               if (res.data.code == 0) {
@@ -306,7 +328,7 @@
                 });
               }
             });
-            
+
         },
         // 意见反馈
         goYijian() {
@@ -433,8 +455,8 @@
           params['orderType'] = 1;
           params['pageNum'] = this.pageNum;
           params['pageSize'] = this.pageSize;
-       /*    params['rootId'] = 1; */
-        /*   params['articleId'] = this.id; */
+          /*    params['rootId'] = 1; */
+          /*   params['articleId'] = this.id; */
           jrequest
             .post(`/api/articleComment/page`, params)
             .then((res) => {
@@ -443,6 +465,12 @@
                 this.pageNum = res.data.body.pageNum;
                 this.pageSize = res.data.body.pageSize;
                 this.totalNum = res.data.body.totalNum;
+              }else{
+                $('body').toast({
+                  position: 'fixed',
+                  content: res.data.msg,
+                  duration: 3000
+                });
               }
             });
         }
