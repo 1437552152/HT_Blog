@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: yfye
  * @Date: 2021-06-05 16:59:35
- * @LastEditTime: 2021-07-25 22:21:03
+ * @LastEditTime: 2021-07-29 00:22:32
  * @LastEditors: sueRimn
 -->
 <!DOCTYPE html>
@@ -121,25 +121,29 @@
                 <div class="clearfix"></div>
 
                 <div id="info-show" style="padding-left:50px;width:calc(100% - 10px)">
-                    <ul>
-                      <li v-for="(_item,index) in item.replyList" style="border: none;">
-                        <div class="head-face"><img :src="_item.userImage||'images/1.jpg'"></div>
-                        <div class="reply-cont">
-                          <p class="username" v-html="_item.nickName"></p>
-                          <p class="comment-body" v-html="_item.context"></p>
-                        </div>
-                        <div class="opertion">
-                          <img src="/images/zan.png" v-if="!_item.praiseFlag" @click="goZan(_item,1)" style="cursor: pointer;">
-                          <img src="/images/zanCheck.png" v-if="_item.praiseFlag" style="cursor: pointer;"
-                            @click="goZan(_item,2)">
-                          <el-button type="text" @click="onReply(_item)">回复</el-button>
-                          <el-button type="text" @click="onDelete(_item)" v-if="userId==_item.userId">删除</el-button>
-                        </div>
-                       </li>
-                       <div class="clearfix"></div>
-                    </ul>
+                  <ul>
+                    <li v-for="(_item,index) in item.replyList" style="border: none;">
+                      <div class="head-face"><img :src="_item.userImage||'images/1.jpg'"></div>
+                      <div class="reply-cont">
+                        <p class="username" v-html="_item.nickName"></p>
+                        <p class="comment-body" v-html="_item.context"></p>
+                      </div>
+                      <div class="opertion">
+                        <img src="/images/zan.png" v-if="!_item.praiseFlag" @click="goZan(_item,1)"
+                          style="cursor: pointer;">
+                        <img src="/images/zanCheck.png" v-if="_item.praiseFlag" style="cursor: pointer;"
+                          @click="goZan(_item,2)">
+                        <!--   <span v-html="_item.praiseNum"></span> -->
+                        <el-button type="text" @click="onReply(_item,2)">回复</el-button>
+                        <el-button type="text" @click="onDelete(_item)" v-if="userId==_item.userId">删除</el-button>
+                      </div>
+                    </li>
+                    <div @click="goLookMore(item.id)" style="text-align: center;color: cornflowerblue;"
+                      v-if="!item.LoadMore&&item.replyList&&item.replyList.length==2">查看全部回复</div>
+                    <div class="clearfix"></div>
+                  </ul>
                 </div>
-       
+
                 <div class="content" v-if="editVisable&&item.id==commentId" style="margin-left: 90px;margin-top: 20px;">
                   <div class="cont-box">
                     <textarea class="text text2" placeholder="请输入..."></textarea>
@@ -205,6 +209,10 @@
       },
       methods: {
         onSubmit() {
+          if (!this.userId) {
+            goLogin();
+            return
+          }
           var params = {};
           params['userId'] = getlocal('userInfo').id;
           params['context'] = this.form.context;
@@ -227,7 +235,37 @@
               }
             });
         },
-
+        goLookMore(id) {
+          if (!this.userId) {
+            goLogin();
+            return
+          }
+          let params = {};
+          params['articleId'] = this.id;
+          params['orderType'] = 1;
+          params['pageNum'] = 1;
+          params['pageSize'] = 1000;
+          params['userId'] = getlocal('userInfo').id;
+          params['rootId'] = id;
+          jrequest
+            .post(`/api/articleComment/replyPage`, params)
+            .then((res) => {
+              if (res.data.code == 0) {
+                this.commentList.map(item => {
+                  if (item.id == id) {
+                    item.replyList = res.data.body.data;
+                    item.LoadMore = true;
+                  }
+                })
+              } else {
+                $('body').toast({
+                  position: 'fixed',
+                  content: res.data.msg,
+                  duration: 3000
+                });
+              }
+            });
+        },
         handleClose(done) {
           this.form.context = '';
           this.dialogVisible = false
@@ -262,6 +300,10 @@
          * @return {*}
          */
         goZan(item, type) {
+          if (!this.userId) {
+            goLogin();
+            return
+          }
           jrequest
             .post(type == 1 ? `/api/articleComment/praise/${this.id}/${item.id}/${getlocal('userInfo').id}` :
               `/api/articleComment/praise/cancel/${this.id}/${item.id}/${getlocal('userInfo').id}`, {})
@@ -290,15 +332,26 @@
          * @param {*} item
          * @return {*}
          */
-        onReply(item) {
+        onReply(item, type) {
+          if (!this.userId) {
+            goLogin();
+            return
+          }
           this.editVisable = true;
           this.commentId = item.id;
+          if (type == 2) {
+            this.commentId = item.rootId;
+          }
         },
-        out(type, item={}) {
+        out(type, item = {}) {
+          if (!this.userId) {
+            goLogin();
+            return
+          }
           let params = {};
           params['articleId'] = this.id
           params['context'] = AnalyticEmotion(type == 1 ? $('.text1').val() : $('.text2').val());
-          params['parentId'] = item.id ? item.id:0;
+          params['parentId'] = item.id ? item.id : 0;
           params['userId'] = getlocal('userInfo').id;
           jrequest
             .post(`/api/articleComment/add`, params)
@@ -313,6 +366,7 @@
                   content: "评论成功",
                   duration: 3000
                 });
+                this.editVisable = false;
               } else {
                 $('body').toast({
                   position: 'fixed',
@@ -323,6 +377,10 @@
             });
         },
         inputInsert(type) {
+          if (!this.userId) {
+            goLogin();
+            return
+          }
           if (type == 1) {
             $(".cont-box1 .text").insertContent('<img src="请在这里输入图片地址" alt=""/>', -10);
           } else {
@@ -337,6 +395,10 @@
          * @return {*}
          */
         onDelete(item) {
+          if (!this.userId) {
+            goLogin();
+            return
+          }
           jrequest
             .post(`/api/articleComment/delete/${item.id}`, {})
             .then((res) => {
@@ -359,6 +421,10 @@
         },
         // 意见反馈
         goYijian() {
+          if (!this.userId) {
+            goLogin();
+            return
+          }
           window.open("/feedback.html", "_blank");
         },
         getDetail(id) {
@@ -387,9 +453,14 @@
          * @return {*}
          */
         goDianzan(type) {
+          if (!this.userId) {
+            goLogin();
+            return
+          }
           jrequest
             .post(
-              type == 1 ? `/api/articleScore/praise/${this.id}/${getlocal('userInfo').id}` : `/api/articleScore/praise/cancel/${this.getQueryVariable('id')}/${getlocal('userInfo').id}`,{}
+              type == 1 ? `/api/articleScore/praise/${this.id}/${getlocal('userInfo').id}` :
+              `/api/articleScore/praise/cancel/${this.getQueryVariable('id')}/${getlocal('userInfo').id}`, {}
             )
             .then((res) => {
               if (res.data.code == 0) {
@@ -420,9 +491,14 @@
             });
         },
         goChaipin(type) {
+          if (!this.userId) {
+            goLogin();
+            return
+          }
           jrequest
             .post(
-             type == 1 ? `/api/articleScore/blame/${this.id}/${getlocal('userInfo').id}` : `/api/articleScore/blame/cancel/${this.getQueryVariable('id')}/${getlocal('userInfo').id}`,{}
+              type == 1 ? `/api/articleScore/blame/${this.id}/${getlocal('userInfo').id}` :
+              `/api/articleScore/blame/cancel/${this.getQueryVariable('id')}/${getlocal('userInfo').id}`, {}
             )
             .then((res) => {
               if (res.data.code == 0) {
@@ -482,7 +558,7 @@
           params['orderType'] = 1;
           params['pageNum'] = this.pageNum;
           params['pageSize'] = this.pageSize;
-          /*    params['rootId'] = 1; */
+          params['userId'] = getlocal('userInfo').id;
           /*   params['articleId'] = this.id; */
           jrequest
             .post(`/api/articleComment/page`, params)
@@ -492,7 +568,7 @@
                 this.pageNum = res.data.body.pageNum;
                 this.pageSize = res.data.body.pageSize;
                 this.totalNum = res.data.body.totalNum;
-              }else{
+              } else {
                 $('body').toast({
                   position: 'fixed',
                   content: res.data.msg,

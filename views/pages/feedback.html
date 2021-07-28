@@ -2,8 +2,8 @@
  * @Description: 
  * @Author: yfye
  * @Date: 2021-06-05 16:59:35
- * @LastEditTime: 2021-06-27 20:36:57
- * @LastEditors: yfye
+ * @LastEditTime: 2021-07-29 00:24:00
+ * @LastEditors: sueRimn
 -->
 <!DOCTYPE html>
 <html>
@@ -70,9 +70,14 @@
       },
       methods: {
         onSubmit() {
+
           var params = {};
           params['userId'] = getlocal('userInfo').id;
           params['context'] = this.form.context;
+          if (!params['userId']) {
+            goLogin();
+            return
+          }
           jrequest
             .post(`/api/advice/add`, params)
             .then((res) => {
