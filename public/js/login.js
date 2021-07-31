@@ -118,7 +118,7 @@ function loginUser() {
             if (res.data.code == 0) {
                 $("body").toast({
                     position: "fixed",
-                    content: "登陆成功",
+                    content: "登录成功",
                     duration: 3000,
                 });
                 localStorage.setItem("userInfo", JSON.stringify(res.data.body));
@@ -129,7 +129,7 @@ function loginUser() {
                     content: res.data.msg,
                     duration: 3000,
                     /* 			isCenter:false,
-                                                                                                                                                                                                                  			background:'#4EA44E' */
+                                                                                                                                                                                                                            			background:'#4EA44E' */
                 });
             }
         });

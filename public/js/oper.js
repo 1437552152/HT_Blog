@@ -161,7 +161,7 @@ function findPassword() {
                         if (respon.data.code == 0) {
                             $("body").toast({
                                 position: "fixed",
-                                content: "登陆成功",
+                                content: "登录成功",
                                 duration: 3000,
                             });
                             localStorage.setItem(
