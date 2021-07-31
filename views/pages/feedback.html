@@ -73,6 +73,10 @@
                     var params = {};
                     params['userId'] = getlocal('userInfo').id;
                     params['context'] = this.form.context;
+                    if (!params['userId']) {
+                        goLogin();
+                        return
+                    }
                     jrequest
                         .post(`/api/advice/add`, params)
                         .then((res) => {

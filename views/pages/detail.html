@@ -199,6 +199,10 @@
             },
             methods: {
                 onSubmit() {
+                    if (!this.userId) {
+                        goLogin();
+                        return
+                    }
                     var params = {};
                     params['userId'] = getlocal('userInfo').id;
                     params['context'] = this.form.context;
@@ -256,6 +260,10 @@
                  * @return {*}
                  */
                 goZan(item, type) {
+                    if (!this.userId) {
+                        goLogin();
+                        return
+                    }
                     jrequest
                         .post(type == 1 ? `/api/articleComment/praise/${this.id}/${item.id}/${getlocal('userInfo').id}` :
                             `/api/articleComment/praise/cancel/${this.id}/${item.id}/${getlocal('userInfo').id}`, {})
@@ -285,11 +293,19 @@
                  * @return {*}
                  */
                 onReply(item) {
+                    if (!this.userId) {
+                        goLogin();
+                        return
+                    }
                     this.editVisable = true;
                     this.commentId = item.id;
                 },
                 out(type, item = {}) {
                     let params = {};
+                    if (!this.userId) {
+                        goLogin();
+                        return
+                    }
                     params['articleId'] = this.id
                     params['context'] = AnalyticEmotion(type == 1 ? $('.text1').val() : $('.text2').val());
                     params['parentId'] = item.id ? item.id : 0;
@@ -317,6 +333,10 @@
                         });
                 },
                 inputInsert(type) {
+                    if (!this.userId) {
+                        goLogin();
+                        return
+                    }
                     if (type == 1) {
                         $(".cont-box1 .text").insertContent('<img src="请在这里输入图片地址" alt=""/>', -10);
                     } else {
@@ -331,6 +351,10 @@
                  * @return {*}
                  */
                 onDelete(item) {
+                    if (!this.userId) {
+                        goLogin();
+                        return
+                    }
                     jrequest
                         .post(`/api/articleComment/delete/${item.id}`, {})
                         .then((res) => {
@@ -353,6 +377,10 @@
                 },
                 // 意见反馈
                 goYijian() {
+                    if (!this.userId) {
+                        goLogin();
+                        return
+                    }
                     window.open("/feedback.html", "_blank");
                 },
                 getDetail(id) {
@@ -381,6 +409,10 @@
                  * @return {*}
                  */
                 goDianzan(type) {
+                    if (!this.userId) {
+                        goLogin();
+                        return
+                    }
                     jrequest
                         .post(
                             type == 1 ? `/api/articleScore/praise/${this.id}/${getlocal('userInfo').id}` : `/api/articleScore/praise/cancel/${this.getQueryVariable('id')}/${getlocal('userInfo').id}`, {}
@@ -414,6 +446,10 @@
                         });
                 },
                 goChaipin(type) {
+                    if (!this.userId) {
+                        goLogin();
+                        return
+                    }
                     jrequest
                         .post(
                             type == 1 ? `/api/articleScore/blame/${this.id}/${getlocal('userInfo').id}` : `/api/articleScore/blame/cancel/${this.getQueryVariable('id')}/${getlocal('userInfo').id}`, {}
