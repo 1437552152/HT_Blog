@@ -1,25 +1,25 @@
 <div>
-  <!-- <el-input
+    <!-- <el-input
     placeholder="请输入内容"
     @change="changeValue"
     v-model="input4"></el-input>
     <i slot="append" class="el-input__icon el-icon-search"></i>
   </el-input> -->
-  <el-card class="box-card" style="margin-bottom: 20px;">
-    <div slot="header" class="clearfix">
-      <span>点赞最多的文章</span>
-    </div>
-    <div v-for="(item,index) in zanList" :key="index" class="text item">
-      <a v-bind:href="'/detail.html?id='+item.articleId+'&gistId='+item.gistId" v-html="item.name"></a>
-    </div>
-  </el-card>
+    <el-card class="box-card asideStyle" style="margin-bottom: 20px;">
+        <div slot="header" class="clearfix">
+            <span>点赞排行</span>
+        </div>
+        <div v-for="(item,index) in zanList" :key="index" class="text item">
+            <a v-bind:href="'/detail.html?id='+item.articleId+'&gistId='+item.gistId" v-html="index+1+'.  '+item.name"></a>
+        </div>
+    </el-card>
 
-  <el-card class="box-card">
-    <div slot="header" class="clearfix">
-      <span>浏览最多的文章</span>
-    </div>
-    <div  v-for="(item,index) in readList" :key="index" class="text item">
-      <a v-bind:href="'/detail.html?id='+item.articleId+'&gistId='+item.gistId"  v-html="item.name"></a>
-    </div>
-  </el-card>
+    <el-card class="box-card asideStyle">
+        <div slot="header" class="clearfix">
+            <span>浏览排行</span>
+        </div>
+        <div v-for="(item,index) in readList" :key="index" class="text item">
+            <a v-bind:href="'/detail.html?id='+item.articleId+'&gistId='+item.gistId" v-html="index+1+'.  '+item.name"></a>
+        </div>
+    </el-card>
 </div>

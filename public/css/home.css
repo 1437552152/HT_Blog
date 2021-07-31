@@ -1,15 +1,59 @@
-.list_index{
-    margin-bottom: 40px;
+.list_index {
+    border: none;
 }
-.tag_list{
+
+.list_index .el-card__header {
+    border: none;
+    padding-bottom: 0;
+}
+
+.descc_index {
+    color: #5e6d82;
+    font-size: 14px;
+}
+
+.asideStyle .el-card__header span {
+    font-weight: bold;
+    font-size: 19px;
+}
+
+.asideStyle .el-card__body .text a {
+    color: #5e6d82;
+    font-size: 14px;
+    margin-bottom: 10px;
+    display: block;
+}
+
+.list_index .clearfix span {
+    font-weight: bold;
+    font-size: 17px;
+}
+
+.tag_list .allNum span {
+    margin-left: 10px;
+}
+
+.is-hover-shadow:hover {
+    box-shadow: none;
+}
+
+.list_index.el-card.is-always-shadow,
+.list_index.el-card.is-hover-shadow:focus,
+.list_index.el-card.is-hover-shadow:hover {
+    box-shadow: none
+}
+
+.tag_list {
     display: flex;
     margin-top: 20px;
     position: relative;
 }
-.tag_list .item{
+
+.tag_list .item {
     margin-right: 10px;
 }
-.tag_list .allNum{
+
+.tag_list .allNum {
     position: absolute;
     right: 10px;
 }

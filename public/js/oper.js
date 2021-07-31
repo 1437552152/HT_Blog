@@ -94,7 +94,7 @@ function getCode() {
             if (res.data.code == 0) {
                 $("body").toast({
                     position: "fixed",
-                    content: "验证码已发送至邮箱",
+                    content: "已发送验证码到邮箱中，请查收",
                     duration: 3000,
                 });
                 var count = 60;
@@ -111,6 +111,12 @@ function getCode() {
                 }
             }
         });
+    } else {
+        $("body").toast({
+            position: "fixed",
+            content: "请填写邮箱",
+            duration: 3000,
+        });
     }
 }
 
@@ -126,6 +132,9 @@ function findPassword() {
             duration: 3000,
         });
         return;
+    }
+    if (!checkEmail(fpEmail)) {
+        return false;
     }
     var encrypt = new JSEncrypt();
     encrypt.setPublicKey(authCode);
@@ -152,7 +161,7 @@ function findPassword() {
                         if (respon.data.code == 0) {
                             $("body").toast({
                                 position: "fixed",
-                                content: "登陆成功",
+                                content: "登录成功",
                                 duration: 3000,
                             });
                             localStorage.setItem(
@@ -168,6 +177,12 @@ function findPassword() {
                             });
                         }
                     });
+            } else {
+                $("body").toast({
+                    position: "fixed",
+                    content: res.data.msg,
+                    duration: 3000,
+                });
             }
         });
 }

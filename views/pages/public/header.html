@@ -6,7 +6,7 @@
             <div class="row">
                 <div class="col-lg-2 col-md-2 col-xs-2">
                     <div class="logo">
-                        <a href="/" title="LearnCoding">LearnCoding</a>
+                        <a href="/" title="LearnCoding"><img src="/images/index.png"></a>
                     </div>
                 </div>
                 <div class="col-lg-8 col-md-8 col-xs-8" id="topNav">
@@ -40,7 +40,7 @@
                         </el-dropdown>
                     </div>
                     <div class="site site2" id="theme_login">
-                        <a class="theme-login" onclick="goLogin()"><span >登陆</span>/<span>注册</span></a>
+                        <a class="theme-login"><span  onclick="goLogin()">登录&nbsp;</span>/&nbsp;<span  onclick="goRegister()">注册</span></a>
                     </div>
                 </div>
             </div>
@@ -56,14 +56,14 @@
     <div class="theme-popbod dform">
         <form class="theme-signin" name="loginform" action="" method="post">
             <ol>
-                <li><strong>邮箱：</strong><input class="ipt" type="text" name="username" value="" size="20" placeholder="邮箱/账户昵称" /></li>
-                <li><strong>密码：</strong><input class="ipt" type="password" name="password" value="" size="20" /></li>
+                <li><strong><span class="requireInput">*</span>账号：</strong><input class="ipt" type="text" name="username" value="" size="20" placeholder="账号" /></li>
+                <li><strong><span class="requireInput">*</span>密码：</strong><input class="ipt" type="password" name="password" value="" size="20" /></li>
 
                 <li style="display: flex;justify-content: space-between;width:338px">
                     <div><input class="btn btn-primary" type="checkbox" value="" style="margin-right:6px" />30天免登录</div>
                     <div><a style="color:#169BD5;cursor: pointer;"><span  onclick="forgetPassword()">忘记密码</span></a></div>
                 </li>
-                <li><input class="btn btn-primary btnSubmit" type="button" name="submit" value=" 登 录 " onclick="loginUser()"/></li>
+                <li><input class="btn btn-primary btnSubmit" type="button" name="submit" value=" 登 录 " onclick="loginUser()" /></li>
                 <li style="display: flex;justify-content: space-between;width:338px"><a style="color:#169BD5;cursor: pointer;"><span  onclick="goRegister()">注册账号</span></a></li>
             </ol>
         </form>
@@ -78,9 +78,10 @@
     <div class="theme-popbod dform">
         <form class="theme-signin" name="loginform" action="" method="post">
             <ol>
-                <li><strong><span class="requireInput">*</span>账户昵称：</strong><input class="ipt" type="text" name="nickname" value="" size="20" placeholder="账户昵称" /></li>
+
                 <li><strong><span class="requireInput">*</span>邮箱：</strong><input class="ipt" type="text" name="email" value="" size="20" placeholder="邮箱" /></li>
                 <li><strong><span class="requireInput">*</span>密码：</strong><input class="ipt" type="password" name="password" value="" size="20" /></li>
+                <li><strong>昵称：</strong><input class="ipt" type="text" name="nickname" value="" size="20" placeholder="昵称" /></li>
                 <li><input class="btn btn-primary btnSubmit register" onclick="registerUser()" type="button" name="submit" value="注册并登录" /></li>
             </ol>
         </form>
