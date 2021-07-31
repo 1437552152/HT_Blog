@@ -220,7 +220,7 @@
     position: fixed;
     top: 50%;
     left: 50%;
-    width: 660px;
+    width: 500px;
     height: 360px;
     margin: -180px 0 0 -330px;
     border-radius: 5px;
@@ -327,7 +327,7 @@
 }
 
 .theme-signin {
-    margin: -50px -20px -50px 90px;
+    margin: -50px -20px -50px 0px;
     text-align: left;
     font-size: 14px;
 }

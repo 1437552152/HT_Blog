@@ -9,44 +9,44 @@
 <html>
 
 <head>
-  <meta charset="UTF-8">
-  <title>详情页</title>
-  <link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="/css/common.css">
-  <link rel="stylesheet" href="/css/index.css">
-  <link rel="stylesheet" href="/css/home.css">
-  <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
-  <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  <script src="/js/learn-coding.js"></script>
-  <link rel="stylesheet" href="/css/header.css">
-  <script src="https://cdn.bootcss.com/jsencrypt/3.0.0-beta.1/jsencrypt.js"></script>
-  <link rel="stylesheet" href="/css/toast.css">
-  <!--[if lt IE 9]>
+    <meta charset="UTF-8">
+    <title>详情页</title>
+    <link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/home.css">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="/js/learn-coding.js"></script>
+    <link rel="stylesheet" href="/css/header.css">
+    <script src="https://cdn.bootcss.com/jsencrypt/3.0.0-beta.1/jsencrypt.js"></script>
+    <link rel="stylesheet" href="/css/toast.css">
+    <!--[if lt IE 9]>
 	<script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
 	<![endif]-->
 </head>
 
 <body>
-  <div id="app" v-cloak>
-    {% include "public/header.html" %}
-    <div class="w1200 m40">
-      <div class="content" style="width: 1200px;">
-        <el-form ref="form" :model="form" label-width="80px">
-          <el-form-item label="建议内容">
-            <el-input type="textarea" v-model="form.context" :autosize="{ minRows:20, maxRows:40}"></el-input>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" @click="onSubmit">提交</el-button>
-            <el-button @click="resetForm('form')">重置</el-button>
-          </el-form-item>
-        </el-form>
+    <div id="app" v-cloak>
+        {% include "public/header.html" %}
+        <div class="w1200 m40">
+            <div class="content" style="width: 1200px;">
+                <el-form ref="form" :model="form" label-width="80px">
+                    <el-form-item label="建议内容">
+                        <el-input type="textarea" style="width: 50%;" v-model="form.context" :autosize="{ minRows:8, maxRows:40}"></el-input>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary" @click="onSubmit">提交</el-button>
+                        <el-button @click="resetForm('form')">重置</el-button>
+                    </el-form-item>
+                </el-form>
 
-      </div>
-      <div class="clearfix"></div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        {% include "public/footer.html" %}
     </div>
-    {% include "public/footer.html" %}
-  </div>
 </body>
 <script src="/js/vue.js"></script>
 <script src="/js/index.js"></script>
@@ -56,47 +56,46 @@
 <script src="/js/toast.js"></script>
 <script src="/js/local.js"></script>
 <script>
-  $(function () {
-    new Vue({
-      el: '#app',
-      data: function () {
-        return {
-          form: {
-            context: ''
-          }
+    $(function() {
+        new Vue({
+            el: '#app',
+            data: function() {
+                return {
+                    form: {
+                        context: ''
+                    }
 
-        }
+                }
 
-      },
-      methods: {
-        onSubmit() {
-          var params = {};
-          params['userId'] = getlocal('userInfo').id;
-          params['context'] = this.form.context;
-          jrequest
-            .post(`/api/advice/add`, params)
-            .then((res) => {
-              if (res.data.code == 0) {
-                this.$message({
-                  message: '感谢您的建议，您可在个人中心 我的反馈 中查看后续处理，如果有后续优化方案，工作人员也会给与说明。祝您生活愉快，工作顺利',
-                  type: 'success'
-                });
-              } else {
-                $('body').toast({
-                  position: 'fixed',
-                  content: res.data.msg,
-                  duration: 3000
-                });
-              }
-            });
-        },
-        resetForm(formName) {
-          this.form.context = ''
-        }
-      }
+            },
+            methods: {
+                onSubmit() {
+                    var params = {};
+                    params['userId'] = getlocal('userInfo').id;
+                    params['context'] = this.form.context;
+                    jrequest
+                        .post(`/api/advice/add`, params)
+                        .then((res) => {
+                            if (res.data.code == 0) {
+                                this.$message({
+                                    message: '感谢您的建议，您可在个人中心 我的反馈 中查看后续处理，如果有后续优化方案，工作人员也会给与说明。祝您生活愉快，工作顺利',
+                                    type: 'success'
+                                });
+                            } else {
+                                $('body').toast({
+                                    position: 'fixed',
+                                    content: res.data.msg,
+                                    duration: 3000
+                                });
+                            }
+                        });
+                },
+                resetForm(formName) {
+                    this.form.context = ''
+                }
+            }
+        })
     })
-  })
-
 </script>
 
 </html>
