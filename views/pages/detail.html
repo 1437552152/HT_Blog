@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: yfye
  * @Date: 2021-06-05 16:59:35
- * @LastEditTime: 2021-08-01 12:28:08
+ * @LastEditTime: 2021-08-01 13:18:24
  * @LastEditors: sueRimn
 -->
 <!DOCTYPE html>
@@ -32,7 +32,7 @@
 </head>
 
 <body>
-  <div id="app" v-cloak>
+  <div id="app" v-cloak class="headContainer" style="height: 100vh;overflow-x: hidden">
     {% include "public/header.html" %}
     <div class="w1200 m40">
       <aside style="width: 200px;">
@@ -99,8 +99,10 @@
                 <textarea class="text text1" placeholder="请输入..."></textarea>
               </div>
               <div class="tools-box">
-                <div class="operator-box-btn"><span class="face-icon">☺</span><span class="img-icon"
-                    @Click="inputInsert(1)">▧</span></div>
+                <div class="operator-box-btn"><span class="face-icon">☺</span>
+                  <!--   <span class="img-icon"
+                    @Click="inputInsert(1)">▧</span> -->
+                </div>
                 <div class="submit-btn"><input type="button" @Click="out(1)" value="提交评论" /></div>
               </div>
             </div>
@@ -146,6 +148,10 @@
                       </div>
                     </li>
                     <div class="clearfix"></div>
+                    <div @click="goLookMore(item.id)" style="text-align: center;color: cornflowerblue;margin-top: 20px;cursor: pointer;"
+                    v-if="!item.LoadMore&&item.replyList&&item.replyList.length==2">查看全部回复</div>
+                  <div class="clearfix"></div>
+                   
                   </ul>
                 </div>
 
@@ -154,8 +160,10 @@
                     <textarea class="text text2" placeholder="请输入..."></textarea>
                   </div>
                   <div class="tools-box">
-                    <div class="operator-box-btn"><span class="face-icon">☺</span><span class="img-icon"
-                        @Click="inputInsert(2)">▧</span></div>
+                    <div class="operator-box-btn"><span class="face-icon face-icon2" @click="zhuce()">☺</span>
+                       <!--  <span class="img-icon"
+                        @Click="inputInsert(2)">▧</span> -->
+                    </div>
                     <div class="submit-btn"><input type="button" @Click="out(2,item)" value="提交评论" /></div>
                   </div>
                 </div>
@@ -171,6 +179,9 @@
         </div>
       </div>
       <div class="clearfix"></div>
+      <el-backtop target=".headContainer">
+        <i class="el-icon-caret-top"></i>
+     </el-backtop>
     </div>
     {% include "public/footer.html" %}
   </div>
@@ -210,9 +221,13 @@
       },
       mounted() {
         // 绑定表情
-        $('.face-icon').SinaEmotion($('.text'));
+        $('.face-icon').SinaEmotion($('.text1'));
+/*         $('.face-icon2').SinaEmotion($('.text2')); */
       },
       methods: {
+        zhuce(){
+            $('.face-icon2').SinaEmotion($('.text2'));  
+        }, 
         onSubmit() {
           if (!this.userId) {
             goLogin();
@@ -264,6 +279,37 @@
             }
           }
           return (false);
+        },
+        goLookMore(id) {
+          if (!this.userId) {
+            goLogin();
+            return
+          }
+          let params = {};
+          params['articleId'] = this.id;
+          params['orderType'] = 1;
+          params['pageNum'] = 1;
+          params['pageSize'] = 1000;
+          params['userId'] = getlocal('userInfo').id;
+          params['rootId'] = id;
+          jrequest
+            .post(`/api/articleComment/replyPage`, params)
+            .then((res) => {
+              if (res.data.code == 0) {
+                this.commentList.map(item => {
+                  if (item.id == id) {
+                    item.replyList = res.data.body.data;
+                    item.LoadMore = true;
+                  }
+                })
+              } else {
+                $('body').toast({
+                  position: 'fixed',
+                  content: res.data.msg,
+                  duration: 3000
+                });
+              }
+            });
         },
         handleSizeChange(val) {
           this.pageNum = 1;
@@ -371,9 +417,9 @@
             return
           }
           if (type == 1) {
-            $(".cont-box1 .text").insertContent('<img src="请在这里输入图片地址" alt=""/>', -10);
+            $(".cont-box1 .text1").insertContent('<img src="请在这里输入图片地址" alt=""/>', -10);
           } else {
-            $(".cont-box2 .text").insertContent('<img src="请在这里输入图片地址" alt=""/>', -10);
+            $(".cont-box2 .text2").insertContent('<img src="请在这里输入图片地址" alt=""/>', -10);
           }
         },
         /**

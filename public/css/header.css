@@ -256,6 +256,9 @@
     padding: 12px;
     position: relative;
 }
+.theme-poptit h3{
+    color: #409eff;
+}
 
 .theme-popbod {
     padding: 60px 15px;
@@ -417,9 +420,9 @@
 }
 
 .theme-signin .btn-primary {
-    border-color: #3079ED;
+    border-color: #409eff;
     color: #F3F7FC;
-    background-color: #4D90FE;
+    background-color: #409eff;
     background: -webkit-linear-gradient(top, #4D90FE, #4787ED);
     background: -moz-linear-gradient(top, #4D90FE, #4787ED);
     background: linear-gradient(top, #4D90FE, #4787ED);

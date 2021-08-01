@@ -2,8 +2,8 @@
  * @Description: 
  * @Author: yfye
  * @Date: 2021-06-05 16:59:35
- * @LastEditTime: 2021-06-27 22:10:23
- * @LastEditors: yfye
+ * @LastEditTime: 2021-08-01 13:08:33
+ * @LastEditors: sueRimn
 -->
 <!DOCTYPE html>
 <html>
@@ -24,7 +24,7 @@
 </head>
 
 <body>
-    <div id="app" v-cloak>
+    <div id="app" v-cloak class="headContainer" style="height: 100vh;overflow-x: hidden">
         {% include "public/header.html" %}
         <div class="w1200 m40">
             <aside style="width: 200px;">
@@ -49,6 +49,9 @@
                 </div>
             </div>
             <div class="clearfix"></div>
+            <el-backtop target=".headContainer">
+                <i class="el-icon-caret-top"></i>
+             </el-backtop>
         </div>
         {% include "public/footer.html" %}
     </div>
