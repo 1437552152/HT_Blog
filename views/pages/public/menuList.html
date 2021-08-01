@@ -4,12 +4,12 @@
  * @Author: sueRimn
  * @Date: 2021-07-19 21:23:08
  * @LastEditors: sueRimn
- * @LastEditTime: 2021-07-25 14:43:39
+ * @LastEditTime: 2021-08-01 11:11:27
 -->
 <div class="sideba">
     <ul>
         <li :class="{active:item.id==defaultId?true:false}" v-if="navList.length" v-for="(item,index) in navList" :key="index"><a v-bind:href="'/newsList.html?menuId='+menuId+'&id='+item.id+'&type='+type"
                 v-html="item.name"></a></li>
-                <li v-if="navList.length==0" style="min-height: 300px;display: flex;align-items: center;text-align: center;justify-content: center;">暂无相关主题</li>
+                <li v-if="navList.length==0" style="min-height: 300px;display: flex;align-items: center;text-align: center;justify-content: center;border: 1px solid #f3f3f3;">暂无相关主题</li>
     </ul>
 </div>

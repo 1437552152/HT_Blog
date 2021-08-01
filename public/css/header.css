@@ -76,7 +76,7 @@
     background-color: #fff;
     box-sizing: border-box;
     position: absolute;
-    left: 10px;
+    left:0px;
     top: 50px;
 }
 
@@ -86,10 +86,10 @@
     width: 0;
     border-left: 8px solid transparent;
     border-right: 8px solid transparent;
-    border-bottom: 8px solid #ccc;
+    border-bottom: 8px solid #409EFF;
     top: -8px;
     left: 15px;
-    display: none;
+  /*   display: none; */
 }
 
 .header .nav .top-nav>li .nav-box .nav-aside {
@@ -177,8 +177,12 @@
     cursor: pointer;
     color: #fff;
     display: block;
-    margin-top: 18px;
+    /* margin-top: 18px; */
     font-size: 16px;
+    width: 100px;
+    height: 60px;
+    line-height: 60px;
+    text-align: center;
 }
 
 .el-icon-arrow-down {

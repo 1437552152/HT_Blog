@@ -1,3 +1,11 @@
+/*
+ * @Descripttion: 
+ * @version: 
+ * @Author: sueRimn
+ * @Date: 2021-06-20 23:20:19
+ * @LastEditors: sueRimn
+ * @LastEditTime: 2021-08-01 10:43:33
+ */
 //服务器地址
 
 const urlPrefix = "http://39.97.160.96:8787";
@@ -66,7 +74,7 @@ function appendTopMenu(dataList, level) {
     }
     navigationStr += `<li ${isEmpty ? "class= 'empty'" : ""
       }><a class="menu" href="${menuUrl(id,dataList[i].childList&&dataList[i].childList.length?1:0)}" data-id="${id}">${name}${level === 1 && dataList[i].childList.length > 0
-        ? "<span class='caret'></span>"
+        ?''
         : ""
       }</a>`;
     navigationStr += appendTopMenu(dataList[i].childList, level + 1);

@@ -6,7 +6,7 @@
             <div class="row">
                 <div class="col-lg-2 col-md-2 col-xs-2">
                     <div class="logo">
-                        <a href="/" title="LearnCoding"><img src="/images/index.png"></a>
+                        <a href="/"><img src="/images/index.png"></a>
                     </div>
                 </div>
                 <div class="col-lg-8 col-md-8 col-xs-8" id="topNav">
@@ -17,7 +17,8 @@
                     <div class="site">
                         <el-dropdown>
                             <span class="el-dropdown-link">
-                                关于本站<span class="caret"></span>
+                                关于本站
+                               <!--  <span class="caret"></span> -->
                             </span>
                             <el-dropdown-menu slot="dropdown">
                                 <el-dropdown-item><a href="/purpose.html">本站宗旨</a></el-dropdown-item>
@@ -30,7 +31,8 @@
                     <div class="site site1" style="display:none">
                         <el-dropdown>
                             <span class="el-dropdown-link">
-                                <span class="userName"></span><span class="caret"></span>
+                                <span class="userName"></span>
+                              <!--   <span class="caret"></span> -->
                             </span>
                             <el-dropdown-menu slot="dropdown">
                                 <el-dropdown-item><a href="/myNews.html">消息</a></el-dropdown-item>
@@ -56,7 +58,7 @@
     <div class="theme-popbod dform">
         <form class="theme-signin" name="loginform" action="" method="post">
             <ol>
-                <li><strong><span class="requireInput">*</span>账号：</strong><input class="ipt" type="text" name="username" value="" size="20" placeholder="账号" /></li>
+                <li><strong><span class="requireInput">*</span>账号：</strong><input class="ipt" type="text" name="username" value="" size="20" placeholder="邮箱/昵称" /></li>
                 <li><strong><span class="requireInput">*</span>密码：</strong><input class="ipt" type="password" name="password" value="" size="20" /></li>
 
                 <li style="display: flex;justify-content: space-between;width:338px">
@@ -96,8 +98,8 @@
     <div class="theme-popbod dform">
         <form class="theme-signin" name="loginform" action="" method="post">
             <ol>
-                <li><strong><span class="requireInput">*</span>邮箱：</strong><input class="ipt" type="text" name="fpEmail" value="" size="20" placeholder="邮箱/账户昵称" style="width:160px" /><input type="button" onclick="getCode()" id="btn" value="获取验证码"></li>
-                <li><strong><span class="requireInput">*</span>验证码：</strong><input class="ipt" type="text" name="fpCode" value="" size="20" placeholder="验证码" /></li>
+                <li><strong><span class="requireInput">*</span>邮箱：</strong><input class="ipt" type="text" name="fpEmail" value="" size="20" placeholder="邮箱"  /></li>
+                <li><strong><span class="requireInput">*</span>验证码：</strong><input class="ipt" type="text" name="fpCode" value="" size="20" placeholder="验证码" style="width:160px"/><input type="button" onclick="getCode()" id="btn" value="获取验证码"></li>
                 <li><strong><span class="requireInput">*</span>密码：</strong><input class="ipt" type="password" name="fpPassword" value="" size="20" /></li>
                 <li><strong><span class="requireInput">*</span>密码确认：</strong><input class="ipt" type="password" name="fpRepeactPassword" value="" size="20" /></li>
                 <li><input class="btn btn-primary btnSubmit" name="submit" type="button" onclick="findPassword()" value="提交并登录" /></li>

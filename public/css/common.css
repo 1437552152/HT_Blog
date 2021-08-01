@@ -287,6 +287,7 @@ aside {
     display: block;
     color: #303133;
     box-sizing: border-box;
+    border:1px solid #f3f3f3;
 }
 
 .sideba ul li.active a {
@@ -299,6 +300,7 @@ aside {
     justify-content: center;
     margin-top: 30px;
     margin-bottom: 30px;
+    color: #409eff;
 }
 
 .detailTitle li {

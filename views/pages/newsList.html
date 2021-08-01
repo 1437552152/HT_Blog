@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: yfye
  * @Date: 2021-06-05 16:59:35
- * @LastEditTime: 2021-07-25 15:55:10
+ * @LastEditTime: 2021-08-01 11:06:07
  * @LastEditors: sueRimn
 -->
 <!DOCTYPE html>
@@ -42,6 +42,7 @@
         </el-breadcrumb>
 
         <div style="min-height: 300px;margin-top: 30px;">
+          <div style="min-height: 288px;">
           <a v-bind:href="'/detail.html?id='+item.id+'&gistId='+item.articleGistId" target="_blank"
             v-for="(item,index) in tableData" :key="index">
             <el-card class="box-card list_index" shadow="hover">
@@ -65,6 +66,7 @@
               </div>
             </el-card>
           </a>
+        </div>
           <div style="margin-top: 30px">
             <el-pagination align="center" @size-change="handleSizeChange" @current-change="handleCurrentChange"
               :current-page="pageNum" :page-sizes="[1,5,10,20]" :page-size="pageSize" :total="totalNum">

@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: yfye
  * @Date: 2021-06-05 16:59:35
- * @LastEditTime: 2021-07-25 17:27:39
+ * @LastEditTime: 2021-08-01 11:09:09
  * @LastEditors: sueRimn
 -->
 <!DOCTYPE html>
@@ -64,7 +64,7 @@
         </el-table>
         <div style="margin-top: 30px;">
           <el-pagination align='center' @size-change="handleSizeChange" @current-change="handleCurrentChange"
-            :current-page="pageNum" :page-sizes="[1,5,10,20]" :page-size="pageSize" :totalNum="totalNum">
+            :current-page="pageNum" :page-sizes="[1,5,10,20]" :page-size="pageSize" :total="totalNum">
           </el-pagination>
         </div>
       </div>
@@ -99,8 +99,8 @@
           message: '',
           tableData: [],
           pageNum: 1, // 当前页码
-          totalNum: 20, // 总条数
-          pageSize: 2 // 每页的数据条数
+          totalNum:0, // 总条数
+          pageSize:10 // 每页的数据条数
         }
       },
       methods: {
@@ -172,7 +172,7 @@
                 this.tableData = res.data.body.data;
                 this.pageNum = res.data.body.pageNum;
                 this.pageSize = res.data.body.pageSize;
-                this.totalNumNum = res.data.body.totalNumNum;
+                this.totalNum = res.data.body.totalNum;
               } else {
                 $('body').toast({
                   position: 'fixed',
